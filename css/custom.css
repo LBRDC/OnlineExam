@@ -1,0 +1,14 @@
+.app-header__logo .logo-src {
+    height: 43px;
+    width: 167px;
+    background: url(../asset/img/logo/lbrdc-banner-nobg.webp);
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.card-bg {
+    background-image: url('../asset/img/landbank.webp');
+    background-size: cover;
+    min-height: 200px;
+    background-position-y: center;
+}

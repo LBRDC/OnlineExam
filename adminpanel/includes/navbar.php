@@ -1,3 +1,51 @@
+<?php
+    // Active Page
+  if (!isset($_GET['page'])) {
+    $activePage = 'home';
+    //$page = 'null';
+  } else {
+    $activePage = $_GET['page'];
+    /*switch ($activePage) {
+      case 'employee-manage':
+        $page = 'employee';
+        break;
+      case 'timekeep-record':
+        $page = 'timekeep';
+        break;
+      case 'timekeep-report':
+        $page = 'timekeep';
+        break;
+      case 'fields-department':
+        $page = 'fields';
+        break;
+      case 'fields-position':
+        $page = 'fields';
+        break;
+      case 'fields-payroll':
+        $page = 'fields';
+        break;
+      case 'fields-location':
+        $page = 'fields';
+        break;
+        case 'fields-location-add':
+          $page = 'fields';
+          break;
+      case 'fields-schedule':
+        $page = 'fields';
+        break;
+      case 'fields-holiday':
+        $page = 'fields';
+        break;
+      case 'adminMng-user':
+        $page = 'adminMng';
+        break;
+      default:
+          // None
+          break;
+    }*/
+  }
+  //class="mm-active"
+?>
 
 <!-- #START# navbar.php -->
         <!-- NAVBAR MAIN -->
@@ -34,7 +82,7 @@
             </div>    
             <div class="app-header__content">
                 <div class="app-header-left">
-                    <div class="search-wrapper">
+                    <!--<div class="search-wrapper">
                         <div class="input-holder">
                             <input type="text" class="search-input" placeholder="Type to search">
                             <button class="search-icon"><span></span></button>
@@ -60,7 +108,7 @@
                                 Settings
                             </a>
                         </li>
-                    </ul>
+                    </ul>-->
                 </div>
                 <div class="app-header-right">
                     <div class="header-btn-lg pr-0">
@@ -69,32 +117,32 @@
                                 <div class="widget-content-left">
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                            <img width="42" class="rounded-circle" src="assets/images/avatars/1.jpg" alt="">
+                                            <img width="42" class="rounded-circle" src="../../asset/img/avatars/default_user.webp" alt="">
                                             <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                             <button type="button" tabindex="0" class="dropdown-item">User Account</button>
-                                            <button type="button" tabindex="0" class="dropdown-item">Settings</button>
-                                            <h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                            <button type="button" tabindex="0" class="dropdown-item">Actions</button>
+                                            <!--<button type="button" tabindex="0" class="dropdown-item">Settings</button>-->
+                                            <!--<h6 tabindex="-1" class="dropdown-header">Header</h6>-->
+                                            <!--<button type="button" tabindex="0" class="dropdown-item">Actions</button>-->
                                             <div tabindex="-1" class="dropdown-divider"></div>
-                                            <button type="button" tabindex="0" class="dropdown-item">Dividers</button>
+                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="widget-content-left  ml-3 header-user-info">
                                     <div class="widget-heading">
-                                        Alina Mclourd
+                                        Administrator
                                     </div>
                                     <div class="widget-subheading">
-                                        VP People Manager
+                                        Superuser
                                     </div>
                                 </div>
-                                <div class="widget-content-right header-user-info ml-3">
+                                <!--<div class="widget-content-right header-user-info ml-3">
                                     <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
                                         <i class="fa text-white fa-calendar pr-1 pl-1"></i>
                                     </button>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -103,7 +151,7 @@
         </div> <!-- #END# NAVBAR MAIN -->  
 
         <!-- ########## UI-THEME HERE ########## -->
-        <?php include("ui-theme.php") ?>
+        <?php //include("ui-theme.php") ?>
 
         <div class="app-main">
             <!-- MAIN SIDEBAR -->
@@ -141,191 +189,59 @@
                 <div class="scrollbar-sidebar">
                     <div class="app-sidebar__inner">
                         <ul class="vertical-nav-menu">
-                            <li class="app-sidebar__heading">Dashboards</li>
+                            <li class="app-sidebar__heading"></li>
                             <li>
-                                <a href="index.html" class="mm-active">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>
-                                    Dashboard Example 1
+                                <a href="home.php" class="<?php if($activePage=="home"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-home"></i>
+                                    Dashboard
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">UI Components</li>
+                            <li class="app-sidebar__heading">Cluster Management</li>
                             <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-diamond"></i>
-                                    Elements
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="elements-buttons-standard.html">
-                                            <i class="metismenu-icon"></i>
-                                            Buttons
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-dropdowns.html">
-                                            <i class="metismenu-icon">
-                                            </i>Dropdowns
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-icons.html">
-                                            <i class="metismenu-icon">
-                                            </i>Icons
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-badges-labels.html">
-                                            <i class="metismenu-icon">
-                                            </i>Badges
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-cards.html">
-                                            <i class="metismenu-icon">
-                                            </i>Cards
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-list-group.html">
-                                            <i class="metismenu-icon">
-                                            </i>List Groups
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-navigation.html">
-                                            <i class="metismenu-icon">
-                                            </i>Navigation Menus
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-utilities.html">
-                                            <i class="metismenu-icon">
-                                            </i>Utilities
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-car"></i>
-                                    Components
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="components-tabs.html">
-                                            <i class="metismenu-icon">
-                                            </i>Tabs
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-accordions.html">
-                                            <i class="metismenu-icon">
-                                            </i>Accordions
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon">
-                                            </i>Notifications
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-modals.html">
-                                            <i class="metismenu-icon">
-                                            </i>Modals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-progress-bar.html">
-                                            <i class="metismenu-icon">
-                                            </i>Progress Bar
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-tooltips-popovers.html">
-                                            <i class="metismenu-icon">
-                                            </i>Tooltips &amp; Popovers
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-carousel.html">
-                                            <i class="metismenu-icon">
-                                            </i>Carousel
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-calendar.html">
-                                            <i class="metismenu-icon">
-                                            </i>Calendar
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-pagination.html">
-                                            <i class="metismenu-icon">
-                                            </i>Pagination
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-scrollable-elements.html">
-                                            <i class="metismenu-icon">
-                                            </i>Scrollable
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-maps.html">
-                                            <i class="metismenu-icon">
-                                            </i>Maps
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="tables-regular.html">
-                                    <i class="metismenu-icon pe-7s-display2"></i>
-                                    Tables
+                                <a href="?page=manage-cluster" class="<?php if($activePage=="manage-cluster"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-culture"></i>
+                                    Employment Cluster
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Widgets</li>
+                            <li class="app-sidebar__heading">Exam Management</li>
                             <li>
-                                <a href="dashboard-boxes.html">
-                                    <i class="metismenu-icon pe-7s-display2"></i>
-                                    Dashboard Boxes
+                                <a href="?page=manage-exam" class="<?php if($activePage=="manage-exam"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-news-paper"></i>
+                                    Examination List
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Forms</li>
+                            <li class="app-sidebar__heading">Examinee Management</li>
                             <li>
-                                <a href="forms-controls.html">
-                                    <i class="metismenu-icon pe-7s-mouse">
-                                    </i>Forms Controls
+                                <a href="?page=manage-examinee" class="<?php if($activePage=="manage-examinee"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-users">
+                                    </i>Examinee List
+                                </a>
+                            </li>
+                            <li class="app-sidebar__heading">Report</li>
+                            <li>
+                                <a href="?page=report-ranking" class="<?php if($activePage=="report-ranking"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-medal">
+                                    </i>Ranking by Exam
                                 </a>
                             </li>
                             <li>
-                                <a href="forms-layouts.html">
-                                    <i class="metismenu-icon pe-7s-eyedropper">
-                                    </i>Forms Layouts
+                                <a href="?page=report-examinee" class="<?php if($activePage=="report-examinee"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-note2">
+                                    </i>Examinee Results
                                 </a>
                             </li>
+                            <li class="app-sidebar__heading">Feedback</li>
                             <li>
-                                <a href="forms-validation.html">
-                                    <i class="metismenu-icon pe-7s-pendrive">
-                                    </i>Forms Validation
+                                <a href="?page=feedback" class="<?php if($activePage=="feedback"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-comment">
+                                    </i>Feedbacks
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Charts</li>
+                            <li class="app-sidebar__heading">Admin Management</li>
                             <li>
-                                <a href="charts-chartjs.html">
-                                    <i class="metismenu-icon pe-7s-graph2">
-                                    </i>ChartJS
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">PRO Version</li>
-                            <li>
-                                <a href="https://dashboardpack.com/theme-details/architectui-dashboard-html-pro/" target="_blank">
-                                    <i class="metismenu-icon pe-7s-graph2">
-                                    </i>
-                                    Upgrade to PRO
+                                <a href="?page=manage-admin" class="<?php if($activePage=="manage-admin"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-key">
+                                    </i>User Accounts
                                 </a>
                             </li>
                         </ul>
