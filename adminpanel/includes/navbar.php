@@ -114,6 +114,14 @@
                     <div class="header-btn-lg pr-0">
                         <div class="widget-content p-0">
                             <div class="widget-content-wrapper">
+                                <div class="widget-content-left  ml-3 mr-2 header-user-info">
+                                    <div class="widget-heading">
+                                        <?php if (isset($_SESSION['user']['admin_fname']) && isset($_SESSION['user']['admin_lname'])) {echo $_SESSION['user']['admin_fname']; echo ' '; echo $_SESSION['user']['admin_lname'];} else {echo 'LBRDC';} ?>
+                                    </div>
+                                    <div class="widget-subheading">
+                                        <?php if (isset($_SESSION['user']['admin_pos'])) {echo $_SESSION['user']['admin_pos'];} else {echo 'Administrator';} ?>
+                                    </div>
+                                </div>
                                 <div class="widget-content-left">
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
@@ -122,20 +130,9 @@
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                             <button type="button" tabindex="0" class="dropdown-item">User Account</button>
-                                            <!--<button type="button" tabindex="0" class="dropdown-item">Settings</button>-->
-                                            <!--<h6 tabindex="-1" class="dropdown-header">Header</h6>-->
-                                            <!--<button type="button" tabindex="0" class="dropdown-item">Actions</button>-->
                                             <div tabindex="-1" class="dropdown-divider"></div>
                                             <button type="button" tabindex="0" class="dropdown-item">Logout</button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="widget-content-left  ml-3 header-user-info">
-                                    <div class="widget-heading">
-                                        Administrator
-                                    </div>
-                                    <div class="widget-subheading">
-                                        Superuser
                                     </div>
                                 </div>
                                 <!--<div class="widget-content-right header-user-info ml-3">
@@ -151,7 +148,7 @@
         </div> <!-- #END# NAVBAR MAIN -->  
 
         <!-- ########## UI-THEME HERE ########## -->
-        <?php //include("ui-theme.php") ?>
+        <?php include("ui-theme.php") ?>
 
         <div class="app-main">
             <!-- MAIN SIDEBAR -->
@@ -245,6 +242,8 @@
                                 </a>
                             </li>
                         </ul>
+                        <hr class="sidebar-divider">
+                        <div class="text-muted text-monospace">v0.3.0-alpha</div>
                     </div>
                 </div>
             </div><!-- #END# SIDEBAR -->

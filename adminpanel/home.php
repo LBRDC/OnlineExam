@@ -1,12 +1,12 @@
 <?php
     session_start();
-    //include("conn.php");
+    include("../conn.php");
     
     // Header
     include("includes/header.php"); 
     
     //Main Page
-    if (isset($_SESSION['user'])) {
+    if (!isset($_SESSION['user'])) {
         /* Redirect to login */
     } else {
         // Pages
@@ -47,13 +47,12 @@
     include("includes/footer.php"); 
 
     //Modals
-    if (isset($_SESSION['user'])) {
+    if (!isset($_SESSION['user'])) {
         /* Redirect to login */
     } else {
         // Pages
         @$page = $_GET['page'];
         if (!isset($page)) {
-            
         } else {
             switch ($page) {
                 case 'manage-cluster':

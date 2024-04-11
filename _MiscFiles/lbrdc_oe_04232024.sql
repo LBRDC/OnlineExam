@@ -18,10 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `lbrdc_oe`
+-- Database: `lbrdc-oe`
 --
-CREATE DATABASE IF NOT EXISTS `lbrdc_oe` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `lbrdc_oe`;
+CREATE DATABASE IF NOT EXISTS `lbrdc-oe` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `lbrdc-oe`;
 
 -- --------------------------------------------------------
 

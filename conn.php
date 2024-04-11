@@ -11,7 +11,7 @@ try {
 
     $userId = 1;
 
-    $stmt = $conn->prepare("SELECT * FROM admin_users WHERE id = :id");
+    $stmt = $conn->prepare("SELECT * FROM admin_user WHERE admin_id = :id");
     $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);

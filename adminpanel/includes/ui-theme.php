@@ -2,9 +2,9 @@
 <!-- #START# ui-theme.php -->
         <!-- THEME SETTINGS -->
         <div class="ui-theme-settings">
-            <button type="button" id="TooltipDemo" class="btn-open-options btn btn-warning">
+            <!--<button type="button" id="TooltipDemo" class="btn-open-options btn btn-warning">
                 <i class="fa fa-cog fa-w-16 fa-spin fa-2x"></i>
-            </button>
+            </button>-->
             <div class="theme-settings__inner">
                 <div class="scrollbar-container">
                     <div class="theme-settings__options-wrapper">
@@ -71,7 +71,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <h3 class="themeoptions-heading">
+                        <!--<h3 class="themeoptions-heading">
                             <div>
                                 Header Options
                             </div>
@@ -275,7 +275,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
