@@ -350,3 +350,90 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
         }
     });
 });
+
+
+// manage-exam ADD
+$(document).on("submit","#addExamFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'add_ExamTitle': $('#add_ExamTitle').val(),
+        'add_ExamDesc': $('#add_ExamDesc').val(),
+        'add_ExamCluster': $('#add_ExamCluster').val(), //Array
+        'add_ExamQuestLimit': $('#add_ExamQuestLimit').val(),
+        'add_ExamTimeLimit': $('#add_ExamTimeLimit').val(),
+        'add_ExamRandom': $('#add_ExamRandom').val(),
+        'add_ExamNoPrev': $('#add_ExamNoPrev').val()
+    };
+
+    console.log(formData);
+    
+    var isValid;
+    if (formData['add_ExamTitle'] === '' || formData['add_ExamCluster'] === '' || formData['add_ExamQuestLimit'] === '' || formData['add_ExamTimeLimit'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    console.log("INPUT VALIDATED " + isValid);
+    console.log(formData);
+
+    $.ajax({
+        url: 'query/add_ExamExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " added.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam';
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + "already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while adding Exam. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in required fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+        }
+    });
+});
