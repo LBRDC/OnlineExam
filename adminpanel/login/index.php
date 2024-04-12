@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="login/vendor/css-hamburgers/hamburgers.min.css">
 	<link rel="stylesheet" type="text/css" href="login/vendor/select2/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="login/vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="../../css/sweetalert.css">
 	<link rel="stylesheet" type="text/css" href="login/css/util.css">
 	<link rel="stylesheet" type="text/css" href="login/css/main.css">
 </head>
@@ -59,6 +60,7 @@
 	<script src="login/vendor/daterangepicker/moment.min.js"></script>
 	<script src="login/vendor/daterangepicker/daterangepicker.js"></script>
 	<script src="login/vendor/countdowntime/countdowntime.js"></script>
+	<script src="../../js/sweetalert.js"></script>
 	<script src="login/js/main.js"></script>
 	<script src="login/js/myjs.js"></script>
 </body>

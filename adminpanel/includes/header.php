@@ -20,8 +20,4 @@
 
 <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-        <!-- NAVBAR HERE -->
-        <?php include('navbar.php'); ?>
-            <div class="app-main__outer">
-                <!-- MAIN CONTENT HERE -->
 <!-- #END# header.php -->

@@ -57,6 +57,8 @@
     <script type="text/javascript" src="../../js/select2.min.js"></script>
     <!-- DataTables JS -->
     <script type="text/javascript" src="../../js/datatables.js"></script>
+    <!-- session -->
+    <script src="./js/session.js"></script>
     <!-- AJAX JS -->
     <script type="text/javascript" src="./js/admin-ajax.js"></script>
     <!-- Custom JS -->

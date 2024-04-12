@@ -80,7 +80,6 @@ $(document).on("submit","#addClusterFrm" , function(event) {
 });
 
 
-
 // manage-cluster EDIT 
 $(document).on("submit","#editClusterFrm" , function(event) {
     event.preventDefault();
@@ -187,7 +186,6 @@ $(document).on("submit","#editClusterFrm" , function(event) {
         }
     });
 });
-
 
 
 // manage-cluster DISABLE 
@@ -369,7 +367,7 @@ $(document).on("submit","#addExamFrm" , function(event) {
     console.log(formData);
     
     var isValid;
-    if (formData['add_ExamTitle'] === '' || formData['add_ExamCluster'] === '' || formData['add_ExamQuestLimit'] === '' || formData['add_ExamTimeLimit'] === '') {
+    if (formData['add_ExamTitle'] === '' || formData['add_ExamCluster'].length === 0 || formData['add_ExamQuestLimit'] === '' || formData['add_ExamTimeLimit'] === '') {
         isValid = false;
     } else {
         isValid = true;
@@ -421,6 +419,12 @@ $(document).on("submit","#addExamFrm" , function(event) {
                     icon: "warning",
                     title: "Incomplete",
                     text: "Please fill in required fields.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Unable to save clusters for " + response.msg,
                 });
             } else {
                 Swal.fire({

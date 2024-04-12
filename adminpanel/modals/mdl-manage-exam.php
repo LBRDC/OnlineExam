@@ -45,7 +45,7 @@
                                 }
                             } else {
                                 // Display a message if there are no clusters
-                                echo '<option value="">No clusters available</option>';
+                                echo '<option value="" disabled="disabled">No clusters available</option>';
                             }
                         ?>
                     </select>
@@ -100,11 +100,11 @@
                         <label>Exam Options</label>
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="add_ExamRandom">
-                            <label class="custom-control-label" for="add_ExamRandom">Randomize Questions</label>
+                            <label class="custom-control-label" for="add_ExamRandom" value="yes">Randomize Questions</label>
                         </div>
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="add_ExamNoPrev">
-                            <label class="custom-control-label" for="add_ExamNoPrev">Disable Previous</label>
+                            <label class="custom-control-label" for="add_ExamNoPrev" value="yes">Disable Previous</label>
                         </div>
                     </div>
                 </div>

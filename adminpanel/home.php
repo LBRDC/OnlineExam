@@ -8,7 +8,10 @@
     //Main Page
     if (!isset($_SESSION['user'])) {
         /* Redirect to login */
+        echo '<div class="app-main__outer">';
     } else {
+        include('includes/navbar.php');
+        echo '<div class="app-main__outer">';
         // Pages
         @$page = $_GET['page'];
         if (!isset($page)) {

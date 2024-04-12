@@ -1,7 +1,7 @@
 // Admin Log in
 $(document).on("submit","#adminLoginFrm", function() {
     $.post("./query/loginExe.php", $(this).serialize(), function(data){
-       if(data.res == "invalid") {
+       if(data.res == "failed") {
          Swal.fire(
            'Invalid',
            'Please input valid username / password',
