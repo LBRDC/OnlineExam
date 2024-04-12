@@ -65,13 +65,13 @@
                                             <label for="filter_status">Status</label>
                                             <select class="form-control" name="filter_status" id="filter_status">
                                                 <option value="">Select...</option>
-                                                <option value="2">All</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
                                         </div> 
                                         <div class="col-md-3 d-flex align-items-end mb-2">
-                                            <button class="btn btn-lg btn-primary" id="filter-btn">Filter</button>
+                                            <button class="btn btn-lg btn-primary mr-2" id="filter-btn">Filter</button>
+                                            <button class="btn btn-lg btn-secondary" id="reset-btn">Reset</button>
                                         </div>
                                     </div>
                                 </div>

@@ -24,6 +24,9 @@
                 case 'manage-exam':
                     include("pages/manage-exam.php");
                     break;
+                case 'manage-exam-edit':
+                    include("pages/manage-exam-edit.php");
+                    break;
                 case 'manage-examinee':
                     include("pages/manage-examinee.php");
                     break;
@@ -63,6 +66,9 @@
                     break;
                 case 'manage-exam':
                     include("modals/mdl-manage-exam.php");
+                    break;
+                case 'manage-exam-edit':
+                    include("modals/mdl-manage-exam-edit.php");
                     break;
                 case 'manage-examinee':
                     include("modals/mdl-manage-examinee.php");

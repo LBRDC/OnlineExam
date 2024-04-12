@@ -1,6 +1,6 @@
 <?php 
-    $stmt1 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
-    $stmt1->execute();
+    $stmtmdl1 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+    $stmtmdl1->execute();
 ?>
 
 
@@ -29,28 +29,25 @@
                     </div>
                 </div>
                 <div class="row mb-2">
-                <div class="col-md-12">
-                    <label for="add_ExamCluster">Cluster<span class="text-danger">*</span></label>
-                    <select class="form-control" name="add_ExamCluster[]" id="add_ExamCluster" multiple="multiple" style="width: 100%;" required>
-                        <option value="">Select...</option>
-                        <?php 
-                            $stmt1 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
-                            $stmt1->execute();
-                            $result = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-                            
-                            // Check if there are any clusters
-                            if ($stmt1->rowCount() > 0) {
-                                foreach ($result as $row) {
-                                    echo '<option value="' . htmlspecialchars($row['clu_id']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
+                    <div class="col-md-12">
+                        <label for="add_ExamCluster">Cluster<span class="text-danger">*</span></label>
+                        <select class="form-control" name="add_ExamCluster[]" id="add_ExamCluster" multiple="multiple" style="width: 100%;" required>
+                            <option value="">Select...</option>
+                            <?php 
+                                $result = $stmtmdl1->fetchAll(PDO::FETCH_ASSOC);
+                                
+                                // Check if there are any clusters
+                                if ($stmt1->rowCount() > 0) {
+                                    foreach ($result as $row) {
+                                        echo '<option value="' . htmlspecialchars($row['clu_id']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
+                                    }
+                                } else {
+                                    // Display a message if there are no clusters
+                                    echo '<option value="" disabled="disabled">No clusters available</option>';
                                 }
-                            } else {
-                                // Display a message if there are no clusters
-                                echo '<option value="" disabled="disabled">No clusters available</option>';
-                            }
-                        ?>
-                    </select>
-                </div>
-
+                            ?>
+                        </select>
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-md-6">

@@ -31,6 +31,9 @@
         case 'manage-exam':
             $pages_js = '<script src="./js/pgjs/exam-js.js"></script>';
             break;
+        case 'manage-exam-edit':
+            $pages_js = '<script src="./js/pgjs/exam-edit-js.js"></script>';
+            break;
         case 'manage-examinee':
             break;
         case 'report-ranking':

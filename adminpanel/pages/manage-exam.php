@@ -201,11 +201,7 @@
                                                     </td>
                                                     <td><?php echo htmlspecialchars($statusText); ?></td>
                                                     <td>
-                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditCluster" data-toggle="tooltip" data-placement="bottom" title="Edit"
-                                                        data-edit-id="<?php echo htmlspecialchars($ex_id); ?>" 
-                                                        data-edit-name="<?php echo htmlspecialchars($ex_title); ?>"
-                                                        data-edit-description="<?php echo htmlspecialchars($ex_description); ?>"
-                                                        data-edit-status="<?php echo htmlspecialchars($ex_status); ?>">
+                                                        <a href="?page=manage-exam-edit&id=<?php echo htmlspecialchars($ex_id); ?>" class="btn btn-warning m-1" id="edit-btn" data-toggle="tooltip" data-placement="bottom" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <?php if ($ex_status == 1) { ?>
