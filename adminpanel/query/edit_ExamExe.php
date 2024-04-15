@@ -28,14 +28,17 @@ if($stmt1->rowCount() == 0){
     $res = array("res" => "norecord", "msg" => $edit_ExamTitle);
     echo json_encode($res);
     exit();
+} else {
+    //assign old exam title
+    $check_ExamTitle = $stmt1->fetch(PDO::FETCH_ASSOC)['ex_title'];
 }
 
 $stmt2 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_title = :edit_ExamTitle");
 $stmt2->bindParam(':edit_ExamTitle', $edit_ExamTitle);
 $stmt2->execute();
 
-// Check if the exam name exists
-if($stmt2->rowCount() > 0){
+// Check if the exam name exists and not equal to the exam title
+if($stmt2->rowCount() > 0 && $check_ExamTitle != $edit_ExamTitle){
     $res = array("res" => "exists", "msg" => $edit_ExamTitle);
     echo json_encode($res);
     exit();
