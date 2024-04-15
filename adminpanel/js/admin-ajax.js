@@ -454,8 +454,10 @@ $(document).on("submit","#editExamFrm" , function(event) {
         'edit_ExamCluster': $('#edit_ExamCluster').val(), 
         'edit_ExamQuestLimit': $('#edit_ExamQuestLimit').val(),
         'edit_ExamTimeLimit': $('#edit_ExamTimeLimit').val(),
-        'edit_ExamRandom': $('#edit_ExamRandom').is(':checked') ? 1 : 0, // Check if the checkbox is checked
-        'edit_ExamNoPrev': $('#edit_ExamNoPrev').is(':checked') ? 1 : 0, // Check if the checkbox is checked
+        'edit_ExamRandom': $('#edit_ExamRandom').val(),
+        'edit_ExamNoPrev': $('#edit_ExamNoPrev').val(),
+        'edit_ExamRandom': $('#edit_ExamRandom').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
+        'edit_ExamNoPrev': $('#edit_ExamNoPrev').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
         'edit_ExamStatus': $('#edit_ExamStatus').val()
     };
     
@@ -491,24 +493,25 @@ $(document).on("submit","#editExamFrm" , function(event) {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: response.msg + " added.",
+                    text: response.msg + " updated.",
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,
                 }).then(function() {
-                    window.location.href = 'home.php?page=manage-exam';
+                    // Assuming 'home.php?page=manage-exam' is the URL where the updated content is located
+                    $('.examContainer').load('home.php?page=manage-exam .examContainer');
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: response.msg + "already exists.",
+                    text: "The name " + response.msg + " already exists.",
                 });
             } else if (response.res == "failed") {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: "An error occurred while adding Exam. Please try again.",
+                    text: "An error occurred while updating exam. Please try again.",
                 });
             } else if (response.res == "incomplete") {
                 Swal.fire({
@@ -520,7 +523,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Unable to save clusters for " + response.msg,
+                    text: "Exam does not exist.",
                 });
             } else {
                 Swal.fire({
@@ -535,5 +538,5 @@ $(document).on("submit","#editExamFrm" , function(event) {
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
         }
-    });
+    });    
 });

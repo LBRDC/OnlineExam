@@ -6,6 +6,16 @@
         $ex_id = $_GET['id'];
     }
     
+    if (isset($_GET['tab'])) {
+        if ($_GET['tab'] == 'exam-info') {
+            $tab = 0;
+        } else if ($_GET['tab'] == 'exam-questions') {
+            $tab = 1;
+        }
+    } else {
+        $tab = 0;
+    }
+    
     $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
     $stmt1->bindParam(':ex_id', $ex_id);
     $stmt1->execute();
@@ -69,21 +79,21 @@
                     </div> <!-- END Page Title -->
                     <!-- Page Tabs -->
                     <a href="?page=manage-exam" class="btn btn-lg btn-dark"><i class="fa fa-arrow-circle-left"></i> Back</a>
-                    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+                    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav" id="exam_tabs">
                         <li class="nav-item">
-                            <a role="tab" class="nav-link active" id="tab-0" data-toggle="tab" href="#tab-content-0">
+                            <a role="tab" class="nav-link <?php if($tab==0){echo'active';} ?>" id="tab-0" data-toggle="tab" href="#tab-content-0">
                                 <span>Exam Information</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a role="tab" class="nav-link" id="tab-1" data-toggle="tab" href="#tab-content-1">
+                            <a role="tab" class="nav-link <?php if($tab==1){echo'active';} ?>" id="tab-1" data-toggle="tab" href="#tab-content-1">
                                 <span>Exam Questions</span>
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <!-- Exam Information -->
-                        <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+                        <div class="tab-pane tabs-animation fade <?php if($tab==0){echo'show active';} ?>" id="tab-content-0" role="tabpanel">
                             <div class="row justify-content-center">
                                 <div class="col-md-11">
                                     <div class="main-card mb-3 card">
@@ -174,12 +184,12 @@
                                                         <div class="col-md-12">
                                                             <label>Exam Options</label>
                                                             <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamRandom">
-                                                                <label class="custom-control-label" for="edit_ExamRandom" value="yes" <?php if($ex_random_qstn=='yes'){echo'checked';} ?>>Randomize Questions</label>
+                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamRandom" <?php if($ex_random_qstn=='yes'){echo'checked';} ?>>
+                                                                <label class="custom-control-label" for="edit_ExamRandom">Randomize Questions</label>
                                                             </div>
                                                             <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamNoPrev">
-                                                                <label class="custom-control-label" for="edit_ExamNoPrev" value="yes" <?php if($ex_disable_prv=='yes'){echo'checked';} ?>>Disable Previous</label>
+                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamNoPrev" <?php if($ex_disable_prv=='yes'){echo'checked';} ?>>
+                                                                <label class="custom-control-label" for="edit_ExamNoPrev">Disable Previous</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -205,7 +215,7 @@
                             </div>
                         </div> <!-- END Exam Information -->
                         <!-- Exam Questions -->
-                        <div class="tab-pane tabs-animation fade" id="tab-content-1" role="tabpanel">
+                        <div class="tab-pane tabs-animation fade <?php if($tab==1){echo'show active';} ?>" id="tab-content-1" role="tabpanel">
                             <div class="row justify-content-center">
                                 <div class="col-md-11">
                                     <div class="main-card mb-3 card">

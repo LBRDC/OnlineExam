@@ -19,4 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     fetchCluList();
+
+    $('#exam_tabs .nav-link').on('click', function() {
+        var tabId = $(this).attr('id'); // Get the ID of the clicked tab
+        var tabName = $(this).text().trim().toLowerCase().replace(/\s+/g, '-'); // Generate a URL-friendly name
+        var currentUrl = window.location.href;
+        var baseUrl = currentUrl.split('?')[0]; // Get the base URL
+        var newUrl = baseUrl + '?page=manage-exam-edit&id=8&tab=' + tabName; // Construct the new URL
+
+        // Update the URL without reloading the page
+        history.pushState({}, '', newUrl);
+    });
 });
