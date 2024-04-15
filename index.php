@@ -6,4 +6,5 @@
     session_unset();
     session_destroy();
     header("location:/online-exam");
+    header("location:/adminpanel");
     //header("location:https://lbpresources.com/");

@@ -360,8 +360,8 @@ $(document).on("submit","#addExamFrm" , function(event) {
         'add_ExamCluster': $('#add_ExamCluster').val(), //Array
         'add_ExamQuestLimit': $('#add_ExamQuestLimit').val(),
         'add_ExamTimeLimit': $('#add_ExamTimeLimit').val(),
-        'add_ExamRandom': $('#add_ExamRandom').val(),
-        'add_ExamNoPrev': $('#add_ExamNoPrev').val()
+        'add_ExamRandom': $('#add_ExamRandom').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
+        'add_ExamNoPrev': $('#add_ExamNoPrev').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
     };
 
     console.log(formData);
@@ -387,6 +387,102 @@ $(document).on("submit","#addExamFrm" , function(event) {
 
     $.ajax({
         url: 'query/add_ExamExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " added.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam';
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + "already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while adding Exam. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in required fields.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Unable to save clusters for " + response.msg,
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+        }
+    });
+});
+
+
+// manage-exam-edit EDIT
+$(document).on("submit","#editExamFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'edit_ExamId': $('#edit_ExamId').val(),
+        'edit_ExamTitle': $('#edit_ExamTitle').val(),
+        'edit_ExamDesc': $('#edit_ExamDesc').val(),
+        'edit_ExamCluster': $('#edit_ExamCluster').val(), 
+        'edit_ExamQuestLimit': $('#edit_ExamQuestLimit').val(),
+        'edit_ExamTimeLimit': $('#edit_ExamTimeLimit').val(),
+        'edit_ExamRandom': $('#edit_ExamRandom').is(':checked') ? 1 : 0, // Check if the checkbox is checked
+        'edit_ExamNoPrev': $('#edit_ExamNoPrev').is(':checked') ? 1 : 0, // Check if the checkbox is checked
+        'edit_ExamStatus': $('#edit_ExamStatus').val()
+    };
+    
+
+    console.log(formData);
+    
+    var isValid;
+    if (formData['edit_ExamId'] === '' || formData['edit_ExamTitle'] === '' || formData['edit_ExamCluster'].length === 0 || formData['edit_ExamQuestLimit'] === '' || formData['edit_ExamTimeLimit'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    console.log("INPUT VALIDATED " + isValid);
+    console.log(formData);
+
+    $.ajax({
+        url: 'query/edit_ExamExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,

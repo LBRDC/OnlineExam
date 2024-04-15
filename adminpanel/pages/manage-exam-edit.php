@@ -1,6 +1,43 @@
 <?php
-    $stmt1 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+    if (!isset($_GET['id'])) {
+        echo "<script>swal('Error', 'Exam ID not provided', 'error');";
+        echo "window.location.href = '?page=manage-exam';</script>";
+    } else {
+        $ex_id = $_GET['id'];
+    }
+    
+    $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
+    $stmt1->bindParam(':ex_id', $ex_id);
     $stmt1->execute();
+
+    // Fetch the result
+    $result = $stmt1->fetch(PDO::FETCH_ASSOC);
+
+    // Check if the result is not empty to avoid errors
+    if ($result) {
+        $ex_title = $result['ex_title'];
+        $ex_description = $result['ex_description'];
+        $ex_time_limit = $result['ex_time_limit'];
+        $ex_qstn_limit = $result['ex_qstn_limit'];
+        $ex_disable_prv = $result['ex_disable_prv'];
+        $ex_random_qstn = $result['ex_random_qstn'];
+        $ex_status = ($result['ex_status'] != '') ? 1 : 0;
+        $ex_status_txt = ($ex_status != '') ? 'Active' : 'Inactive';
+    } else {
+        // Handle the case where no exam is found with the given ID
+        echo "<script>alert('Exam not found.')";
+        echo "window.location.href = '?page=manage-exam';</script>";
+        $ex_title = "";
+        $ex_description = "";
+        $ex_time_limit = "";
+        $ex_qstn_limit = "";
+        $ex_disable_prv = "";
+        $ex_random_qstn = "";
+        $ex_status = "";
+    }
+
+    $stmt2 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+    $stmt2->execute();
 ?>
 
 <!-- #START# manage-exam.php -->
@@ -14,7 +51,7 @@
                                     <i class="pe-7s-news-paper icon-gradient bg-sunny-morning">
                                     </i>
                                 </div>
-                                <div>Exam Management
+                                <div>Manage "<span class="text-warning font-weight-bold"><?php echo htmlspecialchars($ex_title); ?></span>"
                                     <div class="page-title-subheading">
                                         Edit Exam Information and Manage Exam Questions
                                     </div>
@@ -54,16 +91,17 @@
                                             <h5 class="card-title">Exam Information</h5>
                                             <div class="m-3">
                                                 <form id="editExamFrm" name="editExamFrm" method="post">
+                                                    <input type="hidden" name="edit_ExamId" id="edit_ExamId" value="<?php echo $ex_id; ?>">
                                                     <div class="row mb-2">
                                                         <div class="col-md-12">
-                                                            <label for="add_ExamTitle">Exam Title<span class="text-danger">*</span></label>
-                                                            <input type="text" name="add_ExamTitle" id="add_ExamTitle" class="form-control" placeholder="" value="" required>
+                                                            <label for="edit_ExamTitle">Exam Title<span class="text-danger">*</span></label>
+                                                            <input type="text" name="edit_ExamTitle" id="edit_ExamTitle" class="form-control" placeholder="" value="<?php echo htmlspecialchars($ex_title); ?>" required>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-md-12">
-                                                            <label for="add_ExamDesc">Exam Description</label>
-                                                            <textarea name="add_ExamDesc" id="add_ExamDesc" class="form-control" rows="5" placeholder=""></textarea>
+                                                            <label for="edit_ExamDesc">Exam Description</label>
+                                                            <textarea name="edit_ExamDesc" id="edit_ExamDesc" class="form-control" rows="5" placeholder=""><?php echo htmlspecialchars($ex_description); ?></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
@@ -72,10 +110,10 @@
                                                             <select class="form-control" name="edit_ExamCluster[]" id="edit_ExamCluster" multiple="multiple" style="width: 100%;" required>
                                                                 <option value="">Select...</option>
                                                                 <?php 
-                                                                    $result = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+                                                                    $result = $stmt2->fetchAll(PDO::FETCH_ASSOC);
                                                                     
                                                                     // Check if there are any clusters
-                                                                    if ($stmt1->rowCount() > 0) {
+                                                                    if ($stmt2->rowCount() > 0) {
                                                                         foreach ($result as $row) {
                                                                             echo '<option value="' . htmlspecialchars($row['clu_id']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
                                                                         }
@@ -89,9 +127,10 @@
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-md-6">
-                                                            <label for="add_ExamQuestLimit">Question Limit<span class="text-danger">*</span></label>
-                                                            <select class="form-control" name="add_ExamQuestLimit" id="add_ExamQuestLimit" required>
+                                                            <label for="edit_ExamQuestLimit">Question Limit<span class="text-danger">*</span></label>
+                                                            <select class="form-control" name="edit_ExamQuestLimit" id="edit_ExamQuestLimit" required>
                                                                 <option value="">Select...</option>
+                                                                <option value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" selected hidden><?php echo htmlspecialchars($ex_qstn_limit); ?> Questions</option>
                                                                 <option value="1">1 Question</option>
                                                                 <option value="5">5 Questions</option>
                                                                 <option value="10">10 Questions</option>
@@ -109,9 +148,10 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label for="add_ExamTimeLimit">Time Limit<span class="text-danger">*</span></label>
-                                                            <select class="form-control" name="add_ExamTimeLimit" id="add_ExamTimeLimit" required>
-                                                                <option value="">Select...</option>
+                                                            <label for="edit_ExamTimeLimit">Time Limit<span class="text-danger">*</span></label>
+                                                            <select class="form-control" name="edit_ExamTimeLimit" id="edit_ExamTimeLimit" required>
+                                                                <option value=""disabled>Select...</option>
+                                                                <option value="<?php echo htmlspecialchars($ex_time_limit); ?>" selected hidden><?php echo htmlspecialchars($ex_time_limit); ?> Minutes</option>
                                                                 <option value="1">1 Minute</option> 
                                                                 <option value="2">2 Minutes</option> 
                                                                 <option value="3">3 Minutes</option> 
@@ -134,13 +174,24 @@
                                                         <div class="col-md-12">
                                                             <label>Exam Options</label>
                                                             <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="add_ExamRandom">
-                                                                <label class="custom-control-label" for="add_ExamRandom" value="yes">Randomize Questions</label>
+                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamRandom">
+                                                                <label class="custom-control-label" for="edit_ExamRandom" value="yes" <?php if($ex_random_qstn=='yes'){echo'checked';} ?>>Randomize Questions</label>
                                                             </div>
                                                             <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="add_ExamNoPrev">
-                                                                <label class="custom-control-label" for="add_ExamNoPrev" value="yes">Disable Previous</label>
+                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamNoPrev">
+                                                                <label class="custom-control-label" for="edit_ExamNoPrev" value="yes" <?php if($ex_disable_prv=='yes'){echo'checked';} ?>>Disable Previous</label>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-md-12">
+                                                            <label for="edit_ExamStatus">Status<span class="text-danger">*</span></label>
+                                                            <select class="form-control" name="edit_ExamStatus" id="edit_ExamStatus" required>
+                                                                <option value="" disabled>Select...</option>
+                                                                <option value="<?php echo htmlspecialchars($ex_status); ?>" selected hidden><?php echo htmlspecialchars($ex_status_txt); ?></option>
+                                                                <option value="1">Active</option>
+                                                                <option value="0">Inactive</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2 justify-content-center">
