@@ -114,3 +114,66 @@
         </div>
     </div>
 </div> <!-- #END# ADD CLUSTER MODAL -->
+
+
+<!-- DISABLE EXAM MODAL -->
+<div class="modal fade" id="mdlDisableExam" tabindex="-1" role="dialog" aria-labelledby="mdlDisableExamLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlDisableExamLabel">Disable <span class="font-weight-bold">NAME</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="disableExamFrm" name="disableExamFrm" method="post">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <input type="text" name="disable_ExamId" id="disable_ExamId" value="" hidden required>
+                    <input type="text" name="disable_ExamName" id="disable_ExamName" value="" hidden required>
+                    <input type="text" name="disable_ExamStatus" id="disable_ExamStatus" value="" hidden required>
+                    <div class="form-row mb-2">
+                        Are you sure you want to DISABLE&nbsp;<span class="font-weight-bold"></span>?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">DISABLE</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# DISABLE EXAM MODAL -->
+
+
+<!-- ENABLE EXAM MODAL -->
+<div class="modal fade" id="mdlEnableExam" tabindex="-1" role="dialog" aria-labelledby="mdlEnableExamLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdlEnableExamLabel">Enable <span class="font-weight-bold">NAME</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="enableExamFrm" name="enableExamFrm" method="post">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <input type="text" name="enable_ExamId" id="enable_ExamId" value="" hidden required>
+                        <input type="text" name="enable_ExamName" id="enable_ExamName" value="" hidden required>
+                        <input type="text" name="enable_ExamStatus" id="enable_ExamStatus" value="" hidden required>
+                        <div class="form-row mb-2">
+                            Are you sure you want to ENABLE&nbsp;<span class="font-weight-bold"></span>?
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">ENABLE</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div> <!-- #END# ENABLE CLUSTER MODAL -->

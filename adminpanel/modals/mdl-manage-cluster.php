@@ -122,9 +122,9 @@
                 <form id="enableClusterFrm" name="enableClusterFrm" method="post">
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <input type="text" name="enable_CluId" id="enable_CluId" value=""  required>
-                        <input type="text" name="enable_CluName" id="enable_CluName" value=""  required>
-                        <input type="text" name="enable_CluStatus" id="enable_CluStatus" value=""  required>
+                        <input type="text" name="enable_CluId" id="enable_CluId" value="" hidden required>
+                        <input type="text" name="enable_CluName" id="enable_CluName" value="" hidden required>
+                        <input type="text" name="enable_CluStatus" id="enable_CluStatus" value="" hidden required>
                         <div class="form-row mb-2">
                             Are you sure you want to ENABLE&nbsp;<span class="font-weight-bold"></span>?
                         </div>

@@ -31,8 +31,8 @@
         $ex_qstn_limit = $result['ex_qstn_limit'];
         $ex_disable_prv = $result['ex_disable_prv'];
         $ex_random_qstn = $result['ex_random_qstn'];
-        $ex_status = ($result['ex_status'] != '') ? 1 : 0;
-        $ex_status_txt = ($ex_status != '') ? 'Active' : 'Inactive';
+        $ex_status = $result['ex_status'];
+        $ex_status_txt = ($ex_status == 1) ? 'Active' : 'Inactive';
     } else {
         // Handle the case where no exam is found with the given ID
         echo "<script>alert('Exam not found.')";
@@ -46,8 +46,23 @@
         $ex_status = "";
     }
 
-    $stmt2 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+    // Fetch all clusters
+    $stmt2 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
     $stmt2->execute();
+
+    // Separate active and inactive clusters
+    $activeClusters = [];
+    $inactiveClusters = [];
+
+    $result = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($result as $row) {
+        if ($row['clu_status'] == 1) {
+            $activeClusters[] = $row;
+        } else {
+            $inactiveClusters[] = $row;
+        }
+    }
+
 ?>
 
 <!-- #START# manage-exam.php -->
@@ -119,19 +134,29 @@
                                                             <label for="edit_ExamCluster">Cluster<span class="text-danger">*</span></label>
                                                             <select class="form-control" name="edit_ExamCluster[]" id="edit_ExamCluster" multiple="multiple" style="width: 100%;" required>
                                                                 <option value="">Select...</option>
-                                                                <?php 
-                                                                    $result = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-                                                                    
-                                                                    // Check if there are any clusters
-                                                                    if ($stmt2->rowCount() > 0) {
-                                                                        foreach ($result as $row) {
-                                                                            echo '<option value="' . htmlspecialchars($row['clu_id']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
-                                                                        }
-                                                                    } else {
-                                                                        // Display a message if there are no clusters
-                                                                        echo '<option value="" disabled="disabled">No clusters available</option>';
-                                                                    }
-                                                                ?>
+                                                                <?php if (!empty($activeClusters)): ?>
+                                                                    <optgroup label="Active Clusters">
+                                                                        <?php foreach ($activeClusters as $row): ?>
+                                                                            <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?></option>
+                                                                        <?php endforeach; ?>
+                                                                    </optgroup>
+                                                                <?php else: ?>
+                                                                    <optgroup label="Active Clusters">
+                                                                        <option value="" disabled="disabled">No active clusters available</option>
+                                                                    </optgroup>
+                                                                <?php endif; ?>
+
+                                                                <?php if (!empty($inactiveClusters)): ?>
+                                                                    <optgroup label="Inactive Clusters">
+                                                                        <?php foreach ($inactiveClusters as $row): ?>
+                                                                            <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?>(disabled)</option>
+                                                                        <?php endforeach; ?>
+                                                                    </optgroup>
+                                                                <?php else: ?>
+                                                                    <optgroup label="Inactive Clusters">
+                                                                        <option value="" disabled="disabled">No inactive clusters available</option>
+                                                                    </optgroup>
+                                                                <?php endif; ?>
                                                             </select>
                                                         </div>
                                                     </div>

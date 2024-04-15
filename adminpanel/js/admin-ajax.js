@@ -1,3 +1,4 @@
+/* ########## CLUSTER ########## */
 // manage-cluster ADD 
 $(document).on("submit","#addClusterFrm" , function(event) {
     event.preventDefault();
@@ -218,7 +219,7 @@ $(document).on("submit","#disableClusterFrm" , function(event) {
     //console.log(formData);
 
     $.ajax({
-        url: 'query/disable_ClusterExe.php',
+        url: 'query/status_ClusterDisable.php',
         type: 'POST',
         dataType : "json",
         data: formData,
@@ -299,7 +300,7 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
     console.log(formData);
 
     $.ajax({
-        url: 'query/enable_ClusterExe.php',
+        url: 'query/status_ClusterEnable.php',
         type: 'POST',
         dataType : "json",
         data: formData,
@@ -349,7 +350,7 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
     });
 });
 
-
+/* ########## EXAM ########## */
 // manage-exam ADD
 $(document).on("submit","#addExamFrm" , function(event) {
     event.preventDefault();
@@ -425,6 +426,168 @@ $(document).on("submit","#addExamFrm" , function(event) {
                     icon: "error",
                     title: "Error",
                     text: "Unable to save clusters for " + response.msg,
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+        }
+    });
+});
+
+
+// manage-exam DISABLE 
+$(document).on("submit","#disableExamFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'disable_ExamId': $('#disable_ExamId').val(),
+        'disable_ExamName': $('#disable_ExamName').val(),
+        'disable_ExamStatus': $('#disable_ExamStatus').val()
+    };
+    
+    var isValid;
+    if (formData['disable_ExamId'] === '' || formData['disable_ExamName'] === '' || formData['disable_ExamStatus'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED");
+    //console.log(formData);
+
+    $.ajax({
+        url: 'query/status_ExamDisable.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " disabled.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while disabling Exam. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of Exam" + response.msg + " found.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+        }
+    });
+});
+
+
+// manage-exam ENABLE 
+$(document).on("submit","#enableExamFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'enable_ExamId': $('#enable_ExamId').val(),
+        'enable_ExamName': $('#enable_ExamName').val(),
+        'enable_ExamStatus': $('#enable_ExamStatus').val()
+    };
+    
+    var isValid;
+    if (formData['enable_ExamId'] === '' || formData['enable_ExamName'] === '' || formData['enable_ExamStatuss'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid);
+    //console.log(formData);
+
+    $.ajax({
+        url: 'query/status_ExamEnable.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " enabled.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while enabling Exam. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of Exam " + response.msg + " found.",
                 });
             } else {
                 Swal.fire({
@@ -540,3 +703,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
         }
     });    
 });
+
+
+
+/* ########## X ########## */

@@ -135,41 +135,46 @@
                                             </tr>
                                             </tfoot>-->
                                             <tbody>
-                                                <?php
-                                                while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                                                    $ex_id = $row['ex_id'];
-                                                    $ex_title = $row['ex_title'];
-                                                    $ex_description = $row['ex_description'];
-                                                    $ex_qstn_limit = $row['ex_qstn_limit'];
-                                                    $ex_time_limit = $row['ex_time_limit'];
-                                                    $ex_disable_prv = $row['ex_disable_prv'];
-                                                    $ex_random_qstn = $row['ex_random_qstn'];
-                                                    $ex_status = $row['ex_status'];
-                                                    $statusText = ($ex_status == 1) ? 'Active' : 'Inactive';
+                                            <?php
+                                            while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                                                $ex_id = $row['ex_id'];
+                                                $ex_title = $row['ex_title'];
+                                                $ex_description = $row['ex_description'];
+                                                $ex_qstn_limit = $row['ex_qstn_limit'];
+                                                $ex_time_limit = $row['ex_time_limit'];
+                                                $ex_disable_prv = $row['ex_disable_prv'];
+                                                $ex_random_qstn = $row['ex_random_qstn'];
+                                                $ex_status = $row['ex_status'];
+                                                $statusText = ($ex_status == 1) ? 'Active' : 'Inactive';
 
-                                                    $stmt4 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE ex_id = :ex_id");
-                                                    $stmt4->bindParam(':ex_id', $ex_id);
-                                                    $stmt4->execute();
+                                                $stmt4 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE ex_id = :ex_id");
+                                                $stmt4->bindParam(':ex_id', $ex_id);
+                                                $stmt4->execute();
 
-                                                    $clusterCount = 0;
-                                                    $clusterNames = []; 
+                                                $clusterCount = 0;
+                                                $clusterNames = []; 
 
-                                                    while ($row = $stmt4->fetch(PDO::FETCH_ASSOC)) {
+                                                while ($row = $stmt4->fetch(PDO::FETCH_ASSOC)) {
+                                                    $clu_id = $row['clu_id'];
+                                                    
+                                                    // Fetch the cluster name and status from cluster_tbl
+                                                    $stmt5 = $conn->prepare("SELECT clu_name, clu_status FROM cluster_tbl WHERE clu_id = :clu_id");
+                                                    $stmt5->bindParam(':clu_id', $clu_id);
+                                                    $stmt5->execute();
+
+                                                    $cluster = $stmt5->fetch(PDO::FETCH_ASSOC);
+                                                    if ($cluster) {
+                                                        // Append "(DISABLED)" to the cluster name if its status is 0
+                                                        $clusterName = $cluster['clu_status'] == 0 ? $cluster['clu_name'] . "(disabled)" : $cluster['clu_name'];
+                                                        $clusterNames[] = $clusterName;
                                                         $clusterCount++;
-                                                        $clu_id = $row['clu_id'];
-                                                        
-                                                        $stmt5 = $conn->prepare("SELECT clu_name FROM cluster_tbl WHERE clu_id = :clu_id");
-                                                        $stmt5->bindParam(':clu_id', $clu_id);
-                                                        $stmt5->execute();
-
-                                                        $clusterName = $stmt5->fetch(PDO::FETCH_ASSOC);
-                                                        if ($clusterName) {
-                                                            $clusterNames[] = $clusterName['clu_name'];
-                                                        }
                                                     }
-                                                        // Convert cluster names to a string for the data attribute
-                                                    $clusterNamesString = implode(', ', $clusterNames);
-                                                ?>
+                                                }
+                                                // Convert cluster names to a string for the data attribute
+                                                $clusterNamesString = implode(', ', $clusterNames);
+                                            ?>
+
+
                                                 <tr id="<?php echo htmlspecialchars($ex_id); ?>" data-clusters="<?php echo htmlspecialchars($clusterNamesString); ?>">
                                                     <td><?php echo htmlspecialchars($ex_title); ?></td>
                                                     <td>
@@ -205,14 +210,14 @@
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <?php if ($ex_status == 1) { ?>
-                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableCluster" data-toggle="tooltip" data-placement="bottom" title="Disable" 
+                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableExam" data-toggle="tooltip" data-placement="bottom" title="Disable" 
                                                         data-disable-id="<?php echo htmlspecialchars($ex_id); ?>" 
                                                         data-disable-name="<?php echo htmlspecialchars($ex_title); ?>" 
                                                         data-disable-status="<?php echo htmlspecialchars($ex_status); ?>">
                                                             <i class="fas fa-times-circle"></i>
                                                         </a>
                                                         <?php } else { ?>
-                                                        <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableCluster" data-toggle="tooltip" data-placement="bottom" title="Enable" 
+                                                        <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExam" data-toggle="tooltip" data-placement="bottom" title="Enable" 
                                                         data-enable-id="<?php echo htmlspecialchars($ex_id); ?>" 
                                                         data-enable-name="<?php echo htmlspecialchars($ex_title); ?>" 
                                                         data-enable-status="<?php echo htmlspecialchars($ex_status); ?>">
