@@ -1,4 +1,5 @@
 <?php
+    /* ########## EXAM INFORMATION ########## */
     if (!isset($_GET['id'])) {
         echo "<script>swal('Error', 'Exam ID not provided', 'error');";
         echo "window.location.href = '?page=manage-exam';</script>";
@@ -16,22 +17,22 @@
         $tab = 0;
     }
     
-    $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
-    $stmt1->bindParam(':ex_id', $ex_id);
-    $stmt1->execute();
+    $stmtei1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
+    $stmtei1->bindParam(':ex_id', $ex_id);
+    $stmtei1->execute();
 
     // Fetch the result
-    $result = $stmt1->fetch(PDO::FETCH_ASSOC);
+    $resultei1 = $stmtei1->fetch(PDO::FETCH_ASSOC);
 
     // Check if the result is not empty to avoid errors
-    if ($result) {
-        $ex_title = $result['ex_title'];
-        $ex_description = $result['ex_description'];
-        $ex_time_limit = $result['ex_time_limit'];
-        $ex_qstn_limit = $result['ex_qstn_limit'];
-        $ex_disable_prv = $result['ex_disable_prv'];
-        $ex_random_qstn = $result['ex_random_qstn'];
-        $ex_status = $result['ex_status'];
+    if ($resultei1) {
+        $ex_title = $resultei1['ex_title'];
+        $ex_description = $resultei1['ex_description'];
+        $ex_time_limit = $resultei1['ex_time_limit'];
+        $ex_qstn_limit = $resultei1['ex_qstn_limit'];
+        $ex_disable_prv = $resultei1['ex_disable_prv'];
+        $ex_random_qstn = $resultei1['ex_random_qstn'];
+        $ex_status = $resultei1['ex_status'];
         $ex_status_txt = ($ex_status == 1) ? 'Active' : 'Inactive';
     } else {
         // Handle the case where no exam is found with the given ID
@@ -47,15 +48,15 @@
     }
 
     // Fetch all clusters
-    $stmt2 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
-    $stmt2->execute();
+    $stmtei2 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
+    $stmtei2->execute();
 
     // Separate active and inactive clusters
     $activeClusters = [];
     $inactiveClusters = [];
 
-    $result = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($result as $row) {
+    $resultei2 = $stmtei2->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($resultei2 as $row) {
         if ($row['clu_status'] == 1) {
             $activeClusters[] = $row;
         } else {
@@ -63,6 +64,15 @@
         }
     }
 
+    /* ########## EXAM QUESTIONS ########## */
+    //Fetch Exam Questions
+    $stmteq1 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id=:ex_id ORDER BY exqstn_id ASC");
+    $stmteq1->bindParam(':ex_id', $ex_id);
+    $stmteq1->execute();
+    $resulteq1 = $stmteq1->fetchAll(PDO::FETCH_ASSOC);
+
+    //count questions
+    $counteq1 = $stmteq1->rowCount();
 ?>
 
 <!-- #START# manage-exam.php -->
@@ -241,13 +251,16 @@
                         </div> <!-- END Exam Information -->
                         <!-- Exam Questions -->
                         <div class="tab-pane tabs-animation fade <?php if($tab==1){echo'show active';} ?>" id="tab-content-1" role="tabpanel">
+                            <!-- Actions -->
                             <div class="row justify-content-center">
                                 <div class="col-md-11">
                                     <div class="main-card mb-3 card">
                                         <div class="card-body">
                                             <h5 class="card-title">Exam Actions</h5>
                                             <a href="javascript:void(0);">
-                                                <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Add Question"><i class="fa fa-plus-circle icon-gradient bg-grow-early"> </i></div>
+                                                <div class="font-icon-wrapper font-icon-lg btn" id="add-btn" data-toggle="modal" data-target="#mdlAddQuestion" data-toggle="tooltip" data-placement="bottom" title="Add Question" data-add-id="<?php echo htmlspecialchars($ex_id); ?>">
+                                                    <i class="fa fa-plus-circle icon-gradient bg-grow-early"></i>
+                                                </div>
                                             </a>
                                             <a href="javascript:void(0);">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Questions">
@@ -262,57 +275,102 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                                        
+                            </div> <!-- END Actions -->                                   
                             
+                            <!-- Questions -->
                             <div class="row justify-content-center">
                                 <div class="col-md-11">
                                     <div class="main-card mb-3 card">
                                         <div class="card-body">
-                                            <h5 class="card-title">Exam Questions<span class="ml-2 mb-2 mr-2 badge badge-pill badge-success">12</span></h5>
+                                            <h5 class="card-title">Exam Questions<span class="ml-2 mb-2 mr-2 badge badge-pill badge-success"><?php echo htmlspecialchars($counteq1); ?></span></h5>
                                             <div class="m-3 scroll-area-lg">
                                                 <div class="scrollbar-container ps--active-y">
                                                 <table class="mb-0 table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Question</th>
-                                                        <th>Image</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Question</th>
-                                                        <th>Image</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </tfoot>
-                                                <tbody>
-                                                <tr>
-                                                    <th >1</th>
-                                                    <td>Question 1?</td>
-                                                    <td>IMG</td>
-                                                    <td>
-                                                        <a href="?page=manage-exam-edit&id=<?php echo htmlspecialchars($ex_id); ?>" class="btn btn-warning m-1" id="edit-btn" data-toggle="tooltip" data-placement="bottom" title="Edit">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-btn" data-toggle="modal" data-target="#mdlDeleteQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
-                                                        data-disable-id="<?php echo htmlspecialchars($ex_id); ?>" 
-                                                        data-disable-name="<?php echo htmlspecialchars($ex_title); ?>" 
-                                                        data-disable-status="<?php echo htmlspecialchars($ex_status); ?>">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Question</th>
+                                                            <th>Choices</th>
+                                                            <th>Answer</th>
+                                                            <th>Image</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Question</th>
+                                                            <th>Choices</th>
+                                                            <th>Answer</th>
+                                                            <th>Image</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                        <?php
+                                                        if ($resulteq1) {
+                                                            $counter = 1;
+                                                            foreach ($resulteq1 as $row) {
+                                                                $exqstn_id = $row['exqstn_id'];
+                                                                $ex_id = $row['ex_id'];
+                                                                $exam_image = $row['eqt_ans'];
+                                                                $exam_question = $row['exam_question'];
+                                                                $ex_ch1 = $row['ex_ch1'];
+                                                                $ex_ch2 = $row['ex_ch2'];
+                                                                $ex_ch3 = $row['ex_ch3'];
+                                                                $ex_ch4 = $row['ex_ch4'];
+                                                                $ex_ch5 = $row['ex_ch5'];
+                                                                $ex_ch6 = $row['ex_ch6'];
+                                                                $ex_ch7 = $row['ex_ch7'];
+                                                                $ex_ch8 = $row['ex_ch8'];
+                                                                $ex_ch9 = $row['ex_ch9'];
+                                                                $ex_ch10 = $row['ex_ch10'];
+                                                                $exqstn_answer = $row['exqstn_answer'];
+                                                                ?>
+                                                                <tr>
+                                                                    <th><?php echo $counter; ?></th>
+                                                                    <td><?php echo htmlspecialchars($exam_question); ?></td>
+                                                                    <td>
+                                                                        <?php
+                                                                        echo 'A. ' .htmlspecialchars($ex_ch1) . "<br>";
+                                                                        echo 'B. ' .htmlspecialchars($ex_ch2) . "<br>";
+                                                                        echo 'C. ' .htmlspecialchars($ex_ch3) . "<br>";
+                                                                        echo 'D. ' .htmlspecialchars($ex_ch4) . "<br>";
+                                                                        echo 'E. ' .htmlspecialchars($ex_ch5) . "<br>";
+                                                                        echo 'F. ' .htmlspecialchars($ex_ch6) . "<br>";
+                                                                        echo 'G. ' .htmlspecialchars($ex_ch7) . "<br>";
+                                                                        echo 'H. ' .htmlspecialchars($ex_ch8) . "<br>";
+                                                                        echo 'I. ' .htmlspecialchars($ex_ch9) . "<br>";
+                                                                        echo 'J. ' .htmlspecialchars($ex_ch10) . "<br>";
+                                                                        ?>
+                                                                    </td>
+                                                                    <td><?php echo htmlspecialchars($exqstn_answer); ?></td>
+                                                                    <td><?php echo htmlspecialchars($exam_image); ?></td>
+                                                                    <td>
+                                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                                                            <i class="fas fa-edit"></i>
+                                                                        </a>
+                                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-btn" data-toggle="modal" data-target="#mdlDeleteQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
+                                                                        data-delete-id="<?php echo htmlspecialchars($exqstn_id); ?>">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php
+                                                                $counter++;
+                                                            }
+                                                        } else {
+                                                            echo '<tr><td colspan="6" class="text-center">No Questions Found</td></tr>';
+                                                        }
+                                                        ?>
+                                                    </tbody>
                                                 </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> <!-- END Questions -->
                         </div> <!-- END Exam Questions -->
                     </div>
                 </div> <!-- #END# Exam PAGE -->
