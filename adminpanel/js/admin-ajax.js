@@ -723,16 +723,14 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
     formData.append('add_QstnCh8', $('#add_QstnCh8').val());
     formData.append('add_QstnCh9', $('#add_QstnCh9').val());
     formData.append('add_QstnCh10', $('#add_QstnCh10').val());
-    formData.append('add_QstnAns', $('#add_QstnAns').val());
     formData.append('add_ExamImg', $('#add_ExamImg')[0].files[0]);
-    formData.append('sel_QstnAns', $('#add_QstnAns').val());
-
-    console.log(formData);
-
-    // Append add_QstnAns based on selection
+    
+	// Append add_QstnAns based on selection
     var selectedValue = $('#add_QstnAns').val();
     var key = 'add_QstnCh' + selectedValue;
-    if (formData.hasOwnProperty(key)) {
+
+    // Check if the selected answer is not empty or undefined
+    if (selectedValue && formData.get(key)) {
         formData.append('add_QstnAns', formData.get(key));
     } else {
         Swal.fire({
@@ -741,6 +739,12 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             text: "Please select an answer.",
         });
         return;
+    }
+
+
+    // Display the appended values in the console
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
     }
 
     // Check if a file has been selected for add_ExamImg
@@ -765,18 +769,30 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
     //console.log(formData);
 
     $.ajax({
-        url: 'query/add_QuestionExe.php',
+        url: 'query/add_ExamQuestExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
         processData: false, // Prevent jQuery from processing the data
         contentType: false, // Let the browser set the content type
+        beforeSend: function() {
+            // Show Swal alert before sending the request
+            Swal.fire({
+                title: 'Uploading...',
+                html: 'Please wait while your question is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            Swal.close(); // Close the Swal alert
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: response.msg + " added.",
+                    text: "Question added to " + response.msg + ".",
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,
@@ -794,7 +810,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: "An error occurred while adding Exam. Please try again.",
+                    text: "An error occurred while adding Question. Please try again.",
                 });
             } else if (response.res == "incomplete") {
                 Swal.fire({
@@ -817,6 +833,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            Swal.close(); // Close the Swal alert
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);

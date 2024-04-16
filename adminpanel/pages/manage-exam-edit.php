@@ -115,7 +115,7 @@
                                 <span>Exam Questions</span>
                             </a>
                         </li>
-                    </ul>
+                    </ul> <!-- END Page Tabs -->
                     <div class="tab-content">
                         <!-- Exam Information -->
                         <div class="tab-pane tabs-animation fade <?php if($tab==0){echo'show active';} ?>" id="tab-content-0" role="tabpanel">
@@ -288,20 +288,14 @@
                                                 <table class="mb-0 table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
                                                             <th>Question</th>
-                                                            <th>Choices</th>
-                                                            <th>Answer</th>
-                                                            <th>Image</th>
+                                                            <th style="width: 30%;">Image</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tfoot>
                                                         <tr>
-                                                            <th>#</th>
                                                             <th>Question</th>
-                                                            <th>Choices</th>
-                                                            <th>Answer</th>
                                                             <th>Image</th>
                                                             <th>Action</th>
                                                         </tr>
@@ -313,41 +307,74 @@
                                                             foreach ($resulteq1 as $row) {
                                                                 $exqstn_id = $row['exqstn_id'];
                                                                 $ex_id = $row['ex_id'];
-                                                                $exam_image = $row['eqt_ans'];
+                                                                $exam_image = $row['exam_image'];
                                                                 $exam_question = $row['exam_question'];
-                                                                $ex_ch1 = $row['ex_ch1'];
-                                                                $ex_ch2 = $row['ex_ch2'];
-                                                                $ex_ch3 = $row['ex_ch3'];
-                                                                $ex_ch4 = $row['ex_ch4'];
-                                                                $ex_ch5 = $row['ex_ch5'];
-                                                                $ex_ch6 = $row['ex_ch6'];
-                                                                $ex_ch7 = $row['ex_ch7'];
-                                                                $ex_ch8 = $row['ex_ch8'];
-                                                                $ex_ch9 = $row['ex_ch9'];
-                                                                $ex_ch10 = $row['ex_ch10'];
+                                                                $ex_ch1 = $row['exam_ch1'];
+                                                                $ex_ch2 = $row['exam_ch2'];
+                                                                $ex_ch3 = $row['exam_ch3'];
+                                                                $ex_ch4 = $row['exam_ch4'];
+                                                                $ex_ch5 = $row['exam_ch5'];
+                                                                $ex_ch6 = $row['exam_ch6'];
+                                                                $ex_ch7 = $row['exam_ch7'];
+                                                                $ex_ch8 = $row['exam_ch8'];
+                                                                $ex_ch9 = $row['exam_ch9'];
+                                                                $ex_ch10 = $row['exam_ch10'];
                                                                 $exqstn_answer = $row['exqstn_answer'];
                                                                 ?>
-                                                                <tr>
-                                                                    <th><?php echo $counter; ?></th>
-                                                                    <td><?php echo htmlspecialchars($exam_question); ?></td>
+                                                                <tr id="<?php echo $exqstn_id; ?>">
                                                                     <td>
+                                                                        <strong><?php echo $counter; ?>).</strong> <?php echo htmlspecialchars($exam_question); ?><br>
                                                                         <?php
-                                                                        echo 'A. ' .htmlspecialchars($ex_ch1) . "<br>";
-                                                                        echo 'B. ' .htmlspecialchars($ex_ch2) . "<br>";
-                                                                        echo 'C. ' .htmlspecialchars($ex_ch3) . "<br>";
-                                                                        echo 'D. ' .htmlspecialchars($ex_ch4) . "<br>";
-                                                                        echo 'E. ' .htmlspecialchars($ex_ch5) . "<br>";
-                                                                        echo 'F. ' .htmlspecialchars($ex_ch6) . "<br>";
-                                                                        echo 'G. ' .htmlspecialchars($ex_ch7) . "<br>";
-                                                                        echo 'H. ' .htmlspecialchars($ex_ch8) . "<br>";
-                                                                        echo 'I. ' .htmlspecialchars($ex_ch9) . "<br>";
-                                                                        echo 'J. ' .htmlspecialchars($ex_ch10) . "<br>";
+                                                                        $choices = [
+                                                                            'A' => $ex_ch1,
+                                                                            'B' => $ex_ch2,
+                                                                            'C' => $ex_ch3,
+                                                                            'D' => $ex_ch4,
+                                                                            'E' => $ex_ch5,
+                                                                            'F' => $ex_ch6,
+                                                                            'G' => $ex_ch7,
+                                                                            'H' => $ex_ch8,
+                                                                            'I' => $ex_ch9,
+                                                                            'J' => $ex_ch10
+                                                                        ];
+                                                                        $correctLetters = array_keys($choices, $exqstn_answer); // Find the keys (letters) for the correct answer
+                                                                        if (!empty($correctLetters)) {
+                                                                            $correctLetter = $correctLetters[0]; // Use the first correct letter if found
+                                                                        } else {
+                                                                            $correctLetter = null; // Set to null if no correct answer is found
+                                                                        }
+                                                                        // Debugging: Print the correct answer for this question
+                                                                        //echo "<strong>Correct Answer:</strong> " . htmlspecialchars($correctLetter) . "<br>";
+                                                                        foreach ($choices as $letter => $choice) {
+                                                                            $isCorrect = $letter == $correctLetter;
+                                                                            echo ($isCorrect ? '<span class="pl-4 font-weight-bold text-success">' : '<span class="pl-4">') . $letter . '. ' . htmlspecialchars($choice) . ($isCorrect ? '</span>' : '') . "<br>";
+                                                                        }
                                                                         ?>
                                                                     </td>
-                                                                    <td><?php echo htmlspecialchars($exqstn_answer); ?></td>
-                                                                    <td><?php echo htmlspecialchars($exam_image); ?></td>
+
                                                                     <td>
-                                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                                                        <?php if (!empty($exam_image)) { ?>
+                                                                        <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
+                                                                        <img src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" style="width: 50%; height: 50%;">
+                                                                        </a>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditQuestion" data-toggle="tooltip" data-placement="bottom" title="Edit" 
+                                                                        data-edit-id="<?php echo htmlspecialchars($exqstn_id); ?>" 
+                                                                        data-edit-img="<?php echo htmlspecialchars($exam_image); ?>" 
+                                                                        data-edit-question="<?php echo htmlspecialchars($exam_question); ?>" 
+                                                                        data-edit-ch1="<?php echo htmlspecialchars($ex_ch1); ?>"
+                                                                        data-edit-ch2="<?php echo htmlspecialchars($ex_ch2); ?>"
+                                                                        data-edit-ch3="<?php echo htmlspecialchars($ex_ch3); ?>"
+                                                                        data-edit-ch4="<?php echo htmlspecialchars($ex_ch4); ?>"
+                                                                        data-edit-ch5="<?php echo htmlspecialchars($ex_ch5); ?>"
+                                                                        data-edit-ch6="<?php echo htmlspecialchars($ex_ch6); ?>"
+                                                                        data-edit-ch7="<?php echo htmlspecialchars($ex_ch7); ?>"
+                                                                        data-edit-ch8="<?php echo htmlspecialchars($ex_ch8); ?>"
+                                                                        data-edit-ch9="<?php echo htmlspecialchars($ex_ch9); ?>"
+                                                                        data-edit-ch10="<?php echo htmlspecialchars($ex_ch10); ?>"
+                                                                        data-edit-answer="<?php echo htmlspecialchars($exqstn_answer); ?>">
                                                                             <i class="fas fa-edit"></i>
                                                                         </a>
                                                                         <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-btn" data-toggle="modal" data-target="#mdlDeleteQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
@@ -360,7 +387,7 @@
                                                                 $counter++;
                                                             }
                                                         } else {
-                                                            echo '<tr><td colspan="6" class="text-center">No Questions Found</td></tr>';
+                                                            echo '<tr><td colspan="4" class="text-center">No Questions Found</td></tr>';
                                                         }
                                                         ?>
                                                     </tbody>
