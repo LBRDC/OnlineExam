@@ -62,11 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
 
-    /* ADD Question */
+    /* &&&&&&&&&&&& ADD Question &&&&&&&&&&&& */
     //Functions
     function ad_resetImg () {
         document.getElementById('imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
         document.getElementById('add_DeleteImgBtn').style.display = 'none';
+        document.getElementById('add_ExamImg').value = '';
     }
 
     //add question btn
@@ -76,66 +77,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.getElementById('add_QstnExamId').value = examId;
 
-            // ERROR
-            //$('#mdlEditCluster').modal('show');
+            
+            document.getElementById('add_ExamImg').addEventListener('input', function() {
+                if (!this.value) {
+                    ad_resetImg();
+                }
+            });
+
+            // Event listener for the file input change
+            document.getElementById('add_ExamImg').addEventListener('change', function() {
+                var file = this.files[0];
+                var fileSize = file.size / (1024 * 1024) * 4; // in 4MB
+                var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.webp)$/i;
+            
+                if (!allowedExtensions.exec(file.name)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Wrong file type. Upload png, jpg, webp only!",
+                    }).then(function() {
+                        ad_resetImg(); 
+                    });
+                } else if (fileSize > 4) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "File size exceeded. Max file size is 4MB only!",
+                    }).then(function() {
+                        ad_resetImg();
+                    });
+                } else {
+                    document.getElementById('imagePreview').innerHTML = '';
+                    var reader = new FileReader();
+            
+                    reader.onload = function(e) {
+                        document.getElementById('imagePreview').innerHTML = '<img src="' + e.target.result + '" style="max-width:100%; max-height:200px;"/>';
+                        document.getElementById('add_DeleteImgBtn').style.display = 'inline-block';
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.querySelector('#add_DeleteImgBtn').addEventListener('click', function() {
+                ad_resetImg();
+                document.getElementById('add_ExamImg').value = '';
+            });
         });
     });
 
-    // Event listener for the file input change
-    document.getElementById('add_ExamImg').addEventListener('change', function() {
-        var file = this.files[0];
-        var fileSize = file.size / (1024 * 1024) * 4; // in 4MB
-        var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.webp)$/i;
     
-        if (!allowedExtensions.exec(file.name)) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Wrong file type. Upload png, jpg, webp only!",
-            }).then(function() {
-                document.getElementById('add_ExamImg').value = '';
-                ad_resetImg(); 
-            });
-        } else if (fileSize > 4) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "File size exceeded. Max file size is 4MB only!",
-            }).then(function() {
-                document.getElementById('add_ExamImg').value = ''; 
-                ad_resetImg();
-            });
-        } else {
-            document.getElementById('imagePreview').innerHTML = '';
-            var reader = new FileReader();
     
-            reader.onload = function(e) {
-                var htmlString = `
-                    <div style="position: relative; width: 100%; height: 200px; overflow: hidden;">
-                        <img src="${e.target.result}" style="max-width: 100%; max-height: 100%;">
-                    </div>
-                `;
     
-                // Set the innerHTML of the imagePreview div
-                document.getElementById('imagePreview').innerHTML = htmlString;
-                // Show the delete button if an image exists
-                document.getElementById('add_DeleteImgBtn').style.display = 'inline-block';
-            }
-    
-            // Read the file as a Data URL
-            reader.readAsDataURL(file);
-        }
-    });
-    
-    // Event listener for the file input input event
-    document.getElementById('add_ExamImg').addEventListener('input', function() {
-        if (!this.value) {
-            resetPreviewToIcon();
-        }
-    });
 
 
-    /* EDIT Question */
+    /* &&&&&&&&&&&& EDIT Question &&&&&&&&&&&& */
     // Functions
     function ed_setImg (edit_exam_Image, img_Status) {
         if (edit_exam_Image) {
@@ -170,7 +166,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('#edit-btn').forEach(function(editbtn) {
         editbtn.addEventListener('click', function() {
             var edit_examCount = this.getAttribute('data-edit-count');
-            var edit_examId = this.getAttribute('data-edit-id');
+            var edit_QstnId = this.getAttribute('data-edit-id');
+            var edit_ExamId = this.getAttribute('data-edit-exid');
             var edit_exam_Image = this.getAttribute('data-edit-img');
             var edit_exam_Question = this.getAttribute('data-edit-question');
             var edit_exam_ch1 = this.getAttribute('data-edit-ch1');
@@ -185,7 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
             var edit_exam_ch10 = this.getAttribute('data-edit-ch10');
             var edit_exam_Answer = this.getAttribute('data-edit-answer');
 
-            document.getElementById('edit_QstnExamId').value = edit_examId;
+            document.getElementById('edit_QstnId').value = edit_QstnId;
+            document.getElementById('edit_QstnExamId').value = edit_ExamId;
             document.getElementById('edit_Question').value = edit_exam_Question;
             document.getElementById('edit_QstnCh1').value = edit_exam_ch1;
             document.getElementById('edit_QstnCh2').value = edit_exam_ch2;
@@ -288,15 +286,5 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-    
-    
-    
-
-    // TO DO: Add clear button
-    /*document.getElementById('clearButton').addEventListener('click', function() {
-        document.getElementById('add_ExamImg').value = ''; // Clear the file input
-        resetPreviewToIcon(); // Reset the preview to the icon
-    });*/
 
 });

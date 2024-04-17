@@ -745,8 +745,8 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
 
     var page = currentPg();
 
+    //Append fields to formData
     var formData = new FormData();
-    // Append fields to formData
     formData.append('add_QstnExamId', $('#add_QstnExamId').val()); 
     formData.append('add_Question', $('#add_Question').val()); 
     formData.append('add_QstnCh1', $('#add_QstnCh1').val());
@@ -809,10 +809,9 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
-        processData: false, // Prevent jQuery from processing the data
-        contentType: false, // Let the browser set the content type
+        processData: false, 
+        contentType: false,
         beforeSend: function() {
-            // Show Swal alert before sending the request
             Swal.fire({
                 title: 'Uploading...',
                 html: 'Please wait while your question is being processed.',
@@ -823,7 +822,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             });
         },
         success: function(response) {
-            Swal.close(); // Close the Swal alert
+            Swal.close(); 
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -869,7 +868,150 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            Swal.close(); // Close the Swal alert
+            Swal.close();
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+        }
+    });
+});
+
+
+// manage-exam-edit QUESTION EDIT
+$(document).on("submit","#EditQuestionFrm" , function(event) {
+    event.preventDefault();
+    console.log("1");
+
+    
+    var page = currentPg();
+
+    //Append fields to formData
+    var formData = new FormData();
+    formData.append('edit_QstnId', $('#edit_QstnId').val()); 
+    formData.append('edit_QstnExamId', $('#edit_QstnExamId').val()); 
+    formData.append('edit_ImgStatus', $('#edit_ImgStatus').val()); 
+    formData.append('edit_Question', $('#edit_Question').val()); 
+    formData.append('edit_QstnCh1', $('#edit_QstnCh1').val());
+    formData.append('edit_QstnCh2', $('#edit_QstnCh2').val());
+    formData.append('edit_QstnCh3', $('#edit_QstnCh3').val());
+    formData.append('edit_QstnCh4', $('#edit_QstnCh4').val());
+    formData.append('edit_QstnCh5', $('#edit_QstnCh5').val());
+    formData.append('edit_QstnCh6', $('#edit_QstnCh6').val());
+    formData.append('edit_QstnCh7', $('#edit_QstnCh7').val());
+    formData.append('edit_QstnCh8', $('#edit_QstnCh8').val());
+    formData.append('edit_QstnCh9', $('#edit_QstnCh9').val());
+    formData.append('edit_QstnCh10', $('#edit_QstnCh10').val());
+    formData.append('edit_ExamImg', $('#edit_ExamImg')[0].files[0]);  
+    console.log("2");
+    
+	// Append edit_QstnAns based on selection
+    var selectedValue = $('#edit_QstnAns').val();
+    var key = 'edit_QstnCh' + selectedValue;
+
+    // Check if the selected answer is not empty or undefined
+    if (selectedValue && formData.get(key)) {
+        formData.append('edit_QstnAns', formData.get(key));
+    } else {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please select an answer.",
+        });
+        return;
+    }
+
+    // Display the appended values in the console
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }
+
+    // Check if a file has been selected for edit_ExamImg
+    var examImgInput = $('#edit_ExamImg')[0];
+    if (examImgInput.files.length > 0) {
+        var examImgFile = examImgInput.files[0];
+        formData.append('edit_ExamImg', examImgFile);
+    }
+
+    // Validation
+    var isValid = formData.get('edit_Question') !== '' && formData.get('edit_QstnAns') !== '' && formData.get('edit_QstnId') !== '';
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid);
+    //console.log(formData);
+    console.log("3");
+
+    $.ajax({
+        url: 'query/edit_ExamQuestExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        processData: false, 
+        contentType: false,
+        beforeSend: function() {
+            Swal.fire({
+                title: 'Uploading...',
+                html: 'Please wait while your question is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+        success: function(response) {
+            Swal.close(); 
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Question added to " + response.msg + ".",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
+                    //location.reload();
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + "already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while adding Question. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in required fields.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Exam not found " + response.msg,
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Swal.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
