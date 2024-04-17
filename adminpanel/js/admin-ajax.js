@@ -349,8 +349,19 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
         }
     });
 });
+/* ########## END CLUSTER ########## */
 
 /* ########## EXAM ########## */
+//Function
+function currentPg(){
+    // Define the URL with the ID you want to fetch
+    var currentUrl = window.location.href;
+
+    // Extract the 'id' parameter in one line
+    var id = new URL(currentUrl).searchParams.get('id');
+    return id;
+}
+
 // manage-exam ADD
 $(document).on("submit","#addExamFrm" , function(event) {
     event.preventDefault();
@@ -610,6 +621,28 @@ $(document).on("submit","#enableExamFrm" , function(event) {
 $(document).on("submit","#editExamFrm" , function(event) {
     event.preventDefault();
 
+    // Define the URL with the ID you want to fetch
+    const url = 'https://example.com/api/items/123'; // Replace with your actual URL
+
+    // Use fetch to make a GET request
+    fetch(url)
+    .then(response => {
+        // Check if the request was successful
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        // Parse the response body as JSON
+        return response.json();
+    })
+    .then(data => {
+        // Handle the data
+        console.log(data);
+    })
+    .catch(error => {
+        // Handle the error
+        console.error('There was a problem with the fetch operation:', error);
+    });
+
     var formData = {
         'edit_ExamId': $('#edit_ExamId').val(),
         'edit_ExamTitle': $('#edit_ExamTitle').val(),
@@ -662,7 +695,8 @@ $(document).on("submit","#editExamFrm" , function(event) {
                     timerProgressBar: true,
                 }).then(function() {
                     // Assuming 'home.php?page=manage-exam' is the URL where the updated content is located
-                    $('.examContainer').load('home.php?page=manage-exam .examContainer');
+                    //$('.examContainer').load('home.php?page=manage-exam .examContainer');
+                    location.reload();
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
@@ -708,6 +742,8 @@ $(document).on("submit","#editExamFrm" , function(event) {
 // manage-exam-edit QUESTION ADD
 $(document).on("submit","#addQuestionFrm" , function(event) {
     event.preventDefault();
+
+    var page = currentPg();
 
     var formData = new FormData();
     // Append fields to formData
@@ -797,8 +833,8 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
                     timer: 3000,
                     timerProgressBar: true,
                 }).then(function() {
-                    //window.location.href = 'home.php?page=manage-exam';
-                    location.reload();
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
+                    //location.reload();
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
@@ -840,6 +876,6 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
         }
     });
 });
-
+/* ########## END EXAM ########## */
 
 /* ########## X ########## */

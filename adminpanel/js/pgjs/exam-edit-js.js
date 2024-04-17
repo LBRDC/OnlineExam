@@ -1,14 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     $('#exam_tabs .nav-link').on('click', function() {
-        var tabId = $(this).attr('id'); // Get the ID of the clicked tab
         var tabName = $(this).text().trim().toLowerCase().replace(/\s+/g, '-'); // Generate a URL-friendly name
         var currentUrl = window.location.href;
         var baseUrl = currentUrl.split('?')[0]; // Get the base URL
-        var newUrl = baseUrl + '?page=manage-exam-edit&id=8&tab=' + tabName; // Construct the new URL
-
+    
+        // Extract the 'id' parameter from the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var tabId = urlParams.get('id'); // Get the 'id' from the URL
+    
+        var newUrl = baseUrl + '?page=manage-exam-edit&id=' + tabId + '&tab=' + tabName; // Construct the new URL with the extracted 'id' and the tabName
+    
         // Update the URL without reloading the page
         history.pushState({}, '', newUrl);
     });
+    
+    
 
     
     /* ########## EXAM INFO ########## */
@@ -57,6 +63,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     /* ADD Question */
+    //Functions
+    function ad_resetImg () {
+        document.getElementById('imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
+        document.getElementById('add_DeleteImgBtn').style.display = 'none';
+    }
+
     //add question btn
     document.querySelectorAll('#add-btn').forEach(function(addbtn) {
         addbtn.addEventListener('click', function() {
@@ -68,12 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
             //$('#mdlEditCluster').modal('show');
         });
     });
-
-    // Function to reset the preview to the icon
-    function resetPreviewToIcon() {
-        var imagePreviewDiv = document.getElementById('imagePreview');
-        imagePreviewDiv.innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
-    }
 
     // Event listener for the file input change
     document.getElementById('add_ExamImg').addEventListener('change', function() {
@@ -88,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: "Wrong file type. Upload png, jpg, webp only!",
             }).then(function() {
                 document.getElementById('add_ExamImg').value = '';
-                resetPreviewToIcon(); 
+                ad_resetImg(); 
             });
         } else if (fileSize > 4) {
             Swal.fire({
@@ -97,33 +103,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: "File size exceeded. Max file size is 4MB only!",
             }).then(function() {
                 document.getElementById('add_ExamImg').value = ''; 
-                resetPreviewToIcon();
+                ad_resetImg();
             });
         } else {
-            // If the file is valid, display a preview
             document.getElementById('imagePreview').innerHTML = '';
             var reader = new FileReader();
     
             reader.onload = function(e) {
-                // Construct the HTML string for the container, image, and clear button
                 var htmlString = `
                     <div style="position: relative; width: 100%; height: 200px; overflow: hidden;">
                         <img src="${e.target.result}" style="max-width: 100%; max-height: 100%;">
-                        <button class="btn btn-secondary" style="position: absolute; bottom: 10px; right: 10px; padding: 5px 10px; cursor: pointer;">
-                            Clear
-                        </button>
                     </div>
                 `;
     
                 // Set the innerHTML of the imagePreview div
                 document.getElementById('imagePreview').innerHTML = htmlString;
-    
-                // Add event listener to the clear button
-                document.getElementById('imagePreview').querySelector('button').addEventListener('click', function() {
-                    document.getElementById('imagePreview').innerHTML = '';
-                    document.getElementById('add_ExamImg').value = '';
-                    resetPreviewToIcon();
-                });
+                // Show the delete button if an image exists
+                document.getElementById('add_DeleteImgBtn').style.display = 'inline-block';
             }
     
             // Read the file as a Data URL
@@ -140,9 +136,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     /* EDIT Question */
+    // Functions
+    function ed_setImg (edit_exam_Image, img_Status) {
+        if (edit_exam_Image) {
+            document.getElementById('edit_imagePreview').innerHTML = '';
+            document.getElementById('edit_imagePreview').innerHTML = '<img src="../../uploads/exam_question/' + edit_exam_Image + '" style="max-width:100%; max-height:200px;"/>';
+            document.getElementById('edit_ImgStatus').value = img_Status;
+            document.getElementById('edit_DeleteImgBtn').style.display = 'inline-block';
+            document.getElementById('edit_ResetImgBtn').style.display = 'none';
+        } else {
+            document.getElementById('edit_imagePreview').innerHTML = '';
+            document.getElementById('edit_imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
+            document.getElementById('edit_ImgStatus').value = img_Status;
+            document.getElementById('edit_DeleteImgBtn').style.display = 'none';
+            document.getElementById('edit_ResetImgBtn').style.display = 'none';
+        }
+    }
+
+    function ed_deleteImg (img_Status) {
+        document.getElementById('edit_imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
+        document.getElementById('edit_ImgStatus').value = img_Status;
+        document.getElementById('edit_DeleteImgBtn').style.display = 'none';
+        document.getElementById('edit_ResetImgBtn').style.display = 'inline-block';
+    }
+
+    function ed_newImg () {
+        document.getElementById('edit_DeleteImgBtn').style.display = 'inline-block';
+        document.getElementById('edit_ResetImgBtn').style.display = 'inline-block';
+    }
+
+
     //edit question btn
     document.querySelectorAll('#edit-btn').forEach(function(editbtn) {
         editbtn.addEventListener('click', function() {
+            var edit_examCount = this.getAttribute('data-edit-count');
             var edit_examId = this.getAttribute('data-edit-id');
             var edit_exam_Image = this.getAttribute('data-edit-img');
             var edit_exam_Question = this.getAttribute('data-edit-question');
@@ -171,44 +198,94 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('edit_QstnCh9').value = edit_exam_ch9;
             document.getElementById('edit_QstnCh10').value = edit_exam_ch10;
 
-            // Check if edit_exam_Answer is equal to the choices and set its value to the number of the choice if it matches
+            var modalTitle = document.querySelector('#mdlEditQuestion .modal-title span');
+            modalTitle.textContent = edit_examCount;
+
             var choices = [edit_exam_ch1, edit_exam_ch2, edit_exam_ch3, edit_exam_ch4, edit_exam_ch5, edit_exam_ch6, edit_exam_ch7, edit_exam_ch8, edit_exam_ch9, edit_exam_ch10];
-            var answerFound = false; // Flag to check if a match was found
+            var answerFound = false; 
             for (var i = 0; i < choices.length; i++) {
                 if (edit_exam_Answer === choices[i]) {
-                    edit_exam_Answer = (i + 1).toString(); // Convert the index to a string since the value is expected to be a string
-                    answerFound = true; // Set the flag to true since a match was found
-                    break; // Exit the loop once a match is found
+                    edit_exam_Answer = (i + 1).toString(); 
+                    answerFound = true; 
+                    break; 
                 }
             }
 
-            // If no match was found, set edit_exam_Answer to 'none'
             if (!answerFound) {
                 edit_exam_Answer = 'none';
             }
 
             document.getElementById('edit_QstnAns').value = edit_exam_Answer;
 
-            // Display the image
-            if (edit_exam_Image) {
-                var edit_imagePreviewDiv = document.getElementById('edit_imagePreview');
-                edit_imagePreviewDiv.innerHTML = '';
-                document.getElementById('edit_imagePreview').innerHTML = '<img src="../../uploads/exam_question/' + edit_exam_Image + '" style="max-width:100%; max-height:200px;"/><button class="btn btn-secondary" style="position: absolute; bottom: 10px; right: 10px; padding: 5px 10px; cursor: pointer;">Clear</button>';
-                document.getElementById('edit_ImgStatus').value = 'old';
-            } else {
-                document.getElementById('edit_imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
-                document.getElementById('edit_ImgStatus').value = 'old';
-            }
+            /* 
+                Initially Set Image
+                If image exist, display image and delete button
+                If image does not exist, display icon
 
-            // Add event listener to the clear button
-            document.getElementById('edit_imagePreview').querySelector('button').addEventListener('click', function() {
-                document.getElementById('edit_imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
+                If image exist, delete button pressed, display icon and reset button
+                If reset button pressed, Set image again
+
+                If image uploaded, display image, delete button, and reset button
+                If image upload canceled, set image again
+            */
+
+            ed_setImg(edit_exam_Image, 'img_Old');
+
+            document.querySelector('#edit_DeleteImgBtn').addEventListener('click', function() {
+                ed_deleteImg('img_Delete');
                 document.getElementById('edit_ExamImg').value = '';
-                document.getElementById('edit_ImgStatus').value = 'clear';
             });
 
-            var modalTitle = document.querySelector('#mdlEditQuestion .modal-title span');
-            modalTitle.textContent = edit_examId;
+            document.querySelector('#edit_ResetImgBtn').addEventListener('click', function() {
+                ed_setImg(edit_exam_Image, 'img_Old');
+                document.getElementById('edit_ExamImg').value = '';
+            });
+
+            // Event listener for the file input change
+            document.getElementById('edit_ExamImg').addEventListener('change', function() {
+                var file = this.files[0];
+                var fileSize = file.size / (1024 * 1024) * 4; // in 4MB
+                var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.webp)$/i;
+            
+                if (!allowedExtensions.exec(file.name)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Wrong file type. Upload png, jpg, webp only!",
+                    }).then(function() {
+                        document.getElementById('edit_ExamImg').value = '';
+                        ed_setImg(edit_exam_Image, 'img_Old');
+                    });
+                } else if (fileSize > 4) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "File size exceeded. Max file size is 4MB only!",
+                    }).then(function() {
+                        document.getElementById('edit_ExamImg').value = ''; 
+                        ed_setImg(edit_exam_Image, 'img_Old');
+                    });
+                } else {
+                    document.getElementById('edit_imagePreview').innerHTML = '';
+                    var reader = new FileReader();
+            
+                    reader.onload = function(e) {
+                        document.getElementById('edit_imagePreview').innerHTML = '<img src="'+e.target.result+'" style="max-width:100%; max-height:200px;"/>';
+                        ed_newImg();
+                        document.getElementById('edit_ImgStatus').value = 'img_New';
+                    }
+            
+                    // Read the file as a Data URL
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Event listener for the file input input event
+            document.getElementById('edit_ExamImg').addEventListener('input', function() {
+                if (!this.value) {
+                    ed_setImg(edit_exam_Image, 'img_Old');
+                }
+            });
         });
     });
 

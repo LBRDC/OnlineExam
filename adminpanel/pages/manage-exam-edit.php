@@ -361,6 +361,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditQuestion" data-toggle="tooltip" data-placement="bottom" title="Edit" 
+                                                                        data-edit-count="<?php echo htmlspecialchars($counter); ?>" 
                                                                         data-edit-id="<?php echo htmlspecialchars($exqstn_id); ?>" 
                                                                         data-edit-img="<?php echo htmlspecialchars($exam_image); ?>" 
                                                                         data-edit-question="<?php echo htmlspecialchars($exam_question); ?>" 

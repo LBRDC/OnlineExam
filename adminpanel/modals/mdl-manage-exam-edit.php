@@ -18,9 +18,15 @@
                             <input name="add_ExamImg" id="add_ExamImg" type="file" class="form-control-file" accept="image/png, image/jpeg, image/webp">
                             <small class="form-text text-muted">Upload png, jpg/jpeg, webp only. Max file size 4MB.</small>
                         </div>
-                        <div class="form-row mb-3 border justify-content-center" style="height: 220px" id="imgContainer">
+                        <div class="form-row mb-1 border justify-content-center" style="height: 220px" id="imgContainer">
                             <div id="imagePreview" class="row d-flex align-items-center">
                                 <i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>
+                            </div>
+                        </div>
+                        <div class="form-row mb-3">
+                            <div class="d-flex justify-content-end w-100">
+                                <button type="button" class="btn btn-secondary mr-2" id="add_ResetImgBtn" style="display:none">Reset</button>
+                                <button type="button" class="btn btn-danger mr-1" id="add_DeleteImgBtn" style="display:none">Delete</button>
                             </div>
                         </div>
                         <div class="form-row mb-3">
@@ -135,19 +141,25 @@
                 <form id="EditQuestionFrm" name="EditQuestionFrm" method="post">
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <input type="text" name="edit_QstnExamId" id="edit_QstnExamId" value=""  required>
-                        <input type="text" name="edit_ImgStatus" id="edit_ImgStatus" value=""  required>
+                        <input type="text" name="edit_QstnExamId" id="edit_QstnExamId" value="" hidden required>
+                        <input type="text" name="edit_ImgStatus" id="edit_ImgStatus" value="" hidden required>
                         <div class="form-row mb-2">
-                            <label for="edit_QstnImg" class="font-weight-bold">Exam Image</label>
-                            <input name="edit_QstnImg" id="edit_QstnImg" type="file" class="form-control-file" accept="image/png, image/jpeg, image/webp">
+                            <label for="edit_ExamImg" class="font-weight-bold">Exam Image</label>
+                            <input name="edit_ExamImg" id="edit_ExamImg" type="file" class="form-control-file" accept="image/png, image/jpeg, image/webp">
                             <small class="form-text text-muted">Upload png, jpg/jpeg, webp only. Max file size 4MB.</small>
                         </div>
-                        <div class="form-row mb-3 border justify-content-center" style="height: 220px; position: relative;">
+                        <div class="form-row border justify-content-center mb-1" style="height: 220px; position: relative;">
                             <div class="row">
                                 <div id="edit_imagePreview" class="row d-flex align-items-center">
                                     <img src="" alt="" style="max-width:100%; max-height:200px;">
                                     <i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="d-flex justify-content-end w-100">
+                                <button type="button" class="btn btn-secondary mr-2" id="edit_ResetImgBtn" style="display:none">Reset</button>
+                                <button type="button" class="btn btn-danger mr-1" id="edit_DeleteImgBtn" style="display:none">Delete</button>
                             </div>
                         </div>
 
