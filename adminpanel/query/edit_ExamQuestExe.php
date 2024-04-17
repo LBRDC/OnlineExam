@@ -51,6 +51,8 @@ if (isset($_FILES['edit_ExamImg']) && $_FILES['edit_ExamImg']['error'] == UPLOAD
     if (in_array($mime, $allowed_mime_types)) {
         // Define upload directory
         $upload_dir = '../../uploads/exam_question/'; 
+        // Define temporary directory
+        $temp_dir = '../../uploads/_temp/';
 
         //fetch filename from database
         $stmt2 = $conn->prepare("SELECT exam_image FROM exam_question_tbl WHERE exqstn_id = :edit_QstnId");
@@ -61,18 +63,32 @@ if (isset($_FILES['edit_ExamImg']) && $_FILES['edit_ExamImg']['error'] == UPLOAD
         if ($stmt2->rowCount() > 0) { // File exists
             $row = $stmt2->fetch(PDO::FETCH_ASSOC);
             $edit_ExamImg = $row['exam_image'];
-            
-            // File exists, move to temp folder
-            $temp_dir = '../../uploads/temp/';
-            $temp_file = $temp_dir . $edit_ExamImg;
-            if (!file_exists($temp_dir)) {
-                mkdir($temp_dir, 0777, true);
-            }
-            move_uploaded_file($_FILES['edit_ExamImg']['tmp_name'], $temp_file);
 
-            //rename new file
-            $new_filename = pathinfo($edit_ExamImg, PATHINFO_FILENAME) . '.' . pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
-            //assign file to edit_ExamImg
+            // Construct the full path to the existing file
+            $existing_file_path = $upload_dir . $edit_ExamImg;
+
+            // Check if the file exists and move it to the temp folder
+            if (file_exists($existing_file_path)) {
+                $temp_file_path = $temp_dir . $edit_ExamImg;
+                rename($existing_file_path, $temp_file_path);
+            }
+            
+            // Use the original filename and append the exam ID
+            $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
+            $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
+            $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;
+
+            // Define File Name with original filename and appended exam ID
+            $upload_file = $upload_dir . $new_filename;
+
+            // Check if file already exists
+            $i = 2;
+            while (file_exists($upload_file)) {
+                $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '(' . $i . ').' . $extension;
+                $upload_file = $upload_dir . $new_filename;
+                $i++;
+            }
+
             $edit_ExamImg = $new_filename;
         } else { // File does not exist
             // Use the original filename and append the exam ID
