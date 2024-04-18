@@ -262,7 +262,7 @@
                                                     <i class="fa fa-plus-circle icon-gradient bg-grow-early"></i>
                                                 </div>
                                             </a>
-                                            <a href="javascript:void(0);">
+                                            <a href="query/export_ExamQuestExe.php?id=<?php echo htmlspecialchars($ex_id); ?>">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Questions">
                                                     <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
                                                 </div>
