@@ -114,7 +114,7 @@ if (isset($_FILES['edit_ExamImg'])) {
                         }
 
                         $edit_ExamImg = $new_filename;
-                    } else { // File does not exist
+                    } else { // File does not exist OBSOLETE
                         $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
                         $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
                         $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;

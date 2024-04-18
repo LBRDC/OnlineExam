@@ -1036,7 +1036,7 @@ $(document).on("submit","#deleteQuestionFrm" , function(event) {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: response.msg + " deleted.",
+                    text: "Question deleted.",
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,
@@ -1059,7 +1059,7 @@ $(document).on("submit","#deleteQuestionFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "No record of Cluster" + response.msg + " found.",
+                    text: "No record of Question " + response.msg + " found.",
                 });
             } else {
                 Swal.fire({

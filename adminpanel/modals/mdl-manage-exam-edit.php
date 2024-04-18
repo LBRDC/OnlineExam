@@ -286,7 +286,7 @@
             <form id="deleteQuestionFrm" name="deleteQuestionFrm" method="post">
             <div class="modal-body">
                 <div class="col-md-12 text-center">
-                    <input type="text" name="delete_QstnId" id="delete_QstnId" value=""  required>
+                    <input type="text" name="delete_QstnId" id="delete_QstnId" value="" hidden required>
                     <div class="form-row mb-2 justify-content-center">
                         <span></span>
                     </div>
