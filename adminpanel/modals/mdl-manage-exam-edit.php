@@ -13,11 +13,27 @@
                 <div class="modal-body">
                     <div class="col-md-12">
                         <input type="text" name="add_QstnExamId" id="add_QstnExamId" value="" hidden required>
-                        <div class="form-row mb-2">
-                            <label for="add_ExamImg" class="font-weight-bold">Exam Image</label>
+                        <div class="form-row">
+                            <label class="font-weight-bold">Exam Image</label>
+                        </div>
+                        <!--<div class="form-row mb-2"> NOT IMPLEMENTED
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="selImg_switch">
+                                <label class="custom-control-label" for="selImg_switch">Select Existing</label>
+                            </div>
+                        </div>-->
+                        <div class="form-row mb-2" id="uploadInput">
                             <input name="add_ExamImg" id="add_ExamImg" type="file" class="form-control-file" accept="image/png, image/jpeg, image/webp">
                             <small class="form-text text-muted">Upload png, jpg/jpeg, webp only. Max file size 4MB.</small>
                         </div>
+                        <!--<div class="form-row mb-2" id="selectInput" style="display: none;"> NOT IMPLEMENTED
+                            <select name="existingImages" id="existingImages" class="form-control">
+                                <option value="">Select an existing image</option>
+                                <option value="image1">Image 1</option>
+                                <option value="image2">Image 2</option>
+                            </select>
+                        </div>-->
+
                         <div class="form-row mb-1 border justify-content-center" style="height: 220px" id="imgContainer">
                             <div id="imagePreview" class="row d-flex align-items-center">
                                 <i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>
@@ -141,14 +157,30 @@
             <form id="EditQuestionFrm" name="EditQuestionFrm" method="post">
             <div class="modal-body">
                 <div class="col-md-12">
-                    <input type="text" name="edit_QstnId" id="edit_QstnId" value=""  required>
-                    <input type="text" name="edit_QstnExamId" id="edit_QstnExamId" value=""  required>
-                    <input type="text" name="edit_ImgStatus" id="edit_ImgStatus" value=""  required>
-                    <div class="form-row mb-2">
-                        <label for="edit_ExamImg" class="font-weight-bold">Exam Image</label>
+                    <input type="text" name="edit_QstnId" id="edit_QstnId" value="" hidden required>
+                    <input type="text" name="edit_QstnExamId" id="edit_QstnExamId" value="" hidden required>
+                    <input type="text" name="edit_ImgStatus" id="edit_ImgStatus" value="" hidden required>
+                    <div class="form-row">
+                        <label class="font-weight-bold">Exam Image</label>
+                    </div>
+                    <!--<div class="form-row mb-2"> NOT IMPLEMENTED
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="selImg_switch">
+                            <label class="custom-control-label" for="selImg_switch">Select Existing</label>
+                        </div>
+                    </div>-->
+                    <div class="form-row mb-2" id="uploadInput">
                         <input name="edit_ExamImg" id="edit_ExamImg" type="file" class="form-control-file" accept="image/png, image/jpeg, image/webp">
                         <small class="form-text text-muted">Upload png, jpg/jpeg, webp only. Max file size 4MB.</small>
                     </div>
+                    <!--<div class="form-row mb-2" id="selectInput" style="display: none;"> NOT IMPLEMENTED
+                        <select name="existingImages" id="existingImages" class="form-control">
+                            <option value="">Select an existing image</option>
+                            <option value="image1">Image 1</option>
+                            <option value="image2">Image 2</option>
+                        </select>
+                    </div>-->
+                
                     <div class="form-row border justify-content-center mb-1" style="height: 220px; position: relative;">
                         <div class="row">
                             <div id="edit_imagePreview" class="row d-flex align-items-center">
@@ -239,3 +271,33 @@
         </div>
     </div>
 </div> <!-- #END# EDIT QUESTION MODAL -->
+
+
+<!-- DELETE QUESTION MODAL -->
+<div class="modal fade" id="mdlDeleteQuestion" tabindex="-1" role="dialog" aria-labelledby="mdlDeleteQuestionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlDeleteQuestionLabel">Delete "<span class="font-weight-bold text-danger">NAME</span>"</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="deleteQuestionFrm" name="deleteQuestionFrm" method="post">
+            <div class="modal-body">
+                <div class="col-md-12 text-center">
+                    <input type="text" name="delete_QstnId" id="delete_QstnId" value=""  required>
+                    <div class="form-row mb-2 justify-content-center">
+                        <span></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">DELETE</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# DISABLE CLUSTER MODAL -->

@@ -1,21 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     $('#exam_tabs .nav-link').on('click', function() {
-        var tabName = $(this).text().trim().toLowerCase().replace(/\s+/g, '-'); // Generate a URL-friendly name
+        var tabName = $(this).text().trim().toLowerCase().replace(/\s+/g, '-'); 
         var currentUrl = window.location.href;
         var baseUrl = currentUrl.split('?')[0]; // Get the base URL
     
         // Extract the 'id' parameter from the URL
         var urlParams = new URLSearchParams(window.location.search);
-        var tabId = urlParams.get('id'); // Get the 'id' from the URL
+        var tabId = urlParams.get('id'); 
     
-        var newUrl = baseUrl + '?page=manage-exam-edit&id=' + tabId + '&tab=' + tabName; // Construct the new URL with the extracted 'id' and the tabName
+        var newUrl = baseUrl + '?page=manage-exam-edit&id=' + tabId + '&tab=' + tabName; 
     
         // Update the URL without reloading the page
         history.pushState({}, '', newUrl);
     });
     
-    
-
     
     /* ########## EXAM INFO ########## */
     $('#edit_ExamCluster').select2({
@@ -44,20 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // View Image
     document.querySelectorAll('#viewimg-btn').forEach(function(viewimgbtn) {
         viewimgbtn.addEventListener('click', function() {
-            // Get the image filename from the data-view-img attribute
             var imageFilename = this.getAttribute('data-view-img');
     
-            // Construct the image URL based on the filename
-            // Assuming the images are stored in a publicly accessible directory
             var imageUrl = '../../uploads/exam_question/' + imageFilename;
     
             // Update the image source in the modal
             var modalImage = document.querySelector('#mdlViewImage .modal-body img');
             modalImage.src = imageUrl;
             modalImage.alt = 'Image for exam ID ' + imageFilename;
-    
-            // Show the modal
-            //$('#mdlViewImage').modal('show');
         });
     });
     
@@ -76,7 +68,22 @@ document.addEventListener('DOMContentLoaded', function() {
             var examId = this.getAttribute('data-add-id');
 
             document.getElementById('add_QstnExamId').value = examId;
-
+            
+            //Select Existing Image NOT IMPLEMENTED
+            /*document.getElementById('selImg_switch').addEventListener('change', function() {
+                var uploadInput = document.getElementById('uploadInput');
+                var selectInput = document.getElementById('selectInput');
+        
+                if (this.checked) {
+                    // If the switch is checked, hide the upload input and show the select input
+                    uploadInput.style.display = 'none';
+                    selectInput.style.display = 'block';
+                } else {
+                    // If the switch is unchecked, show the upload input and hide the select input
+                    uploadInput.style.display = 'block';
+                    selectInput.style.display = 'none';
+                }
+            });*/
             
             document.getElementById('add_ExamImg').addEventListener('input', function() {
                 if (!this.value) {
@@ -126,10 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
-    
-    
-
 
     /* &&&&&&&&&&&& EDIT Question &&&&&&&&&&&& */
     // Functions
@@ -160,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('edit_DeleteImgBtn').style.display = 'inline-block';
         document.getElementById('edit_ResetImgBtn').style.display = 'inline-block';
     }
-
 
     //edit question btn
     document.querySelectorAll('#edit-btn').forEach(function(editbtn) {
@@ -215,18 +217,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.getElementById('edit_QstnAns').value = edit_exam_Answer;
 
-            /* 
-                Initially Set Image
-                If image exist, display image and delete button
-                If image does not exist, display icon
-
-                If image exist, delete button pressed, display icon and reset button
-                If reset button pressed, Set image again
-
-                If image uploaded, display image, delete button, and reset button
-                If image upload canceled, set image again
-            */
-
             ed_setImg(edit_exam_Image, 'img_Old');
 
             document.querySelector('#edit_DeleteImgBtn').addEventListener('click', function() {
@@ -242,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Event listener for the file input change
             document.getElementById('edit_ExamImg').addEventListener('change', function() {
                 var file = this.files[0];
-                var fileSize = file.size / (1024 * 1024) * 4; // in 4MB
+                var fileSize = file.size / (1024 * 1024); // in MB
                 var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.webp)$/i;
             
                 if (!allowedExtensions.exec(file.name)) {
@@ -270,10 +260,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     reader.onload = function(e) {
                         document.getElementById('edit_imagePreview').innerHTML = '<img src="'+e.target.result+'" style="max-width:100%; max-height:200px;"/>';
                         ed_newImg();
-                        document.getElementById('edit_ImgStatus').value = 'img_New';
+                        
+                        // if there is existing file set to img_Replace else img_new
+                        if (edit_exam_Image) {
+                            document.getElementById('edit_ImgStatus').value = 'img_Replace';
+                        } else {
+                            document.getElementById('edit_ImgStatus').value = 'img_New';
+                        }
                     }
             
-                    // Read the file as a Data URL
                     reader.readAsDataURL(file);
                 }
             });
@@ -287,4 +282,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    //Delete question
+    document.querySelectorAll('#delete-btn').forEach(function(deleteBtn) {
+        deleteBtn.addEventListener('click', function() {
+            var QstnId = this.getAttribute('data-delete-id');
+            var count = this.getAttribute('data-delete-count');
+        
+            document.getElementById('delete_QstnId').value = QstnId;
+        
+            var modalTitle = document.querySelector('#mdlDeleteQuestion .modal-title span');
+            modalTitle.textContent = count;
+        
+            var modalBodyName = document.querySelector('#mdlDeleteQuestion .modal-body span');
+            modalBodyName.innerHTML = "Are you sure you want to DELETE Question <span class='font-weight-bold text-danger'>" + count + "</span>?<br><br> <span class='font-weight-bold'>This action is IRREVERSIBLE!</span>";
+        });
+    });
 });

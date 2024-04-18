@@ -337,11 +337,11 @@
                                                                             'I' => $ex_ch9,
                                                                             'J' => $ex_ch10
                                                                         ];
-                                                                        $correctLetters = array_keys($choices, $exqstn_answer); // Find the keys (letters) for the correct answer
+                                                                        $correctLetters = array_keys($choices, $exqstn_answer);
                                                                         if (!empty($correctLetters)) {
-                                                                            $correctLetter = $correctLetters[0]; // Use the first correct letter if found
+                                                                            $correctLetter = $correctLetters[0]; 
                                                                         } else {
-                                                                            $correctLetter = null; // Set to null if no correct answer is found
+                                                                            $correctLetter = null;
                                                                         }
                                                                         // Debugging: Print the correct answer for this question
                                                                         //echo "<strong>Correct Answer:</strong> " . htmlspecialchars($correctLetter) . "<br>";
@@ -380,7 +380,8 @@
                                                                             <i class="fas fa-edit"></i>
                                                                         </a>
                                                                         <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-btn" data-toggle="modal" data-target="#mdlDeleteQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
-                                                                        data-delete-id="<?php echo htmlspecialchars($exqstn_id); ?>">
+                                                                        data-delete-id="<?php echo htmlspecialchars($exqstn_id); ?>"
+                                                                        data-delete-count="<?php echo htmlspecialchars($counter); ?>">
                                                                             <i class="fas fa-trash"></i>
                                                                         </a>
                                                                     </td>

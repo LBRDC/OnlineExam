@@ -40,78 +40,172 @@ if($stmt1->rowCount() == 0){
     exit();
 }
 
-//Prepare File
-if (isset($_FILES['edit_ExamImg']) && $_FILES['edit_ExamImg']['error'] == UPLOAD_ERR_OK) {
-    // Get the file's MIME type
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mime = $finfo->file($_FILES['edit_ExamImg']['tmp_name']);
+//fetch filename from database
+$stmt2 = $conn->prepare("SELECT exam_image FROM exam_question_tbl WHERE exqstn_id = :edit_QstnId");
+$stmt2->bindParam(':edit_QstnId', $edit_QstnId);
+$stmt2->execute();
+// Define upload directory
+$upload_dir = '../../uploads/exam_question/'; 
+// Define temporary directory
+$temp_dir = '../../uploads/_temp/';
 
-    // Check if the file is an image
-    $allowed_mime_types = ['image/png', 'image/jpeg', 'image/webp'];
-    if (in_array($mime, $allowed_mime_types)) {
-        // Define upload directory
-        $upload_dir = '../../uploads/exam_question/'; 
-        // Define temporary directory
-        $temp_dir = '../../uploads/_temp/';
+if (isset($_FILES['edit_ExamImg'])) {
+    // Check if there's an error with the file upload
+    if ($_FILES['edit_ExamImg']['error'] != UPLOAD_ERR_OK) {
+        $res = array("res" => "fileerror", "msg" => isset($_FILES['edit_ExamImg']));
+        echo json_encode($res);
+        exit();
+    } else {
+        // Get the file's MIME type
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($_FILES['edit_ExamImg']['tmp_name']);
 
-        //fetch filename from database
-        $stmt2 = $conn->prepare("SELECT exam_image FROM exam_question_tbl WHERE exqstn_id = :edit_QstnId");
-        $stmt2->bindParam(':edit_QstnId', $edit_QstnId);
-        $stmt2->execute();
+        // Check if the file is an image
+        $allowed_mime_types = ['image/png', 'image/jpeg', 'image/webp'];
+        if (in_array($mime, $allowed_mime_types)) {
+            switch ($edit_ImgStatus) {
+                case 'img_Replace':
+                    if ($stmt2->rowCount() > 0) { // File exists
+                        $row = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                        $new_ExamImg = $row['exam_image'];
 
-        //check row count
-        if ($stmt2->rowCount() > 0) { // File exists
-            $row = $stmt2->fetch(PDO::FETCH_ASSOC);
-            $edit_ExamImg = $row['exam_image'];
+                        $existing_file_path = $upload_dir . $new_ExamImg;
 
-            // Construct the full path to the existing file
-            $existing_file_path = $upload_dir . $edit_ExamImg;
+                        // Check if the file exists and move it to the temp folder
+                        if (file_exists($existing_file_path)) {
+                            $existing_files = glob($temp_dir . '*');
+        
+                            $file_info = pathinfo($existing_file_path);
+                            $filename = $file_info['filename'];
+                            $extension = $file_info['extension'];
+        
+                            $file_exists_in_temp = false;
+                            foreach ($existing_files as $file) {
+                                if (basename($file) == $new_ExamImg) {
+                                    $file_exists_in_temp = true;
+                                    break;
+                                }
+                            }
+        
+                            // If the file exists in the temp directory, generate a unique filename
+                            if ($file_exists_in_temp) {
+                                $timestamp = time();
+                                $unique_filename = $filename . '_' . $timestamp . '.' . $extension;
+                                $temp_file_path = $temp_dir . $unique_filename;
+                            } else {
+                                $temp_file_path = $temp_dir . $new_ExamImg;
+                            }
 
-            // Check if the file exists and move it to the temp folder
-            if (file_exists($existing_file_path)) {
-                $temp_file_path = $temp_dir . $edit_ExamImg;
-                rename($existing_file_path, $temp_file_path);
+                            rename($existing_file_path, $temp_file_path);
+                        }
+                        
+                        $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
+                        $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
+                        $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;
+
+                        $upload_file = $upload_dir . $new_filename;
+
+                        // Check if file already exists
+                        $i = 2;
+                        while (file_exists($upload_file)) {
+                            $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '(' . $i . ').' . $extension;
+                            $upload_file = $upload_dir . $new_filename;
+                            $i++;
+                        }
+
+                        $edit_ExamImg = $new_filename;
+                    } else { // File does not exist
+                        $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
+                        $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
+                        $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;
+
+                        $upload_file = $upload_dir . $new_filename;
+
+                        // Check if file already exists
+                        $i = 2;
+                        while (file_exists($upload_file)) {
+                            $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '(' . $i . ').' . $extension;
+                            $upload_file = $upload_dir . $new_filename;
+                            $i++;
+                        }
+
+                        $edit_ExamImg = $new_filename;
+                    }
+                    break;
+                case 'img_New':
+                    $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
+                    $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
+                    $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;
+
+                    $upload_file = $upload_dir . $new_filename;
+
+                    // Check if file already exists
+                    $i = 2;
+                    while (file_exists($upload_file)) {
+                        $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '(' . $i . ').' . $extension;
+                        $upload_file = $upload_dir . $new_filename;
+                        $i++;
+                    }
+
+                    $edit_ExamImg = $new_filename;
+                    break;
+                case 'img_Old':
+                    if ($stmt2->rowCount() > 0) {
+                        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+                        $edit_ExamImg = $row['exam_image'];
+                    }
+                    break;
+                default:
+                    $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
+                    $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
+                    
+                    $res = array("res" => "filemodify", "msg" => $filename . '.' . $extension);
+                    echo json_encode($res);
+                    exit();
+                    break;
             }
-            
-            // Use the original filename and append the exam ID
-            $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
-            $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
-            $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;
-
-            // Define File Name with original filename and appended exam ID
-            $upload_file = $upload_dir . $new_filename;
-
-            // Check if file already exists
-            $i = 2;
-            while (file_exists($upload_file)) {
-                $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '(' . $i . ').' . $extension;
-                $upload_file = $upload_dir . $new_filename;
-                $i++;
-            }
-
-            $edit_ExamImg = $new_filename;
-        } else { // File does not exist
-            // Use the original filename and append the exam ID
-            $filename = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_FILENAME);
-            $extension = pathinfo($_FILES['edit_ExamImg']['name'], PATHINFO_EXTENSION);
-            $new_filename = 'id_' . $edit_QstnExamId . '-' . $filename . '.' . $extension;
-
-            // Define File Name with original filename and appended exam ID
-            $upload_file = $upload_dir . $new_filename;
-
-            // Check if file already exists
-            $i = 2;
-            while (file_exists($upload_file)) {
-                $new_filename = 'id_' . $add_QstnExamId . '-' . $filename . '(' . $i . ').' . $extension;
-                $upload_file = $upload_dir . $new_filename;
-                $i++;
-            }
-
-            $edit_ExamImg = $new_filename;
+        } else {
+            $res = array("res" => "filetypeerror");
+            echo json_encode($res);
+            exit();
         }
-    } 
+    }
+} else if (!isset($_FILES['edit_ExamImg']) && $edit_ImgStatus == 'img_Delete') {
+    if ($stmt2->rowCount() > 0) { // File exists
+        $del_file = $stmt2->fetch(PDO::FETCH_ASSOC);
+        $existing_file_path = $upload_dir . $del_file['exam_image'];
+        
+        if (file_exists($existing_file_path)) {
+            $existing_files = glob($temp_dir . '*');
+    
+            $file_info = pathinfo($existing_file_path);
+            $filename = $file_info['filename'];
+            $extension = $file_info['extension'];
+    
+            $file_exists_in_temp = false;
+            foreach ($existing_files as $file) {
+                if (basename($file) == $del_file['exam_image']) {
+                    $file_exists_in_temp = true;
+                    break;
+                }
+            }
+    
+            if ($file_exists_in_temp) {
+                $timestamp = time();
+                $unique_filename = $filename . '_' . $timestamp . '.' . $extension;
+                $temp_file_path = $temp_dir . $unique_filename;
+            } else {
+                $temp_file_path = $temp_dir . $del_file['exam_image'];
+            }
+            rename($existing_file_path, $temp_file_path);
+        }
+        $edit_ExamImg = '';
+    }    
 } else {
-    $edit_ExamImg = '';
+    if ($stmt2->rowCount() > 0) {
+        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+        $edit_ExamImg = $row['exam_image'];
+    }
 }
 
 // update question based on exqstn_id
@@ -129,12 +223,12 @@ $stmt3->bindParam(':edit_QstnCh8', $edit_QstnCh8);
 $stmt3->bindParam(':edit_QstnCh9', $edit_QstnCh9);
 $stmt3->bindParam(':edit_QstnCh10', $edit_QstnCh10);
 $stmt3->bindParam(':edit_QstnAns', $edit_QstnAns);
-$stmt3->bindParam(':edit_QstnId', $edit_QstnExamId);
+$stmt3->bindParam(':edit_QstnId', $edit_QstnId);
 
 // Execute the statement and check if it was successful
 if($stmt3->execute()) {
     //Upload File
-    if (!empty($edit_ExamImg)) {
+    if (isset($_FILES['edit_ExamImg'])) {
         move_uploaded_file($_FILES['edit_ExamImg']['tmp_name'], $upload_file);
     } 
     $res = array("res" => "success", "msg" => $ex_title);

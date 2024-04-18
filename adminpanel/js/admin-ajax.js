@@ -26,8 +26,8 @@ $(document).on("submit","#addClusterFrm" , function(event) {
         return;
     }
 
-    console.log("INPUT VALIDATED " + isValid);
-    console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid);
+    //console.log(formData);
 
     $.ajax({
         url: 'query/add_ClusterExe.php',
@@ -76,6 +76,7 @@ $(document).on("submit","#addClusterFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -107,26 +108,6 @@ $(document).on("submit","#editClusterFrm" , function(event) {
         });
         return;
     }
-
-    // For MANY Input
-    /*var isValid;
-    $.each(formData, function(key, value) {
-        if (value === '') {
-            isValid = false;
-            return false;
-        } else {
-            isValid = true;
-        }
-    });
-
-    if (!isValid) {
-        Swal.fire({
-            icon: "warning",
-            title: "Incomplete",
-            text: "Please fill in all fields.",
-        });
-        return;
-    }*/
 
     //console.log("INPUT VALIDATED");
     //console.log(formData);
@@ -184,6 +165,7 @@ $(document).on("submit","#editClusterFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -265,6 +247,7 @@ $(document).on("submit","#disableClusterFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -296,8 +279,8 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
         return;
     }
 
-    console.log("INPUT VALIDATED " + isValid);
-    console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid);
+    //console.log(formData);
 
     $.ajax({
         url: 'query/status_ClusterEnable.php',
@@ -346,6 +329,7 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -376,7 +360,7 @@ $(document).on("submit","#addExamFrm" , function(event) {
         'add_ExamNoPrev': $('#add_ExamNoPrev').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
     };
 
-    console.log(formData);
+    //console.log(formData);
     
     var isValid;
     if (formData['add_ExamTitle'] === '' || formData['add_ExamCluster'].length === 0 || formData['add_ExamQuestLimit'] === '' || formData['add_ExamTimeLimit'] === '') {
@@ -394,8 +378,8 @@ $(document).on("submit","#addExamFrm" , function(event) {
         return;
     }
 
-    console.log("INPUT VALIDATED " + isValid);
-    console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid);
+    //console.log(formData);
 
     $.ajax({
         url: 'query/add_ExamExe.php',
@@ -450,6 +434,7 @@ $(document).on("submit","#addExamFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -531,6 +516,7 @@ $(document).on("submit","#disableExamFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -612,6 +598,7 @@ $(document).on("submit","#enableExamFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -621,27 +608,7 @@ $(document).on("submit","#enableExamFrm" , function(event) {
 $(document).on("submit","#editExamFrm" , function(event) {
     event.preventDefault();
 
-    // Define the URL with the ID you want to fetch
-    const url = 'https://example.com/api/items/123'; // Replace with your actual URL
-
-    // Use fetch to make a GET request
-    fetch(url)
-    .then(response => {
-        // Check if the request was successful
-        if (!response.ok) {
-        throw new Error('Network response was not ok');
-        }
-        // Parse the response body as JSON
-        return response.json();
-    })
-    .then(data => {
-        // Handle the data
-        console.log(data);
-    })
-    .catch(error => {
-        // Handle the error
-        console.error('There was a problem with the fetch operation:', error);
-    });
+    var page = currentPg();
 
     var formData = {
         'edit_ExamId': $('#edit_ExamId').val(),
@@ -657,8 +624,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
         'edit_ExamStatus': $('#edit_ExamStatus').val()
     };
     
-
-    console.log(formData);
+    //console.log(formData);
     
     var isValid;
     if (formData['edit_ExamId'] === '' || formData['edit_ExamTitle'] === '' || formData['edit_ExamCluster'].length === 0 || formData['edit_ExamQuestLimit'] === '' || formData['edit_ExamTimeLimit'] === '') {
@@ -676,8 +642,8 @@ $(document).on("submit","#editExamFrm" , function(event) {
         return;
     }
 
-    console.log("INPUT VALIDATED " + isValid);
-    console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid);
+    //console.log(formData);
 
     $.ajax({
         url: 'query/edit_ExamExe.php',
@@ -694,9 +660,8 @@ $(document).on("submit","#editExamFrm" , function(event) {
                     timer: 3000,
                     timerProgressBar: true,
                 }).then(function() {
-                    // Assuming 'home.php?page=manage-exam' is the URL where the updated content is located
-                    //$('.examContainer').load('home.php?page=manage-exam .examContainer');
-                    location.reload();
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-information';
+                    //location.reload();
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
@@ -734,6 +699,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });    
 });
@@ -779,9 +745,9 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
 
 
     // Display the appended values in the console
-    for (var pair of formData.entries()) {
+    /*for (var pair of formData.entries()) {
         console.log(pair[0]+ ', ' + pair[1]); 
-    }
+    }*/
 
     // Check if a file has been selected for add_ExamImg
     var examImgInput = $('#add_ExamImg')[0];
@@ -872,6 +838,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
@@ -880,9 +847,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
 // manage-exam-edit QUESTION EDIT
 $(document).on("submit","#EditQuestionFrm" , function(event) {
     event.preventDefault();
-    console.log("1");
 
-    
     var page = currentPg();
 
     //Append fields to formData
@@ -902,7 +867,6 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
     formData.append('edit_QstnCh9', $('#edit_QstnCh9').val());
     formData.append('edit_QstnCh10', $('#edit_QstnCh10').val());
     formData.append('edit_ExamImg', $('#edit_ExamImg')[0].files[0]);  
-    console.log("2");
     
 	// Append edit_QstnAns based on selection
     var selectedValue = $('#edit_QstnAns').val();
@@ -920,10 +884,10 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
         return;
     }
 
-    // Display the appended values in the console
-    for (var pair of formData.entries()) {
+    // DEBUG: Display the appended values in the console
+    /*for (var pair of formData.entries()) {
         console.log(pair[0]+ ', ' + pair[1]); 
-    }
+    }*/
 
     // Check if a file has been selected for edit_ExamImg
     var examImgInput = $('#edit_ExamImg')[0];
@@ -945,7 +909,6 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
 
     //console.log("INPUT VALIDATED " + isValid);
     //console.log(formData);
-    console.log("3");
 
     $.ajax({
         url: 'query/edit_ExamQuestExe.php',
@@ -970,7 +933,7 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: "Question added to " + response.msg + ".",
+                    text: "Question updated.",
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,
@@ -978,17 +941,29 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
                     window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
                     //location.reload();
                 });
-            } else if (response.res == "exists") {
+            } else if (response.res == "fileerror") {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: response.msg + "already exists.",
+                    text: "There was an error uploading the image.",
+                });
+            } else if (response.res == "filetypeerror") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "Wrong File Type. Only PNG, JPG, JPEG and WEBP files are allowed.",
+                });
+            } else if (response.res == "filemodify") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "There was an error modifying the image. Please try again.",
                 });
             } else if (response.res == "failed") {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: "An error occurred while adding Question. Please try again.",
+                    text: "An error occurred while updating Question. Please try again.",
                 });
             } else if (response.res == "incomplete") {
                 Swal.fire({
@@ -1015,6 +990,90 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
+            //window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
+            location.reload();
+        }
+    });
+});
+
+
+// manage-exam-edit QUESTION DELETE
+$(document).on("submit","#deleteQuestionFrm" , function(event) {
+    event.preventDefault();
+
+    var page = currentPg();
+    
+    var formData = {
+        'delete_QstnId': $('#delete_QstnId').val()
+    };
+    
+    var isValid;
+    if (formData['delete_QstnId'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED");
+    //console.log(formData);
+
+    $.ajax({
+        url: 'query/delete_ExamQuestExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " deleted.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while Deleting Question. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of Cluster" + response.msg + " found.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
         }
     });
 });
