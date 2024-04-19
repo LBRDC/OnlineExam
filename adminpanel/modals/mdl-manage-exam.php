@@ -1,6 +1,23 @@
 <?php 
-    $stmtmdl1 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+    //$stmtmdl1 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+    //$stmtmdl1->execute();
+
+    // Fetch all clusters
+    $stmtmdl1 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
     $stmtmdl1->execute();
+
+    // Separate active and inactive clusters
+    $activeClusters = [];
+    $inactiveClusters = [];
+
+    $resultmdl1 = $stmtmdl1->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($resultmdl1 as $row) {
+        if ($row['clu_status'] == 1) {
+            $activeClusters[] = $row;
+        } else {
+            $inactiveClusters[] = $row;
+        }
+    }
 ?>
 
 
@@ -33,6 +50,30 @@
                         <label for="add_ExamCluster">Cluster<span class="text-danger">*</span></label>
                         <select class="form-control" name="add_ExamCluster[]" id="add_ExamCluster" multiple="multiple" style="width: 100%;" required>
                             <option value="">Select...</option>
+                            <?php if (!empty($activeClusters)): ?>
+                                <optgroup label="Active Clusters">
+                                    <?php foreach ($activeClusters as $row): ?>
+                                        <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php else: ?>
+                                <optgroup label="Active Clusters">
+                                    <option value="" disabled="disabled">No active clusters available</option>
+                                </optgroup>
+                            <?php endif; ?>
+
+                            <?php if (!empty($inactiveClusters)): ?>
+                                <optgroup label="Inactive Clusters">
+                                    <?php foreach ($inactiveClusters as $row): ?>
+                                        <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?>(inactive)</option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php else: ?>
+                                <optgroup label="Inactive Clusters">
+                                    <option value="" disabled="disabled">No inactive clusters available</option>
+                                </optgroup>
+                            <?php endif; ?>
+                            
                             <?php 
                                 $result = $stmtmdl1->fetchAll(PDO::FETCH_ASSOC);
                                 

@@ -81,7 +81,6 @@ $(document).on("submit","#addClusterFrm" , function(event) {
     });
 });
 
-
 // manage-cluster EDIT 
 $(document).on("submit","#editClusterFrm" , function(event) {
     event.preventDefault();
@@ -170,7 +169,6 @@ $(document).on("submit","#editClusterFrm" , function(event) {
     });
 });
 
-
 // manage-cluster DISABLE 
 $(document).on("submit","#disableClusterFrm" , function(event) {
     event.preventDefault();
@@ -251,7 +249,6 @@ $(document).on("submit","#disableClusterFrm" , function(event) {
         }
     });
 });
-
 
 // manage-cluster ENABLE 
 $(document).on("submit","#enableClusterFrm" , function(event) {
@@ -334,6 +331,8 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
     });
 });
 /* ########## END CLUSTER ########## */
+
+
 
 /* ########## EXAM ########## */
 //Function
@@ -439,7 +438,6 @@ $(document).on("submit","#addExamFrm" , function(event) {
     });
 });
 
-
 // manage-exam DISABLE 
 $(document).on("submit","#disableExamFrm" , function(event) {
     event.preventDefault();
@@ -521,7 +519,6 @@ $(document).on("submit","#disableExamFrm" , function(event) {
     });
 });
 
-
 // manage-exam ENABLE 
 $(document).on("submit","#enableExamFrm" , function(event) {
     event.preventDefault();
@@ -602,7 +599,6 @@ $(document).on("submit","#enableExamFrm" , function(event) {
         }
     });
 });
-
 
 // manage-exam-edit INFO EDIT
 $(document).on("submit","#editExamFrm" , function(event) {
@@ -703,7 +699,6 @@ $(document).on("submit","#editExamFrm" , function(event) {
         }
     });    
 });
-
 
 // manage-exam-edit QUESTION ADD
 $(document).on("submit","#addQuestionFrm" , function(event) {
@@ -842,7 +837,6 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
         }
     });
 });
-
 
 // manage-exam-edit QUESTION EDIT
 $(document).on("submit","#EditQuestionFrm" , function(event) {
@@ -996,7 +990,6 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
     });
 });
 
-
 // manage-exam-edit QUESTION DELETE
 $(document).on("submit","#deleteQuestionFrm" , function(event) {
     event.preventDefault();
@@ -1079,4 +1072,95 @@ $(document).on("submit","#deleteQuestionFrm" , function(event) {
 });
 /* ########## END EXAM ########## */
 
-/* ########## X ########## */
+
+
+/* ########## EXAMINEE ########## */
+// manage-examinee ADD 
+$(document).on("submit","#addExamineeFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'add_ExmneFname': $('#add_ExmneFname').val(),
+        'add_ExmneMname': $('#add_ExmneMname').val(),
+        'add_ExmneLname': $('#add_ExmneLname').val(),
+        'add_ExmneSfname': $('#add_ExmneSfname').val(),
+        'add_ExmneCluster': $('#add_ExmneCluster').val(),
+        'add_ExmneSex': $('#add_ExmneSex').val(),
+        'add_ExmneBirth': $('#add_ExmneBirth').val(),
+        'add_ExmneEmail': $('#add_ExmneEmail').val(),
+        'add_ExmnePass': $('#add_ExmnePass').val()
+    };
+    
+    var isValid;
+    if (formData['add_ExmneFname'] === '' || formData['add_ExmneLname'] === '' || formData['add_ExmneCluster'] === '' || formData['add_ExmneEmail'] === '' || formData['add_ExmnePass'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    console.log("INPUT VALIDATED " + isValid);
+    console.log(formData);
+
+    $.ajax({
+        url: 'query/add_ExamineeExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " added.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-cluster';
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + "already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while adding Cluster. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in all fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+
+/* ########## END EXAMINEE ########## */

@@ -1,0 +1,275 @@
+<?php
+// Fetch all clusters
+$stmtmdl1 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
+$stmtmdl1->execute();
+
+// Separate active and inactive clusters
+$activeClusters = [];
+$inactiveClusters = [];
+
+$resultmdl1 = $stmtmdl1->fetchAll(PDO::FETCH_ASSOC);
+foreach ($resultmdl1 as $row) {
+    if ($row['clu_status'] == 1) {
+        $activeClusters[] = $row;
+    } else {
+        $inactiveClusters[] = $row;
+    }
+}
+
+?>
+<!-- ADD EXAMINEE MODAL -->
+<div class="modal fade" id="mdlAddExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlAddExamineeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlAddExamineeLabel">Add Examinee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addExamineeFrm" name="addExamineeFrm" method="post">
+            <div class="modal-body">
+                <div class="">
+                    <div class="row justify-content-center m-2">
+                        <h6 class="font-weight-bold text-muted">Examinee Information</h6>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-3 col-md-12 mb-1">
+                            <div class="form-row">
+                                <label for="add_ExmneFname">First Name<span class="text-danger">*</span></label>
+                                <input type="text" name="add_ExmneFname" id="add_ExmneFname" class="form-control" placeholder="" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 mb-1">
+                            <div class="form-row">
+                                <label for="add_ExmneMname">Middle Name</label>
+                                <input type="text" name="add_ExmneMname" id="add_ExmneMname" class="form-control" placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 mb-1">
+                            <div class="form-row">
+                                <label for="add_ExmneLname">Last Name<span class="text-danger">*</span></label>
+                                <input type="text" name="add_ExmneLname" id="add_ExmneLname" class="form-control" placeholder="" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmneSfname">Suffix</label>
+                                <select class="form-control" name="add_ExmneSfname" id="add_ExmneSfname" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <option value="Sr.">Sr.</option>
+                                    <option value="Jr.">Jr.</option>
+                                    <option value="III">III</option>
+                                    <option value="IV">IV</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmneCluster">Employment Cluster<span class="text-danger">*</span></label>
+                                <select class="form-control-lg" name="add_ExmneCluster" id="add_ExmneCluster" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <?php if (!empty($activeClusters)): ?>
+                                        <optgroup label="Active Clusters">
+                                            <?php foreach ($activeClusters as $row): ?>
+                                                <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?></option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    <?php else: ?>
+                                        <optgroup label="Active Clusters">
+                                            <option value="" disabled="disabled">No active clusters available</option>
+                                        </optgroup>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($inactiveClusters)): ?>
+                                        <optgroup label="Inactive Clusters">
+                                            <?php foreach ($inactiveClusters as $row): ?>
+                                                <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?>(inactive)</option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    <?php else: ?>
+                                        <optgroup label="Inactive Clusters">
+                                            <option value="" disabled="disabled">No inactive clusters available</option>
+                                        </optgroup>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmneSex">Sex</label>
+                                <select class="form-control-lg" name="add_ExmneSex" id="add_ExmneSex" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmneBirth">Birthdate</label>
+                                <input type="date" name="add_ExmneBirth" id="add_ExmneBirth" class="form-control" placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center m-2">
+                        <h6 class="font-weight-bold text-muted">Login Credentials</h6>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmneEmail">Email<span class="text-danger">*</span></label>
+                                <input type="email" name="add_ExmneEmail" id="add_ExmneEmail" class="form-control" placeholder="" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmnePass">Password<span class="text-danger">*</span></label>
+                                <input type="password" name="add_ExmnePass" id="add_ExmnePass" class="form-control" placeholder="" autocomplete="off" requried>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# ADD EXAMINEE MODAL -->
+
+
+<!-- EDIT EXAMINEE MODAL -->
+<div class="modal fade" id="mdlEditExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlEditExamineeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlEditExamineeLabel">Edit <span class="font-weight-bold">NAME</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="EditExamineeFrm" name="EditExamineeFrm" method="post">
+            <div class="modal-body">
+                <div class="">
+                    <div class="row justify-content-center m-2">
+                        <h6 class="font-weight-bold text-muted">Examinee Information</h6>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-3 col-md-12 mb-1">
+                            <div class="form-row">
+                                <label for="edit_ExmneFname">First Name<span class="text-danger">*</span></label>
+                                <input type="text" name="edit_ExmneFname" id="edit_ExmneFname" class="form-control" placeholder="" autocomplete="off" value="" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 mb-1">
+                            <div class="form-row">
+                                <label for="edit_ExmneMname">Middle Name</label>
+                                <input type="text" name="edit_ExmneMname" id="edit_ExmneMname" class="form-control" placeholder="" autocomplete="off" value="">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 mb-1">
+                            <div class="form-row">
+                                <label for="edit_ExmneLname">Last Name<span class="text-danger">*</span></label>
+                                <input type="text" name="edit_ExmneLname" id="edit_ExmneLname" class="form-control" placeholder="" autocomplete="off" value="" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmneSfname">Suffix</label>
+                                <select class="form-control" name="edit_ExmneSfname" id="edit_ExmneSfname" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <option value="Sr.">Sr.</option>
+                                    <option value="Jr.">Jr.</option>
+                                    <option value="III">III</option>
+                                    <option value="IV">IV</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmneCluster">Employment Cluster<span class="text-danger">*</span></label>
+                                <select class="form-control-lg" name="edit_ExmneCluster" id="edit_ExmneCluster" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <?php if (!empty($activeClusters)): ?>
+                                        <optgroup label="Active Clusters">
+                                            <?php foreach ($activeClusters as $row): ?>
+                                                <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?></option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    <?php else: ?>
+                                        <optgroup label="Active Clusters">
+                                            <option value="" disabled="disabled">No active clusters available</option>
+                                        </optgroup>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($inactiveClusters)): ?>
+                                        <optgroup label="Inactive Clusters">
+                                            <?php foreach ($inactiveClusters as $row): ?>
+                                                <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?>(inactive)</option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    <?php else: ?>
+                                        <optgroup label="Inactive Clusters">
+                                            <option value="" disabled="disabled">No inactive clusters available</option>
+                                        </optgroup>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmneSex">Sex</label>
+                                <select class="form-control-lg" name="edit_ExmneSex" id="edit_ExmneSex" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmneBirth">Birthdate</label>
+                                <input type="date" name="edit_ExmneBirth" id="edit_ExmneBirth" class="form-control" placeholder="" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center m-2">
+                        <h6 class="font-weight-bold text-muted">Login Credentials</h6>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmneEmail">Email<span class="text-danger">*</span></label>
+                                <input type="email" name="edit_ExmneEmail" id="edit_ExmneEmail" class="form-control" placeholder="" autocomplete="off" value="" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmnePass">Password<span class="text-danger">*</span></label>
+                                <input type="password" name="edit_ExmnePass" id="edit_ExmnePass" class="form-control" placeholder="" autocomplete="off" value="" requried>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-warning">Update</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# EDIT EXAMINEE MODAL -->

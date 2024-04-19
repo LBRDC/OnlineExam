@@ -159,7 +159,7 @@
                                                                 <?php if (!empty($inactiveClusters)): ?>
                                                                     <optgroup label="Inactive Clusters">
                                                                         <?php foreach ($inactiveClusters as $row): ?>
-                                                                            <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?>(disabled)</option>
+                                                                            <option value="<?= htmlspecialchars($row['clu_id']) ?>"><?= htmlspecialchars($row['clu_name']) ?>(inactive)</option>
                                                                         <?php endforeach; ?>
                                                                     </optgroup>
                                                                 <?php else: ?>

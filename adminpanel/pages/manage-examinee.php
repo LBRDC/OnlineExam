@@ -1,10 +1,10 @@
 <?php
-    $stmt1 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_created DESC");
+    $stmt1 = $conn->prepare("SELECT * FROM examinee_tbl ORDER BY exmne_created DESC");
     $selCluster = $stmt1->execute();
 
-    $clu_status = 1;
-    $stmt2 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status = :clu_status");
-    $stmt2->bindParam(':clu_status', $clu_status);
+    $exmne_status = 1;
+    $stmt2 = $conn->prepare("SELECT * FROM examinee_tbl WHERE exmne_status = :exmne_status");
+    $stmt2->bindParam(':exmne_status', $exmne_status);
     $stmt2->execute();
 ?>
 
@@ -44,7 +44,7 @@
                                         </div>
                                         <div class="widget-content-right">
                                             <div>
-                                                <a href="javascript:void(0)" data-toggle="modal" data-target="#mdlAddCluster" data-toggle="tooltip" data-placement="bottom" title="Add Cluster">
+                                                <a href="javascript:void(0)" data-toggle="modal" data-target="#mdlAddExaminee" data-toggle="tooltip" data-placement="bottom" title="Add Examinee">
                                                     <i class="fa fa-3x fa-plus-circle icon-gradient bg-grow-early"></i>
                                                 </a>
                                             </div>
@@ -108,27 +108,70 @@
                                         </tr>
                                         </tfoot>-->
                                         <tbody>
-                                        <tr>
-                                            <td>LBRDC Examinee</td>
-                                            <td>AGSD</td>
-                                            <td>Male</td>
-                                            <td>Feb. 19, 2024</td>
-                                            <td>lbrdc@email.com</td>
-                                            <td>Active</td>
+                                        <?php
+                                            while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                                                $exmne_id = $row['exmne_id'];
+                                                $exmne_clu_id = $row['exmne_clu_id'];
+                                                $exmne_fname = $row['exmne_fname'];
+                                                $exmne_mname = $row['exmne_mname'];
+                                                $exmne_lname = $row['exmne_lname'];
+                                                $exmne_sfname = $row['exmne_sfname'];
+                                                $exmne_sex = $row['exmne_sex'];
+                                                $exmne_birthdate = $row['exmne_birthdate'];
+                                                $exmne_email = $row['exmne_email'];
+                                                $exmne_status = $row['exmne_status'];
+                                                $statusText = ($exmne_status == 1) ? 'Active' : 'Inactive';
+                                                // Fetch the cluster name and status
+                                                $clusterName = '';
+                                                $stmt3 = $conn->prepare("SELECT clu_name, clu_status FROM cluster_tbl WHERE clu_id = :exmne_clu_id");
+                                                $stmt3->bindParam(':exmne_clu_id', $exmne_clu_id);
+                                                $stmt3->execute();
+                                                $clusterRow = $stmt3->fetch(PDO::FETCH_ASSOC);
+
+                                                if ($clusterRow) {
+                                                    $clusterName = $clusterRow['clu_name'];
+                                                    $clu_status = $clusterRow['clu_status'];
+                                                }
+
+                                                if ($clu_status == 1 && !empty($clusterName)) {
+                                                    $cluster = $clusterName;
+                                                } else if ($clu_status == 0 && !empty($clusterName)) {
+                                                    $cluster = $clusterName . "(inactive)";
+                                                } else {
+                                                    $cluster = "N/A";
+                                                }
+                                        ?>
+                                        <tr id="<?php echo htmlspecialchars($exmne_id); ?>">
+                                            <td><?php 
+                                                echo htmlspecialchars($exmne_fname) . " ";
+                                                if (!empty($exmne_mname)) {
+                                                    echo htmlspecialchars(substr($exmne_mname, 0, 1)) . ". ";
+                                                } else {
+                                                    echo "_ ";
+                                                }
+                                                echo htmlspecialchars($exmne_lname) . " ";
+                                                echo htmlspecialchars($exmne_sfname);
+                                                ?>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($cluster) ?></td><!--Cluster-->
+                                            <td><?php echo htmlspecialchars($exmne_sex) ?></td>
+                                            <td><?php echo htmlspecialchars($exmne_birthdate) ?></td>
+                                            <td><?php echo htmlspecialchars($exmne_email) ?></td>
+                                            <td><?php echo htmlspecialchars($statusText) ?></td>
                                             <td>
                                                 <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="tooltip" data-placement="bottom" title="View">
                                                     <i class="fas fa-info-circle"></i>
                                                 </a>
-                                                <a href="?page=manage-exam-edit&id=" class="btn btn-warning m-1" id="edit-btn" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                                <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditExaminee" data-toggle="tooltip" data-placement="bottom" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableExam" data-toggle="tooltip" data-placement="bottom" title="Disable" 
+                                                <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableExaminee" data-toggle="tooltip" data-placement="bottom" title="Disable" 
                                                 data-disable-id="" 
                                                 data-disable-name="" 
                                                 data-disable-status="">
                                                     <i class="fas fa-times-circle"></i>
                                                 </a>
-                                                <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExam" data-toggle="tooltip" data-placement="bottom" title="Enable" 
+                                                <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExaminee" data-toggle="tooltip" data-placement="bottom" title="Enable" 
                                                 data-enable-id="" 
                                                 data-enable-name="" 
                                                 data-enable-status="">
@@ -136,6 +179,7 @@
                                                 </a>
                                             </td>
                                         </tr>
+                                        <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
