@@ -41,7 +41,7 @@ if($stmt1->rowCount() == 0){
 }
 
 //fetch filename from database
-$stmt2 = $conn->prepare("SELECT exam_image FROM exam_question_tbl WHERE exqstn_id = :edit_QstnId");
+$stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE exqstn_id = :edit_QstnId");
 $stmt2->bindParam(':edit_QstnId', $edit_QstnId);
 $stmt2->execute();
 // Define upload directory
@@ -66,7 +66,7 @@ if (isset($_FILES['edit_ExamImg'])) {
             switch ($edit_ImgStatus) {
                 case 'img_Replace':
                     if ($stmt2->rowCount() > 0) { // File exists
-                        $row = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
                         $new_ExamImg = $row['exam_image'];
 
                         $existing_file_path = $upload_dir . $new_ExamImg;
