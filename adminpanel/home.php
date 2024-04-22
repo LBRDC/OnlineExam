@@ -51,6 +51,7 @@
 
     // Footer
     include("includes/footer.php"); 
+    include("includes/modals.php"); 
 
     //Modals
     if (!isset($_SESSION['user'])) {

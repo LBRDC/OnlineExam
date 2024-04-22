@@ -243,7 +243,7 @@
                             </li>
                         </ul>
                         <hr class="sidebar-divider">
-                        <div class="text-muted text-monospace">v0.3.0-alpha</div>
+                        <div class="text-muted text-monospace"><a href="javascript:void(0);" data-toggle="modal" data-target="#mdlSystemInfo">v0.3.0-alpha</a></div>
                     </div>
                 </div>
             </div><!-- #END# SIDEBAR -->
