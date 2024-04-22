@@ -89,8 +89,8 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Cluster</th>
-                                            <th>Sex</th>
-                                            <th>Birthdate</th>
+                                            <!--<th>Sex</th>-->
+                                            <!--<th>Birthdate</th>-->
                                             <th>Email</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -119,6 +119,7 @@
                                                 $exmne_sex = $row['exmne_sex'];
                                                 $exmne_birthdate = $row['exmne_birthdate'];
                                                 $exmne_email = $row['exmne_email'];
+                                                $exmne_pass = $row['exmne_pass'];
                                                 $exmne_status = $row['exmne_status'];
                                                 $statusText = ($exmne_status == 1) ? 'Active' : 'Inactive';
                                                 // Fetch the cluster name and status
@@ -153,16 +154,36 @@
                                                 echo htmlspecialchars($exmne_sfname);
                                                 ?>
                                             </td>
-                                            <td><?php echo htmlspecialchars($cluster) ?></td><!--Cluster-->
-                                            <td><?php echo htmlspecialchars($exmne_sex) ?></td>
-                                            <td><?php echo htmlspecialchars($exmne_birthdate) ?></td>
+                                            <td><?php echo htmlspecialchars($cluster) ?></td>
+                                            <!--<td><?php //echo htmlspecialchars($exmne_sex) ?></td>-->
+                                            <!--<td><?php //echo htmlspecialchars($exmne_birthdate) ?></td>-->
                                             <td><?php echo htmlspecialchars($exmne_email) ?></td>
                                             <td><?php echo htmlspecialchars($statusText) ?></td>
                                             <td>
-                                                <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="tooltip" data-placement="bottom" title="View">
+                                                <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="modal" data-target="#mdlViewExaminee" data-toggle="tooltip" data-placement="bottom" title="View"
+                                                data-view-id = "<?php echo htmlspecialchars($exmne_id); ?>"
+                                                data-view-fname = "<?php echo htmlspecialchars($exmne_fname); ?>"
+                                                data-view-mname = "<?php echo htmlspecialchars($exmne_mname); ?>"
+                                                data-view-lname = "<?php echo htmlspecialchars($exmne_lname); ?>"
+                                                data-view-sfname = "<?php echo htmlspecialchars($exmne_sfname); ?>"
+                                                data-view-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
+                                                data-view-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
+                                                data-view-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                data-view-email = "<?php echo htmlspecialchars($exmne_email); ?>"
+                                                data-view-pass = "<?php echo htmlspecialchars($exmne_pass); ?>">
                                                     <i class="fas fa-info-circle"></i>
                                                 </a>
-                                                <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditExaminee" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                                <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditExaminee" data-toggle="tooltip" data-placement="bottom" title="Edit"
+                                                data-edit-id = "<?php echo htmlspecialchars($exmne_id); ?>"
+                                                data-edit-fname = "<?php echo htmlspecialchars($exmne_fname); ?>"
+                                                data-edit-mname = "<?php echo htmlspecialchars($exmne_mname); ?>"
+                                                data-edit-lname = "<?php echo htmlspecialchars($exmne_lname); ?>"
+                                                data-edit-sfname = "<?php echo htmlspecialchars($exmne_sfname); ?>"
+                                                data-edit-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
+                                                data-edit-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
+                                                data-edit-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                data-edit-email = "<?php echo htmlspecialchars($exmne_email); ?>"
+                                                data-edit-pass = "<?php echo htmlspecialchars($exmne_pass); ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableExaminee" data-toggle="tooltip" data-placement="bottom" title="Disable" 
@@ -172,9 +193,7 @@
                                                     <i class="fas fa-times-circle"></i>
                                                 </a>
                                                 <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExaminee" data-toggle="tooltip" data-placement="bottom" title="Enable" 
-                                                data-enable-id="" 
-                                                data-enable-name="" 
-                                                data-enable-status="">
+                                                >
                                                     <i class="fas fa-check-circle"></i>
                                                 </a>
                                             </td>

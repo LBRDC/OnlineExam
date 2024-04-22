@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: "error",
                     title: "Session Expired!",
-                    html: "Redirecting in <b>5</b> seconds.", // Changed to seconds
+                    text: "Redirecting to login page.", // Changed to seconds
                     timer: 5000,
                     timerProgressBar: true,
                     showConfirmButton: false,
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: "error",
                     title: "Session Error",
-                    html: "Redirecting in <b>5</b> seconds.", // Changed to seconds
+                    html: "Redirecting to login page.", // Changed to seconds
                     timer: 5000,
                     timerProgressBar: true,
                     didOpen: () => {
