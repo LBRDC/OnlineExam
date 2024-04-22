@@ -114,12 +114,12 @@
                                                 <th>Exam Title</th>
                                                 <th>Cluster</th>
                                                 <th style="display:none">Clusters_Filter</th>
-                                                <th>Description</th>
+                                                <th data-dt-order="disable">Description</th>
                                                 <th>Question Limit</th>
                                                 <th>Time Limit</th>
                                                 <th>Properties</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
+                                                <th data-dt-order="disable">Action</th>
                                             </tr>
                                             </thead>
                                             <!--<tfoot>

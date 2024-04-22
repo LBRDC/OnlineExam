@@ -6,7 +6,7 @@ $edit_CluName = isset($_POST['edit_CluName']) ? $_POST['edit_CluName'] : '';
 $edit_CluDesc = isset($_POST['edit_CluDesc']) ? $_POST['edit_CluDesc'] : '';
 $edit_CluStatus = isset($_POST['edit_CluStatus']) ? $_POST['edit_CluStatus'] : '';
 
-if(empty($edit_CluId) || empty($edit_CluName) || empty($edit_CluStatus)) {
+if(empty($edit_CluId) || empty($edit_CluName) || $edit_CluStatus == '') {
     $res = array("res" => "incomplete" , "msg" => $edit_CluId . $edit_CluName . $edit_CluStatus);
     echo json_encode($res);
     exit();

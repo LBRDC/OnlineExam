@@ -13,7 +13,7 @@ $edit_ExamNoPrev = isset($_POST['edit_ExamNoPrev']) ? $_POST['edit_ExamNoPrev'] 
 $edit_ExamStatus = isset($_POST['edit_ExamStatus']) ? $_POST['edit_ExamStatus'] : '';
 
 // Check if all variables contain values
-if(empty($edit_ExamTitle) || empty($edit_ExamCluster) || empty($edit_ExamQuestLimit) || empty($edit_ExamTimeLimit)) {
+if(empty($edit_ExamTitle) || empty($edit_ExamCluster) || empty($edit_ExamQuestLimit) || empty($edit_ExamTimeLimit) || $edit_ExamStatus == '') {
     $res = array("res" => "incomplete");
     echo json_encode($res);
     exit();

@@ -226,7 +226,7 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-2">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-row">
                                 <label for="view_ExmneSex">Sex</label>
@@ -242,6 +242,16 @@ foreach ($resultmdl1 as $row) {
                                 <label for="view_ExmneBirth">Birthdate</label>
                                 <input type="date" name="view_ExmneBirth" id="view_ExmneBirth" class="form-control" placeholder="" autocomplete="off" value="" disabled>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4 justify-content-center">
+                        <div class="col-lg-4 col-md-12">
+                            <label for="view_ExmneStatus">Status<span class="text-danger">*</span></label>
+                            <select class="form-control" name="view_ExmneStatus" id="view_ExmneStatus" style="width: 100%" disabled>
+                                <option value="">Select...</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row justify-content-center m-2">
@@ -277,7 +287,7 @@ foreach ($resultmdl1 as $row) {
 
 
 <!-- EDIT EXAMINEE MODAL -->
-<div class="modal fade" id="mdlEditExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlEditExamineeLabel" aria-hidden="true">
+<div class="modal fade" id="mdlEditExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlEditExamineeLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,6 +299,7 @@ foreach ($resultmdl1 as $row) {
             <form id="EditExamineeFrm" name="EditExamineeFrm" method="post">
             <div class="modal-body">
                 <div class="">
+                    <input type="text" name="edit_ExmneId" id="edit_ExmneId" value="" hidden readonly>
                     <div class="row justify-content-center m-2">
                         <h6 class="font-weight-bold text-muted">Examinee Information</h6>
                     </div>
@@ -375,6 +386,16 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-4 justify-content-center">
+                        <div class="col-lg-4 col-md-12">
+                            <label for="edit_ExmneStatus">Status<span class="text-danger">*</span></label>
+                            <select class="form-control" name="edit_ExmneStatus" id="edit_ExmneStatus" style="width: 100%" required>
+                                <option value="">Select...</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row justify-content-center m-2">
                         <h6 class="font-weight-bold text-muted">Login Credentials</h6>
                     </div>
@@ -388,7 +409,7 @@ foreach ($resultmdl1 as $row) {
                         <div class="col-lg-6 col-md-12">
                             <div class="form-row">
                                 <label for="edit_ExmnePass">Password<span class="text-danger">*</span></label>
-                                <input type="password" name="edit_ExmnePass" id="edit_ExmnePass" class="form-control" placeholder="" autocomplete="off" value="" requried>
+                                <input type="password" name="edit_ExmnePass" id="edit_ExmnePass" class="form-control" placeholder="" autocomplete="off" value="" required>
                                 <!--<small class="form-text text-muted">Only Administrator can modify the password.</small>-->
                             </div>
                         </div>
@@ -404,3 +425,102 @@ foreach ($resultmdl1 as $row) {
         </div>
     </div>
 </div> <!-- #END# EDIT EXAMINEE MODAL -->
+
+
+<!-- DISABLE EXAMINEE MODAL -->
+<div class="modal fade" id="mdlDisableExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlDisableExamineeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdlDisableExamineeLabel">Disable "<span class="font-weight-bold text-danger">NAME</span>"</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="disableExamineeFrm" name="disableExamineeFrm" method="post">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <input type="text" name="disable_ExmneId" id="disable_ExmneId" value=""  required>
+                        <input type="text" name="disable_ExmneFname" id="disable_ExmneFname" value=""  required>
+                        <input type="text" name="disable_ExmneLname" id="disable_ExmneLname" value=""  required>
+                        <input type="text" name="disable_ExmneStatus" id="disable_ExmneStatus" value=""  required>
+                        <div class="form-row mb-2">
+                            Are you sure you want to DISABLE&nbsp;<span class="font-weight-bold text-danger"></span>?
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">DISABLE</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div> <!-- #END# DISABLE CLUSTER MODAL -->
+
+
+<!-- DISABLE EXAMINEE MODAL -->
+<div class="modal fade" id="mdlDisableExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlDisableExamineeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdlDisableExamineeLabel">Disable <span class="font-weight-bold">NAME</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="disableExamineeFrm" name="disableExamineeFrm" method="post">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <input type="text" name="disable_ExmneId" id="disable_ExmneId" value=""  required>
+                        <input type="text" name="disable_ExmneFname" id="disable_ExmneFname" value=""  required>
+                        <input type="text" name="disable_ExmneLname" id="disable_ExmneLname" value=""  required>
+                        <input type="text" name="disable_ExmneStatus" id="disable_ExmneStatus" value=""  required>
+                        <div class="form-row mb-2">
+                            Are you sure you want to DISABLE&nbsp;<span class="font-weight-bold"></span>?
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">DISABLE</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div> <!-- #END# DISABLE CLUSTER MODAL -->
+
+
+<!-- ENABLE EXAMINEE MODAL -->
+<div class="modal fade" id="mdlEnableExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlEnableExamineeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdlEnableExamineeLabel">Enable "<span class="font-weight-bold text-success">NAME</span>"</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="enableExamineeFrm" name="enableExamineeFrm" method="post">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <input type="text" name="enable_ExmneId" id="enable_ExmneId" value=""  required>
+                        <input type="text" name="enable_ExmneFname" id="enable_ExmneFname" value=""  required>
+                        <input type="text" name="enable_ExmneLname" id="enable_ExmneLname" value=""  required>
+                        <input type="text" name="enable_ExmneStatus" id="enable_ExmneStatus" value=""  required>
+                        <div class="form-row mb-2">
+                            Are you sure you want to ENABLE&nbsp;<span class="font-weight-bold text-success"></span>?
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">ENABLE</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div> <!-- #END# ENABLE CLUSTER MODAL -->

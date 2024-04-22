@@ -88,9 +88,9 @@
                                         <thead class="thead-light">
                                         <tr>
                                             <th>Name</th>
-                                            <th>Description</th>
+                                            <th data-dt-order="disable">Description</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th data-dt-order="disable">Action</th>
                                         </tr>
                                         </thead>
                                         <!--<tfoot>

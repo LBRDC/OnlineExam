@@ -1125,7 +1125,7 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
                     timer: 3000,
                     timerProgressBar: true,
                 }).then(function() {
-                    window.location.href = 'home.php?page=manage-cluster';
+                    window.location.href = 'home.php?page=manage-examinee';
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
@@ -1137,13 +1137,282 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: "An error occurred while adding Cluster. Please try again.",
+                    text: "An error occurred while adding Examinee. Please try again.",
                 });
             } else if (response.res == "incomplete") {
                 Swal.fire({
                     icon: "warning",
                     title: "Incomplete",
                     text: "Please fill in all fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+// manage-examinee EDIT 
+$(document).on("submit","#EditExamineeFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'edit_ExmneId': $('#edit_ExmneId').val(),
+        'edit_ExmneFname': $('#edit_ExmneFname').val(),
+        'edit_ExmneMname': $('#edit_ExmneMname').val(),
+        'edit_ExmneLname': $('#edit_ExmneLname').val(),
+        'edit_ExmneSfname': $('#edit_ExmneSfname').val(),
+        'edit_ExmneCluster': $('#edit_ExmneCluster').val(),
+        'edit_ExmneSex': $('#edit_ExmneSex').val(),
+        'edit_ExmneBirth': $('#edit_ExmneBirth').val(),
+        'edit_ExmneStatus': $('#edit_ExmneStatus').val(),
+        'edit_ExmneEmail': $('#edit_ExmneEmail').val(),
+        'edit_ExmnePass': $('#edit_ExmnePass').val()
+    };
+    
+    var isValid;
+    if (formData['edit_ExmneId'] === '' || formData['edit_ExmneFname'] === '' || formData['edit_ExmneLname'] === '' || formData['edit_ExmneCluster'] === '' || formData['edit_ExmneStatus'] === '' || formData['edit_ExmneEmail'] === '' || formData['edit_ExmnePass'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid);
+    console.log(formData);
+
+    $.ajax({
+        url: 'query/edit_ExamineeExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " updated.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-examinee';
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "Similar Data Found.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while updating Examinee. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in all fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+// manage-cluster DISABLE 
+$(document).on("submit","#disableExamineeFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'disable_ExmneId': $('#disable_ExmneId').val(),
+        'disable_ExmneFname': $('#disable_ExmneFname').val(),
+        'disable_ExmneLname': $('#disable_ExmneLname').val(),
+        'disable_ExmneStatus': $('#disable_ExmneStatus').val()
+    };
+    
+    var isValid;
+    if (formData['disable_ExmneId'] === '' || formData['disable_ExmneFname'] === '' || formData['disable_ExmneLname'] === '' || formData['disable_ExmneStatus'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED");
+    //console.log(formData);
+
+    $.ajax({
+        url: 'query/status_ExamineeDisable.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " disabled.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-examinee';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while disabling Examinee. Please try again.",
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "info",
+                    title: "Disabled",
+                    text: "Examinee " + response.msg + " already disabled.",
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-examinee';
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of examinee" + response.msg + " found.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+// manage-cluster ENABLE 
+$(document).on("submit","#enableExamineeFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'enable_ExmneId': $('#enable_ExmneId').val(),
+        'enable_ExmneFname': $('#enable_ExmneFname').val(),
+        'enable_ExmneLname': $('#enable_ExmneLname').val(),
+        'enable_ExmneStatus': $('#enable_ExmneStatus').val()
+    };
+    
+    var isValid;
+    if (formData['enable_ExmneId'] === '' || formData['enable_ExmneFname'] === '' || formData['enable_ExmneLname'] === '' || formData['enable_ExmneStatus'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED");
+    //console.log(formData);
+
+    $.ajax({
+        url: 'query/status_ExamineeEnable.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " enabled.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-examinee';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while enabling Examinee. Please try again.",
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "info",
+                    title: "Disabled",
+                    text: "Examinee " + response.msg + " already enabled.",
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-examinee';
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of examinee" + response.msg + " found.",
                 });
             } else {
                 Swal.fire({

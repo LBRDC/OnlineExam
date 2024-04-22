@@ -58,7 +58,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
-                                <div class="card-body">
+                            <div class="card-body">
                                     <div class="card-title">Filter Options</div>
                                     <div class="row">
                                         <div class="col-md-3 mr-2 mb-2">
@@ -67,6 +67,27 @@
                                                 <option value="">Select...</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
+                                            </select>
+                                        </div> 
+                                        <div class="col-md-3 mr-2 mb-2">
+                                            <label for="filter_cluster">Cluster</label>
+                                            <select class="form-control" name="filter_cluster" id="filter_cluster">
+                                                <option value="">Select...</option>
+                                                <?php 
+                                                $stmtflt = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+                                                $stmtflt->execute();
+                                                $result = $stmtflt->fetchAll(PDO::FETCH_ASSOC);
+                                                
+                                                // Check if there are any clusters
+                                                if ($stmtflt->rowCount() > 0) {
+                                                    foreach ($result as $row) {
+                                                        echo '<option value="' . htmlspecialchars($row['clu_name']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
+                                                    }
+                                                } else {
+                                                    // Display a message if there are no clusters
+                                                    echo '<option value="" disabled="disabled">No clusters available</option>';
+                                                }
+                                            ?>
                                             </select>
                                         </div> 
                                         <div class="col-md-3 d-flex align-items-end mb-2">
@@ -89,19 +110,15 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Cluster</th>
-                                            <!--<th>Sex</th>-->
-                                            <!--<th>Birthdate</th>-->
                                             <th>Email</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th data-dt-order="disable">Action</th>
                                         </tr>
                                         </thead>
                                         <!--<tfoot>
                                         <tr>
                                             <th>Name</th>
                                             <th>Cluster</th>
-                                            <th>Sex</th>
-                                            <th>Birthdate</th>
                                             <th>Email</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -155,8 +172,6 @@
                                                 ?>
                                             </td>
                                             <td><?php echo htmlspecialchars($cluster) ?></td>
-                                            <!--<td><?php //echo htmlspecialchars($exmne_sex) ?></td>-->
-                                            <!--<td><?php //echo htmlspecialchars($exmne_birthdate) ?></td>-->
                                             <td><?php echo htmlspecialchars($exmne_email) ?></td>
                                             <td><?php echo htmlspecialchars($statusText) ?></td>
                                             <td>
@@ -169,6 +184,7 @@
                                                 data-view-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                 data-view-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                 data-view-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                data-view-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                 data-view-email = "<?php echo htmlspecialchars($exmne_email); ?>"
                                                 data-view-pass = "<?php echo htmlspecialchars($exmne_pass); ?>">
                                                     <i class="fas fa-info-circle"></i>
@@ -182,20 +198,30 @@
                                                 data-edit-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                 data-edit-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                 data-edit-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                data-edit-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                 data-edit-email = "<?php echo htmlspecialchars($exmne_email); ?>"
                                                 data-edit-pass = "<?php echo htmlspecialchars($exmne_pass); ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
+                                                <?php if ($exmne_status == 1) { ?>
                                                 <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableExaminee" data-toggle="tooltip" data-placement="bottom" title="Disable" 
-                                                data-disable-id="" 
-                                                data-disable-name="" 
-                                                data-disable-status="">
+                                                data-disable-id="<?php echo htmlspecialchars($exmne_id); ?>" 
+                                                data-disable-fname="<?php echo htmlspecialchars($exmne_fname); ?>" 
+                                                data-disable-lname="<?php echo htmlspecialchars($exmne_lname); ?>" 
+                                                data-disable-status="<?php echo htmlspecialchars($exmne_status); ?>">
                                                     <i class="fas fa-times-circle"></i>
                                                 </a>
+                                                <?php } else { ?>
                                                 <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExaminee" data-toggle="tooltip" data-placement="bottom" title="Enable" 
-                                                >
+                                                data-enable-id="<?php echo htmlspecialchars($exmne_id); ?>" 
+                                                data-enable-fname="<?php echo htmlspecialchars($exmne_fname); ?>" 
+                                                data-enable-lname="<?php echo htmlspecialchars($exmne_lname); ?>" 
+                                                data-enable-status="<?php echo htmlspecialchars($exmne_status); ?>">
                                                     <i class="fas fa-check-circle"></i>
                                                 </a>
+                                                <?php } ?>
+                                                
+                                                
                                             </td>
                                         </tr>
                                         <?php } ?>
