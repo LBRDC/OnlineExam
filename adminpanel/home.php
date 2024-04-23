@@ -33,6 +33,9 @@
                 case 'report-ranking':
                     include("pages/report-ranking.php");
                     break;
+                case 'report-ranking-exam':
+                    include("pages/report-ranking-exam.php");
+                    break;
                 case 'report-examinee':
                     include("pages/report-examinee.php");
                     break;
@@ -76,6 +79,9 @@
                     break;
                 case 'report-ranking':
                     include("modals/mdl-report-ranking.php");
+                    break;
+                case 'report-ranking-exam':
+                    include("modals/mdl-report-ranking-exam.php");
                     break;
                 case 'report-examinee':
                     include("modals/mdl-report-examinee.php");

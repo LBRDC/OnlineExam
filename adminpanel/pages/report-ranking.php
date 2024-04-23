@@ -1,11 +1,8 @@
 <?php
-    $stmt1 = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_created DESC");
-    $selCluster = $stmt1->execute();
+    $stmt1 = $conn->prepare("SELECT * FROM exam_tbl ORDER BY ex_created DESC");
+    $selExam = $stmt1->execute();
 
-    $clu_status = 1;
-    $stmt2 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status = :clu_status");
-    $stmt2->bindParam(':clu_status', $clu_status);
-    $stmt2->execute();
+    $stmt2 = $conn->prepare("SELECT * FROM exam_cluster_tbl");
 ?>
 
 <!-- #START# report-ranking.php -->
@@ -33,33 +30,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Legend -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <div class="card-title">Legend</div>
-                                    <div class="row justify-content-center">
-                                        <div class="mr-2">
-                                            <h1><span class="badge badge-warning">Excellent</span></h1>
-                                        </div>
-                                        <div class="mr-2">
-                                            <h1><span class="badge badge-success">Very Good</span></h1>
-                                        </div>
-                                        <div class="mr-2">
-                                            <h1><span class="badge badge-info">Good</span></h1>
-                                        </div>
-                                        <div class="mr-2">
-                                            <h1><span class="badge badge-danger">Failed</span></h1>
-                                        </div>
-                                        <div class="">
-                                            <h1><span class="badge badge-secondary">Not Answered</span></h1>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Filter Options -->
                     <div class="row">
                         <div class="col-md-12">
@@ -68,13 +38,26 @@
                                     <div class="card-title">Filter Options</div>
                                     <div class="row">
                                         <div class="col-md-3 mr-2 mb-2">
-                                            <label for="filter_status">Status</label>
-                                            <select class="form-control" name="filter_status" id="filter_status">
+                                            <label for="filter_cluster">Cluster</label>
+                                            <select class="form-control" name="filter_cluster" id="filter_cluster">
                                                 <option value="">Select...</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
+                                                <?php 
+                                                $stmtflt = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+                                                $stmtflt->execute();
+                                                $result = $stmtflt->fetchAll(PDO::FETCH_ASSOC);
+                                                
+                                                // Check if there are any clusters
+                                                if ($stmtflt->rowCount() > 0) {
+                                                    foreach ($result as $row) {
+                                                        echo '<option value="' . htmlspecialchars($row['clu_name']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
+                                                    }
+                                                } else {
+                                                    // Display a message if there are no clusters
+                                                    echo '<option value="" disabled="disabled">No clusters available</option>';
+                                                }
+                                            ?>
                                             </select>
-                                        </div> 
+                                        </div>  
                                         <div class="col-md-3 d-flex align-items-end mb-2">
                                             <button class="btn btn-lg btn-primary mr-2" id="filter-btn">Filter</button>
                                             <button class="btn btn-lg btn-secondary" id="reset-btn">Reset</button>
@@ -89,65 +72,88 @@
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
-                                    <div class="card-title">Employment Cluster</div>
+                                    <div class="card-title">Examinations List</div>
                                     <table class="mb-0 table table-hover dt-sort" id="tableList">
                                         <thead class="thead-light">
                                         <tr>
                                             <th>Name</th>
+                                            <th>Cluster</th>
+                                            <th style="display:none">Clusters_Filter</th>
                                             <th data-dt-order="disable">Description</th>
-                                            <th>Status</th>
-                                            <th data-dt-order="disable">Action</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <!--<tfoot>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Cluster</th>
                                             <th>Description</th>
-                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                         </tfoot>-->
                                         <tbody>
                                         <?php
                                             while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                                                $clu_id = $row['clu_id'];
-                                                $clu_name = $row['clu_name'];
-                                                $clu_description = $row['clu_description'];
-                                                $clu_status = $row['clu_status'];
-                                                $statusText = ($clu_status == 1) ? 'Active' : 'Inactive';
-                                        ?>
-                                            <tr id="<?php echo htmlspecialchars($clu_id); ?>">
-                                                <td><?php echo htmlspecialchars($clu_name); ?></td>
-                                                <td><?php echo htmlspecialchars($clu_description); ?></td>
-                                                <td><?php echo htmlspecialchars($statusText); ?></td>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="btn btn-warning" id="edit-btn" data-toggle="modal" data-target="#mdlEditCluster" data-toggle="tooltip" data-placement="bottom" title="Edit"
-                                                    data-edit-id="<?php echo htmlspecialchars($clu_id); ?>" 
-                                                    data-edit-name="<?php echo htmlspecialchars($clu_name); ?>"
-                                                    data-edit-description="<?php echo htmlspecialchars($clu_description); ?>"
-                                                    data-edit-status="<?php echo htmlspecialchars($clu_status); ?>">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <?php if ($clu_status == 1) { ?>
-                                                    <a href="javascript:void(0);" class="btn btn-danger" id="disable-btn" data-toggle="modal" data-target="#mdlDisableCluster" data-toggle="tooltip" data-placement="bottom" title="Disable" 
-                                                    data-disable-id="<?php echo htmlspecialchars($clu_id); ?>" 
-                                                    data-disable-name="<?php echo htmlspecialchars($clu_name); ?>" 
-                                                    data-disable-status="<?php echo htmlspecialchars($clu_status); ?>">
-                                                        <i class="fas fa-times-circle"></i>
-                                                    </a>
-                                                    <?php } else { ?>
-                                                    <a href="javascript:void(0);" class="btn btn-success" id="enable-btn" data-toggle="modal" data-target="#mdlEnableCluster" data-toggle="tooltip" data-placement="bottom" title="Enable" 
-                                                    data-enable-id="<?php echo htmlspecialchars($clu_id); ?>" 
-                                                    data-enable-name="<?php echo htmlspecialchars($clu_name); ?>" 
-                                                    data-enable-status="<?php echo htmlspecialchars($clu_status); ?>">
-                                                        <i class="fas fa-check-circle"></i>
-                                                    </a>
-                                                    <?php } ?>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                            } // End of while loop
-                                        ?>
+                                                $ex_id = $row['ex_id'];
+                                                $ex_title = $row['ex_title'];
+                                                $ex_description = $row['ex_description'];
+                                                $ex_qstn_limit = $row['ex_qstn_limit'];
+                                                $ex_time_limit = $row['ex_time_limit'];
+                                                $ex_disable_prv = $row['ex_disable_prv'];
+                                                $ex_random_qstn = $row['ex_random_qstn'];
+                                                $ex_status = $row['ex_status'];
+                                                $statusText = ($ex_status == 1) ? 'Active' : 'Inactive';
+
+                                                $stmt4 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE ex_id = :ex_id");
+                                                $stmt4->bindParam(':ex_id', $ex_id);
+                                                $stmt4->execute();
+
+                                                $clusterCount = 0;
+                                                $clusterNames = []; 
+
+                                                while ($row = $stmt4->fetch(PDO::FETCH_ASSOC)) {
+                                                    $clu_id = $row['clu_id'];
+                                                    
+                                                    // Fetch the cluster name and status from cluster_tbl
+                                                    $stmt5 = $conn->prepare("SELECT clu_name, clu_status FROM cluster_tbl WHERE clu_id = :clu_id");
+                                                    $stmt5->bindParam(':clu_id', $clu_id);
+                                                    $stmt5->execute();
+
+                                                    $cluster = $stmt5->fetch(PDO::FETCH_ASSOC);
+                                                    if ($cluster) {
+                                                        // Append "(DISABLED)" to the cluster name if its status is 0
+                                                        $clusterName = $cluster['clu_status'] == 0 ? $cluster['clu_name'] . "(disabled)" : $cluster['clu_name'];
+                                                        $clusterNames[] = $clusterName;
+                                                        $clusterCount++;
+                                                    }
+                                                }
+                                                // Convert cluster names to a string for the data attribute
+                                                $clusterNamesString = implode(', ', $clusterNames);
+                                            ?>
+
+
+                                                <tr>
+                                                    <td><?php echo htmlspecialchars($ex_title); ?></td>
+                                                    <td>
+                                                        <?php 
+                                                        if ($clusterCount > 2) {
+                                                            echo '<button class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="' . implode(', ', $clusterNames) . '">+' . $clusterCount . '</button>';
+                                                        } else {
+                                                            echo implode(', ', $clusterNames);
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td style="display:none"><?php echo implode(', ', $clusterNames); ?></td>
+                                                    <td><?php echo htmlspecialchars($ex_description); ?></td>
+                                                    <td>
+                                                        <a href="?page=report-ranking-exam&id=<?php echo $ex_id; ?>" class="btn btn-primary m-1" id="view-btn" data-toggle="tooltip" data-placement="bottom" title="View">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                                } // End of while loop
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>

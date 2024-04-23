@@ -6,9 +6,17 @@
                         <div class="app-footer__inner justify-content-center">
                             <div class="container my-auto">
                                 <div class="copyright text-center my-auto">
-                                    <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by
-                                    <b><a href="https://lbpresources.com" target="_blank">LBP Resources and Development Corp.</a></b>
-                                    </span>
+                                    <div class="col-md-12">
+                                        <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by
+                                        <b><a href="https://lbpresources.com" target="_blank">LBP Resources and Development Corp.</a></b>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <a href="javascript:void(0);" class="text-monospace justify-content-center" data-toggle="modal" data-target="#mdlSystemInfo">
+                                        <u>v0.3.0-alpha</u>
+                                    </a>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -38,6 +46,10 @@
             $pages_js = '<script src="./js/pgjs/examinee-js.js"></script>';
             break;
         case 'report-ranking':
+            $pages_js = '<script src="./js/pgjs/ranking-js.js"></script>';
+            break;
+        case 'report-ranking-exam':
+            $pages_js = '<script src="./js/pgjs/ranking-exam-js.js"></script>';
             break;
         case 'report-examinee':
             break;

@@ -131,7 +131,7 @@
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                             <button type="button" tabindex="0" class="dropdown-item">User Account</button>
                                             <div tabindex="-1" class="dropdown-divider"></div>
-                                            <button type="button" tabindex="0" class="dropdown-item">Logout</button>
+                                            <button type="button" tabindex="0" class="dropdown-item" data-toggle="modal" data-target="#mdlLogout">Logout</button>
                                         </div>
                                     </div>
                                 </div>
@@ -241,9 +241,15 @@
                                     </i>User Accounts
                                 </a>
                             </li>
+                            <li class="app-sidebar__heading"><hr class="sidebar-divider"></li>
+                            <li style="padding-right: 139px;">
+                                <a href="javascript:void(0);" class="m-0 p-0 text-monospace text-muted">
+                                    v0.3.0-alpha
+                                </a>
+                            </li>
                         </ul>
-                        <hr class="sidebar-divider">
-                        <div class="text-muted text-monospace"><a href="javascript:void(0);" data-toggle="modal" data-target="#mdlSystemInfo">v0.3.0-alpha</a></div>
+                        <!--<hr class="sidebar-divider">
+                        <div class="text-muted text-monospace"><a href="javascript:void(0);" data-toggle="modal" data-target="#mdlSystemInfo">v0.3.0-alpha</a></div>-->
                     </div>
                 </div>
             </div><!-- #END# SIDEBAR -->

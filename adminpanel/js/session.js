@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         clearInterval(timerInterval);
                     }
                 }).then(function() {
-                    window.location.href = '/';
+                    window.location.href = '/adminpanel/';
                 });
             } else {
                 Swal.fire({
@@ -49,14 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         clearInterval(timerInterval);
                     }
                 }).then(function() {
-                    window.location.href = '/';
+                    window.location.href = '/adminpanel/';
                 });
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('An error occurred with the session.');
             console.error(textStatus, errorThrown);
-            window.location.href = '/';
+            window.location.href = '/adminpanel/';
         }
     });
     
