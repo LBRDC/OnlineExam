@@ -11,11 +11,6 @@
                                         <b><a href="https://lbpresources.com" target="_blank">LBP Resources and Development Corp.</a></b>
                                         </span>
                                     </div>
-                                    <!--<div class="col-md-12">
-                                        <a href="javascript:void(0);" class="text-monospace justify-content-center" data-toggle="modal" data-target="#mdlSystemInfo">
-                                            <u>v0.3.0-alpha</u>
-                                        </a>
-                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -29,32 +24,11 @@
     // Pages
     $pages_js="";
     if (!isset($page)) {
-      //$pages_js = '<script src="./js/intervals.js"></script>';
+        $pages_js = '<script src="./js/pgjs/dashboard-js.js"></script>';
     } else {
       switch ($page) {
-        case 'manage-cluster':
-            $pages_js = '<script src="./js/pgjs/cluster-js.js"></script>';
-            break;
-        case 'manage-exam':
-            $pages_js = '<script src="./js/pgjs/exam-js.js"></script>';
-            break;
-        case 'manage-exam-edit':
-            $pages_js = '<script src="./js/pgjs/exam-edit-js.js"></script>';
-            break;
-        case 'manage-examinee':
-            $pages_js = '<script src="./js/pgjs/examinee-js.js"></script>';
-            break;
-        case 'report-ranking':
-            $pages_js = '<script src="./js/pgjs/ranking-js.js"></script>';
-            break;
-        case 'report-ranking-exam':
-            $pages_js = '<script src="./js/pgjs/ranking-exam-js.js"></script>';
-            break;
-        case 'report-examinee':
-            break;
-        case 'feedback':
-            break;
-        case 'manage-admin':
+        case 'exam-list':
+            $pages_js = '<script src="./js/pgjs/exam-list-js.js"></script>';
             break;
         default:
             break;
@@ -75,9 +49,9 @@
     <!-- session -->
     <script src="./js/session.js"></script>
     <!-- AJAX JS -->
-    <script type="text/javascript" src="./js/admin-ajax.js"></script>
+    <script type="text/javascript" src="./js/exmne-ajax.js"></script>
     <!-- Custom JS -->
-    <script type="text/javascript" src="./js/admin-myjs.js"></script>
+    <script type="text/javascript" src="./js/exmne-myjs.js"></script>
     <?php echo $pages_js; ?>
 </body>
 </html>

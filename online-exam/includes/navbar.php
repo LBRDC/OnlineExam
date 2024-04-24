@@ -5,46 +5,29 @@
     //$page = 'null';
   } else {
     $activePage = $_GET['page'];
-    /*switch ($activePage) {
-      case 'employee-manage':
-        $page = 'employee';
-        break;
-      case 'timekeep-record':
-        $page = 'timekeep';
-        break;
-      case 'timekeep-report':
-        $page = 'timekeep';
-        break;
-      case 'fields-department':
-        $page = 'fields';
-        break;
-      case 'fields-position':
-        $page = 'fields';
-        break;
-      case 'fields-payroll':
-        $page = 'fields';
-        break;
-      case 'fields-location':
-        $page = 'fields';
-        break;
-        case 'fields-location-add':
-          $page = 'fields';
-          break;
-      case 'fields-schedule':
-        $page = 'fields';
-        break;
-      case 'fields-holiday':
-        $page = 'fields';
-        break;
-      case 'adminMng-user':
-        $page = 'adminMng';
-        break;
-      default:
-          // None
-          break;
-    }*/
   }
   //class="mm-active"
+
+  if (isset($_SESSION['ex_user']['exmne_fname']) && isset($_SESSION['ex_user']['exmne_lname'])) {
+    $exmne_fname = $_SESSION['ex_user']['exmne_fname'];
+    $exmne_lname = $_SESSION['ex_user']['exmne_lname'];
+  } else {
+    $exmne_fname = 'null';
+    $exmne_lname = 'null';
+  }
+
+  if (isset($_SESSION['ex_user']['exmne_mname'])) {
+    $exmne_mname = $_SESSION['ex_user']['exmne_mname'];
+    $exmne_minitial = substr($exmne_mname, 0, 1) . ". ";
+  } else {
+    $exmne_minitial = '_ ';
+  }
+
+  if (isset($_SESSION['ex_user']['exmne_sfname'])) {
+    $exmne_sfname = $_SESSION['ex_user']['exmne_sfname'];
+  } else {
+    $exmne_sfname = '';
+  }  
 ?>
 
 <!-- #START# navbar.php -->
@@ -82,33 +65,7 @@
             </div>    
             <div class="app-header__content">
                 <div class="app-header-left">
-                    <!--<div class="search-wrapper">
-                        <div class="input-holder">
-                            <input type="text" class="search-input" placeholder="Type to search">
-                            <button class="search-icon"><span></span></button>
-                        </div>
-                        <button class="close"></button>
-                    </div>
-                    <ul class="header-menu nav">
-                        <li class="nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon fa fa-database"> </i>
-                                Statistics
-                            </a>
-                        </li>
-                        <li class="btn-group nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon fa fa-edit"></i>
-                                Projects
-                            </a>
-                        </li>
-                        <li class="dropdown nav-item">
-                            <a href="javascript:void(0);" class="nav-link">
-                                <i class="nav-link-icon fa fa-cog"></i>
-                                Settings
-                            </a>
-                        </li>
-                    </ul>-->
+                    <!-- EMPTY -->
                 </div>
                 <div class="app-header-right">
                     <div class="header-btn-lg pr-0">
@@ -116,10 +73,15 @@
                             <div class="widget-content-wrapper">
                                 <div class="widget-content-left  ml-3 mr-2 header-user-info">
                                     <div class="widget-heading">
-                                        <?php if (isset($_SESSION['user']['admin_fname']) && isset($_SESSION['user']['admin_lname'])) {echo $_SESSION['user']['admin_fname']; echo ' '; echo $_SESSION['user']['admin_lname'];} else {echo 'LBRDC';} ?>
+                                        <?php 
+                                        echo htmlspecialchars($exmne_fname) . " ";
+                                        echo htmlspecialchars($exmne_minitial);
+                                        echo htmlspecialchars($exmne_lname) . " ";
+                                        echo htmlspecialchars($exmne_sfname);
+                                        ?>
                                     </div>
                                     <div class="widget-subheading">
-                                        <?php if (isset($_SESSION['user']['admin_pos'])) {echo $_SESSION['user']['admin_pos'];} else {echo 'Administrator';} ?>
+                                        <?php echo htmlspecialchars("Examinee"); ?>
                                     </div>
                                 </div>
                                 <div class="widget-content-left">
@@ -135,11 +97,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--<div class="widget-content-right header-user-info ml-3">
-                                    <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
-                                        <i class="fa text-white fa-calendar pr-1 pl-1"></i>
-                                    </button>
-                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -193,52 +150,11 @@
                                     Dashboard
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Cluster Management</li>
+                            <li class="app-sidebar__heading">Examination</li>
                             <li>
-                                <a href="?page=manage-cluster" class="<?php if($activePage=="manage-cluster"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-culture"></i>
-                                    Employment Cluster
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Exam Management</li>
-                            <li>
-                                <a href="?page=manage-exam" class="<?php if($activePage=="manage-exam"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-news-paper"></i>
+                                <a href="?page=exam-list" class="<?php if($activePage=="exam-list"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-study"></i>
                                     Examination List
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Examinee Management</li>
-                            <li>
-                                <a href="?page=manage-examinee" class="<?php if($activePage=="manage-examinee"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-users">
-                                    </i>Examinee List
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Report</li>
-                            <li>
-                                <a href="?page=report-ranking" class="<?php if($activePage=="report-ranking"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-medal">
-                                    </i>Ranking by Exam
-                                </a>
-                            </li>
-                            <li>
-                                <a href="?page=report-examinee" class="<?php if($activePage=="report-examinee"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-note2">
-                                    </i>Examinee Results
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Feedback</li>
-                            <li>
-                                <a href="?page=feedback" class="<?php if($activePage=="feedback"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-comment">
-                                    </i>Feedbacks
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Admin Management</li>
-                            <li>
-                                <a href="?page=manage-admin" class="<?php if($activePage=="manage-admin"){echo"mm-active";} ?>">
-                                    <i class="metismenu-icon pe-7s-key">
-                                    </i>User Accounts
                                 </a>
                             </li>
                             <li class="app-sidebar__heading"><hr class="sidebar-divider"></li>
@@ -248,8 +164,6 @@
                                 </a>
                             </li>
                         </ul>
-                        <!--<hr class="sidebar-divider">
-                        <div class="text-muted text-monospace"><a href="javascript:void(0);" data-toggle="modal" data-target="#mdlSystemInfo">v0.3.0-alpha</a></div>-->
                     </div>
                 </div>
             </div><!-- #END# SIDEBAR -->

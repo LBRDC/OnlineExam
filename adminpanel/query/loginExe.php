@@ -4,9 +4,9 @@ include("../../conn.php");
 
 extract($_POST);
 
-$stmt = $conn->prepare("SELECT * FROM examinee_tbl WHERE exmne_email = :ex_username AND exmne_pass = :ex_password ");
-$stmt->bindParam(':ex_username', $username);
-$stmt->bindParam(':ex_password', $pass);
+$stmt = $conn->prepare("SELECT * FROM admin_user WHERE admin_username = :ad_username AND admin_password = :ad_password ");
+$stmt->bindParam(':ad_username', $username);
+$stmt->bindParam(':ad_password', $pass);
 $stmt->execute();
 
 $admin_Acc = $stmt->fetch(PDO::FETCH_ASSOC);

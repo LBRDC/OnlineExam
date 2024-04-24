@@ -3,20 +3,23 @@ session_start();
 include("../../conn.php");
 
 extract($_POST);
+$ex_Status = 1;
 
-$stmt = $conn->prepare("SELECT * FROM admin_user WHERE admin_username = :ad_username AND admin_password = :ad_password ");
-$stmt->bindParam(':ad_username', $username);
-$stmt->bindParam(':ad_password', $pass);
+$stmt = $conn->prepare("SELECT * FROM examinee_tbl WHERE (exmne_email = :ex_email AND exmne_pass = :ex_password) AND exmne_status = :ex_Status");
+$stmt->bindParam(':ex_email', $username);
+$stmt->bindParam(':ex_password', $pass);
+$stmt->bindParam(':ex_Status', $ex_Status);
 $stmt->execute();
 
-$admin_Acc = $stmt->fetch(PDO::FETCH_ASSOC);
+$exmne_Acc = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($admin_Acc) {
-    $_SESSION['user'] = array(
-        'admin_fname' => $admin_Acc['admin_fname'],
-        'admin_lname' => $admin_Acc['admin_lname'],
-        'admin_pos' => $admin_Acc['admin_pos'],
-        'admin_super' => $admin_Acc['admin_super']
+if ($exmne_Acc) {
+    $_SESSION['ex_user'] = array(
+        'exmne_id' => $exmne_Acc['exmne_id'],
+        'exmne_clu_id' => $exmne_Acc['exmne_clu_id'],
+        'exmne_fname' => $exmne_Acc['exmne_fname'],
+        'exmne_mname' => $exmne_Acc['exmne_mname'],
+        'exmne_lname' => $exmne_Acc['exmne_lname']
     );
     $res = array("res" => "success");
 } else {
