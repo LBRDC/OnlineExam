@@ -22,7 +22,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="row">
                         <div class="col-md-6 col-xl-6">
                             <!-- Date and Time -->
@@ -120,6 +119,19 @@
                                             <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
                                         </li>
                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-3">
+                            <div class="main-card mb-3 card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                        <button type="button" class="btn btn-success ml-5 mr-5" style="width: 100px; height: 50px;">START EXAM</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -12245,6 +12245,10 @@
 		simple: function () {
 			return [ 'previous', 'next' ];
 		},
+
+		simple_modified: function () {
+			return [];
+		},
 	
 		full: function () {
 			return [  'first', 'previous', 'next', 'last' ];

@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Filter Options -->
+                    <!-- Filter Options 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <!-- TABLE -->
                     <div class="row">
                         <div class="col-md-12">
@@ -69,7 +69,7 @@
                                         <tr>
                                             <th>Title</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <!--<th>Action</th>-->
                                         </tr>
                                         </thead>
                                         <!--<tfoot>
@@ -117,12 +117,11 @@
                                                         <!--<td><?php echo htmlspecialchars($ex_status); ?></td>
                                                         <td><?php echo htmlspecialchars($attempts); ?> Attempts</td>-->
                                                         <td><?php echo htmlspecialchars($completed); ?></td>
-                                                        <td>
-                                                            <a href="javascript:void(0);" class="btn btn-primary <?php if($completed=='Completed'){echo'disabled';} ?>" id="take-btn" data-toggle="modal" data-target="#mdlreminder" data-toggle="tooltip" data-placement="bottom" title="Enable" 
-                                                            data-exam-id="<?php echo htmlspecialchars($ex_id); ?>">
+                                                        <!--<td>
+                                                            <a href="exam.php?id=<?php echo htmlspecialchars($ex_id); ?>" class="btn btn-primary <?php if($completed=='Completed'){echo'disabled';} ?>" id="take-btn">
                                                                 Take Exam
                                                             </a>
-                                                        </td>
+                                                        </td>-->
                                                     </tr>
                                         <?php
                                                 } // End of if statement checking if exam details are fetched
