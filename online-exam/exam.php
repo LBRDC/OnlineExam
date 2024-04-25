@@ -2,9 +2,22 @@
     /*
         Fetch Exam Display Limit (Questions Per List Group)
         Fetch Exam Questions
+        SELECT `ex_id`, `ex_title`, `ex_description`, `ex_time_limit`, `ex_qstn_limit`, `ex_disable_prv`, `ex_random_qstn`, `ex_status`, `ex_created` FROM `exam_tbl` WHERE 1
+        SELECT `exqstn_id`, `ex_id`, `exam_image`, `exam_question`, `exam_ch1`, `exam_ch2`, `exam_ch3`, `exam_ch4`, `exam_ch5`, `exam_ch6`, `exam_ch7`, `exam_ch8`, `exam_ch9`, `exam_ch10`, `exqstn_answer` FROM `exam_question_tbl` WHERE 1
+    
+    $ex_id = $_GET['id'];
+    //Select ex_title, ex_description, ex_time_limit, ex_qstn_limit, ex_disable_prv, ex_random_qstn
+    $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
+    $stmt1->bindparam(':ex_id', $ex_id);
+    $stmt1->execute();
+
+    //Select exqstn_id, exam_image, exam_question, exam_ch1-10, exqstn_answer
+    //Randomize if ex_random_qstn = yes else order by ascending
+    $stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
+    $stmt2->bindParam(':ex_id', $ex_id);
+    $stmt2->execute();
     */
 ?>
-
 
 <!doctype html>
 <html lang="en">
@@ -30,7 +43,6 @@
 <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
 <!-- #END# header.php -->
-
 
 <!-- #START# navbar.php -->
         <!-- NAVBAR MAIN -->
@@ -99,7 +111,7 @@
                 </div>
             </div>
         </div> <!-- #END# NAVBAR MAIN -->  
-   
+
 <!-- #START# ui-theme.php -->
         <!-- THEME SETTINGS -->
         <div class="ui-theme-settings">
@@ -445,7 +457,7 @@
             </div> #END# SIDEBAR -->
 <!-- #END# navbar.php -->
 
-<div class="app-main__outer" style="padding-left: 0px;">
+            <div class="app-main__outer" style="padding-left: 0px;">
 
 <!-- #START# dashboard.php -->
                 <!-- ### MAIN PAGE ### -->
@@ -475,54 +487,67 @@
                         <div class="col-md-12 col-xl-10 mb-4">
                             <div class="card">
                                 <div class="card-body">
+                                    <?php
+                                        $ex_id = $_GET['id'];
+                                        //Select ex_title, ex_description, ex_time_limit, ex_qstn_limit, ex_disable_prv, ex_random_qstn
+                                        $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
+                                        $stmt1->bindparam(':ex_id', $ex_id);
+                                        $stmt1->execute();
+                                    
+                                        //Select exqstn_id, exam_image, exam_question, exam_ch1-10, exqstn_answer
+                                        //Randomize if ex_random_qstn = yes else order by ascending
+                                        $stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
+                                        $stmt2->bindParam(':ex_id', $ex_id);
+                                        $stmt2->execute();
+                                    ?>
                                     <ul class="list-group" name="Part_1">
                                         <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">1.)</span> Question 1</h5>
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                    <h6 class="list-group-item-heading"><span class="font-weight-bold">1.)</span> Question 1</h5>
                                                     <div class="row questions">
                                                         <div class="col-md-6">
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-1">
-                                                                <label for="answer-1" data-question-number="A">Choice 1</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_1">
+                                                                <label for="ch_1" data-question-number="A">Choice 1</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-2"> 
-                                                                <label for="answer-2" data-question-number="B">Choice 2</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_2"> 
+                                                                <label for="ch_2" data-question-number="B">Choice 2</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-3">
-                                                                <label for="answer-3" data-question-number="C">Choice 3</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_3">
+                                                                <label for="ch_3" data-question-number="C">Choice 3</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-4">
-                                                                <label for="answer-4" data-question-number="D">Choice 4</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_4">
+                                                                <label for="ch_4" data-question-number="D">Choice 4</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-5"> 
-                                                                <label for="answer-5" data-question-number="E">Choice 5</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_5"> 
+                                                                <label for="ch_5" data-question-number="E">Choice 5</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-6">
-                                                                <label for="answer-6" data-question-number="F">Choice 6</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_6">
+                                                                <label for="ch_6" data-question-number="F">Choice 6</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-7">
-                                                                <label for="answer-7" data-question-number="G">Choice 7</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_7">
+                                                                <label for="ch_7" data-question-number="G">Choice 7</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-8">
-                                                                <label for="answer-8" data-question-number="H">Choice 8</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_8">
+                                                                <label for="ch_8" data-question-number="H">Choice 8</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-9">
-                                                                <label for="answer-9" data-question-number="I">Choice 9</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_9">
+                                                                <label for="ch_9" data-question-number="I">Choice 9</label>
                                                             </div>
                                                             <div class="">
-                                                                <input type="radio" name="answer" id="answer-10">
-                                                                <label for="answer-10" data-question-number="J">Choice 10</label>
+                                                                <input type="radio" name="qstnch_1" id="ch_10">
+                                                                <label for="ch_10" data-question-number="J">Choice 10</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -531,38 +556,17 @@
                                                     <img src="../../asset/img/avatars/default_user.webp" alt="">
                                                 </div>
                                             </div>
-                                            
-                                            
-                                        </li>
-                                        <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">2.)</span> Question 2</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">3.)</span> Question 3</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
                                         </li>
                                     </ul>
                                     <ul class="list-group" name="Part_2">
-                                        <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">4.)</span> Question 4</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">5.)</span> Question 5</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">6.)</span> Question 6</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                        </li>
+
                                     </ul>
                                 </div>
                                 <div class="card-footer justify-content-center">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button type="button" class="btn btn-primary"><i class="fa fa-arrow-circle-left"></i> Previous</button>
-                                            <button type="button" class="btn btn-success ml-5 mr-5" style="width: 100px; height: 50px;">Submit</button>
+                                            <button type="button" class="btn btn-success ml-5 mr-5 disabled" style="width: 100px; height: 50px;">Submit</button>
                                             <button type="button" class="btn btn-primary">Next <i class="fa fa-arrow-circle-right"></i></button>
                                         </div>
                                     </div>
