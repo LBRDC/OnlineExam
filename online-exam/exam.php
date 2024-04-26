@@ -42,6 +42,12 @@
     $ex_qstn_limit = $ex_details['ex_qstn_limit'];
     $ex_disable_prv = $ex_details['ex_disable_prv'];
     $ex_random_qstn = $ex_details['ex_random_qstn'];
+
+    if ($ex_random_qstn == 'yes') {
+        $orderBy = "ORDER BY RAND()";
+    } else {
+        $orderBy = "ORDER BY exqstn_id ASC";
+    }
 ?>
 
 <!doctype html>
@@ -483,6 +489,7 @@
 <!-- #END# navbar.php -->
 
             <div class="app-main__outer" style="padding-left: 0px;">
+            <div id="scrollTop"></div>
 
 <!-- #START# dashboard.php -->
                 <!-- ### MAIN PAGE ### -->
@@ -507,10 +514,9 @@
                             </div>-->
                         </div>
                     </div>
-                    
                     <div class="row justify-content-center">
                         <div class="col-md-12 col-xl-10 mb-4">
-                            <div class="card">
+                            <div class="card" id="examCard">
                                 <div class="card-header justify-content-center"> 
                                     <span class="pr-1">Page</span><span class="current-page pr-1">1</span>of<span class="total-pages pl-1">1</span>
                                 </div>
@@ -524,7 +530,7 @@
                                             <?php
                                                 //Select exqstn_id, exam_image, exam_question, exam_ch1-10, exqstn_answer
                                                 //Randomize if ex_random_qstn = yes else order by ascending
-                                                $stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
+                                                $stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id $orderBy");
                                                 $stmt2->bindParam(':ex_id', $ex_id);
                                                 $stmt2->execute();
                                                 
@@ -548,7 +554,7 @@
                                                     $exam_ch10 = $row['exam_ch10'];
                                                     $exqstn_answer = $row['exqstn_answer'];
                                             ?>
-                                            <tr>
+                                            <tr id="scrollRow">
                                                 <td>
                                                     <ul class="list-group">
                                                         <li class="list-group-item">
@@ -556,11 +562,11 @@
                                                                 <div class="col-md-6">
                                                                     <?php $i++; ?>
                                                                     <h6 class="list-group-item-heading"><span class="font-weight-bold"><?php echo htmlspecialchars($i); ?>.)</span> <?php echo htmlspecialchars($exam_question); ?></h5>
-                                                                    <div class="row questions" id="questionsContainer">
+                                                                    <div class="row questions scrollQuest" id="questionsContainer">
                                                                         <div class="col-md-6">
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch1)) {
+                                                                            if (isset($exam_ch1) && $exam_ch1 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -576,7 +582,7 @@
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch2)) {
+                                                                            if (isset($exam_ch2) && $exam_ch2 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -592,7 +598,7 @@
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch3)) {
+                                                                            if (isset($exam_ch3) && $exam_ch3 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -608,7 +614,7 @@
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch4)) {
+                                                                            if (isset($exam_ch4) && $exam_ch4 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -624,7 +630,7 @@
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch5)) {
+                                                                            if (isset($exam_ch5) && $exam_ch5 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -642,7 +648,7 @@
                                                                         <div class="col-md-6">
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch6)) {
+                                                                            if (isset($exam_ch6) && $exam_ch6 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -651,14 +657,14 @@
                                                                                 id="choice_<?php echo htmlspecialchars($ch_id); ?>"
                                                                                 value="<?php echo htmlspecialchars($exam_ch6); ?>"
                                                                                 onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="E">
+                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="F">
                                                                                     <?php echo htmlspecialchars($exam_ch6); ?>
                                                                                 </label>
                                                                             </div>
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch7)) {
+                                                                            if (isset($exam_ch7) && $exam_ch7 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -667,14 +673,14 @@
                                                                                 id="choice_<?php echo htmlspecialchars($ch_id); ?>"
                                                                                 value="<?php echo htmlspecialchars($exam_ch7); ?>"
                                                                                 onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="F">
+                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="G">
                                                                                     <?php echo htmlspecialchars($exam_ch7); ?>
                                                                                 </label>
                                                                             </div>
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch8)) {
+                                                                            if (isset($exam_ch8) && $exam_ch8 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -690,7 +696,7 @@
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch9)) {
+                                                                            if (isset($exam_ch9) && $exam_ch9 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -706,7 +712,7 @@
                                                                             <?php } ?>
                                                                             <?php 
                                                                             $ch_id++; 
-                                                                            if (!empty($exam_ch10)) {
+                                                                            if (isset($exam_ch10) && $exam_ch10 != '') {
                                                                             ?>
                                                                             <div class="">
                                                                                 <input 
@@ -742,12 +748,12 @@
                                 </div>
                                 
                                 <form method="post" id="submitAnswerFrm">
-                                    <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>">
-                                    <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>">
-                                    <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>">
-                                    <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>">
-                                    <input type="text" name="examAction" id="examAction">
-                                    <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>">
+                                    <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>" hidden>
+                                    <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>" hidden>
+                                    <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" hidden>
+                                    <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>" hidden>
+                                    <input type="text" name="examAction" id="examAction" hidden>
+                                    <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden>
                                     <!-- ANSWERS HIDDEN INPUTS -->
                                     <?php 
                                     $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
@@ -767,7 +773,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
-                                            <button type="button" class="btn btn-success ml-5 mr-5 disabled" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
+                                            <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
                                             <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
                                         </div>
                                     </div>
@@ -826,19 +832,44 @@
     <script type="text/javascript" src="./js/exam-js.js"></script>
     <script>
         //Function Update Form Hidden Input
-    function updateHiddenInput(radio) {
-        // Get the name of the selected radio button
-        var radioName = radio.name;
+        function updateHiddenInput(radio) {
+            // Get the name of the selected radio button
+            var radioName = radio.name;
 
-        // Find the hidden input field with the same name and update its value
-        var hiddenInputs = document.getElementsByName(radioName);
-        for (var i = 0; i < hiddenInputs.length; i++) {
-            if (hiddenInputs[i].type === 'hidden') {
-                hiddenInputs[i].value = radio.value;
-                break;
+            // Find the hidden input field with the same name and update its value
+            var hiddenInputs = document.getElementsByName(radioName);
+            for (var i = 0; i < hiddenInputs.length; i++) {
+                if (hiddenInputs[i].type === 'hidden') {
+                    hiddenInputs[i].value = radio.value;
+                    break;
+                }
             }
         }
-    }
+    </script>
+    <script>
+        // View Image Modal
+        document.querySelectorAll('#viewimg-btn').forEach(function(viewimgbtn) {
+            viewimgbtn.addEventListener('click', function() {
+                var imageFilename = this.getAttribute('data-view-img');
+
+                var imageUrl = '../uploads/exam_question/' + imageFilename;
+
+                // Update the image source in the modal
+                var modalImage = document.querySelector('#mdlViewImage .modal-body img');
+                modalImage.src = imageUrl;
+                modalImage.alt = 'Image for exam ID ' + imageFilename;
+            });
+        });
+    </script>
+    <script>
+    document.getElementById('prev-btn').addEventListener('click', function() {
+        // Scroll to the top of the page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('nxt-btn').addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     </script>
 </body>
 </html>

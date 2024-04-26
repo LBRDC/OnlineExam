@@ -118,27 +118,29 @@ function fetchDispLimit() {
     return exLimit;
 }
 
+// Function to show the card
+function showCard() {
+    // Show the card
+    document.getElementById('examCard').classList.remove('d-none');
+}
+
 var display_Limit = fetchDispLimit();
 
 document.addEventListener('DOMContentLoaded', function() {
     //Display Instructions
     stopTimer();
     var exDesc = document.getElementById('exDesc').innerText;
-    console.log("Description: " + exDesc); //DEBUG
+    //console.log("Description: " + exDesc); //DEBUG
     Swal.fire({
         title: 'Instructions',
         text: exDesc,
         icon: 'info',
-        showCancelButton: false,
-        allowOutsideClick: false,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ok'
     }).then((result) => {
         if (result.value) {
             table.page.len(display_Limit).draw();
             startTimer();
             updateDisplay();
+            //showCard();
         }
     });
     
@@ -148,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //Datatable
     var table = $('.dt-sort').DataTable({
         lengthChange: false,
-        pageLength: 0, 
+        pageLength: 1, 
         ordering: false, 
         searching: false, 
         info: false,
@@ -157,25 +159,31 @@ document.addEventListener('DOMContentLoaded', function() {
         order: [],
         //responsive: true,
         drawCallback: function() {
-          var pageInfo = this.api().page.info();
-          $('.current-page').text(pageInfo.page + 1); // Adding 1 to convert zero-based index to 1-based index
-          $('.total-pages').text(pageInfo.pages);
-  
-          // Previous Button
-          if (pageInfo.page == 0 || disableBtn == "yes") {
-            $('#prev-btn').hide();
-          } else {
-            $('#prev-btn').show();
-          }
-  
-          // Next Button
-          if (pageInfo.page == pageInfo.pages - 1) {
-            $('#nxt-btn').hide();
-            $('#submit-btn').show();
-          } else {
-            $('#submit-btn').hide();
-            $('#nxt-btn').show();
-          }
+            var pageInfo = this.api().page.info();
+            $('.current-page').text(pageInfo.page + 1); // Adding 1 to convert zero-based index to 1-based index
+            $('.total-pages').text(pageInfo.pages);
+
+            // Previous Button
+            if (pageInfo.page == 0 || disableBtn == "yes") {
+            $('#prev-btn').prop('disabled', true); 
+            $('#prev-btn').removeClass('btn-primary').addClass('btn-secondary'); 
+            } else {
+            $('#prev-btn').prop('disabled', false);
+            $('#prev-btn').removeClass('btn-secondary').addClass('btn-primary'); 
+            }
+
+            // Next Button
+            if (pageInfo.page == pageInfo.pages - 1) {
+            $('#nxt-btn').prop('disabled', true); 
+            $('#nxt-btn').removeClass('btn-primary').addClass('btn-secondary');
+            $('#submit-btn').prop('disabled', false);
+            $('#submit-btn').removeClass('btn-secondary').addClass('btn-success');
+            } else {
+            $('#submit-btn').prop('disabled', true);
+            $('#submit-btn').removeClass('btn-success').addClass('btn-secondary');
+            $('#nxt-btn').prop('disabled', false); 
+            $('#nxt-btn').removeClass('btn-secondary').addClass('btn-primary');
+            }    
         }
     });
 
@@ -195,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // View Image Modal
-    document.querySelectorAll('#viewimg-btn').forEach(function(viewimgbtn) {
+    /*document.querySelectorAll('#viewimg-btn').forEach(function(viewimgbtn) {
         viewimgbtn.addEventListener('click', function() {
             var imageFilename = this.getAttribute('data-view-img');
 
@@ -206,22 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
             modalImage.src = imageUrl;
             modalImage.alt = 'Image for exam ID ' + imageFilename;
         });
-    });
+    });*/
 
-    // Select all radio buttons
-    var radioButtons = document.querySelectorAll('#questionsContainer input[type="radio"]');
-
-    // Add event listener to each radio button
-    radioButtons.forEach(function(radioButton) {
-        radioButton.addEventListener('change', function() {
-            // Find the next question
-            var nextQuestion = this.closest('.col-md-6').nextElementSibling;
-            if (nextQuestion) {
-                // Scroll to the next question
-                nextQuestion.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
+    
 });
 
 

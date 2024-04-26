@@ -866,9 +866,9 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
     var selectedValue = $('#edit_QstnAns').val();
     var key = 'edit_QstnCh' + selectedValue;
 
-    // Check if the selected answer is not empty or undefined
-    if (selectedValue && formData.get(key)) {
-        formData.append('edit_QstnAns', formData.get(key));
+    // Check if the selected answer is not empty or undefined, or if it is 'none'
+    if (selectedValue && (formData.get(key) || selectedValue === 'none')) {
+        formData.append('edit_QstnAns', formData.get(key) || selectedValue);
     } else {
         Swal.fire({
             icon: "warning",
@@ -877,6 +877,7 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
         });
         return;
     }
+
 
     // DEBUG: Display the appended values in the console
     /*for (var pair of formData.entries()) {

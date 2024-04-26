@@ -18,8 +18,8 @@ $add_QstnCh10 = isset($_POST['add_QstnCh10']) ? $_POST['add_QstnCh10'] : '';
 $add_QstnAns = isset($_POST['add_QstnAns']) ? $_POST['add_QstnAns'] : '';
 
 // Check if variables contain values
-if(empty($add_QstnExamId) || empty($add_Question) || empty($add_QstnAns)) {
-    $res = array("res" => "incomplete");
+if($add_QstnExamId == '' || $add_Question == '' || $add_QstnAns == '') {
+    $res = array("res" => "incomplete" , "msg" => $add_QstnExamId . $add_Question . $add_QstnAns);
     echo json_encode($res);
     exit();
 }
