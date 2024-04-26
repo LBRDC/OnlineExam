@@ -159,6 +159,40 @@ document.addEventListener('DOMContentLoaded', function() {
         order: [],
         //responsive: true,
         drawCallback: function() {
+            // Select all radio buttons
+            /*var radioButtons = document.querySelectorAll('#questionsContainer input[type="radio"]');
+
+            // Add event listener to each radio button
+            radioButtons.forEach(function(radioButton) {
+                radioButton.addEventListener('change', function() {
+                    // Find the next question
+                    var nextQuestion = this.closest('.col-md-6').nextElementSibling;
+                    if (nextQuestion) {
+                        // Scroll to the next question
+                        nextQuestion.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });*/
+
+            // Select all radio buttons within question containers
+           const radioButtons = document.querySelectorAll('.question-container input[type="radio"]');
+
+           radioButtons.forEach(function(radioButton) {
+               radioButton.addEventListener('click', function() {
+                   // Find the current question container
+                   const currentQuestionContainer = this.closest('.question-container');
+
+                   // Find the next question container
+                   const nextQuestionContainer = currentQuestionContainer.nextElementSibling;
+
+                   // Check if there is a next question container
+                   if (nextQuestionContainer) {
+                       // Scroll to the next question container
+                       nextQuestionContainer.scrollIntoView({ behavior: 'smooth' });
+                   }
+               });
+           });
+
             var pageInfo = this.api().page.info();
             $('.current-page').text(pageInfo.page + 1); // Adding 1 to convert zero-based index to 1-based index
             $('.total-pages').text(pageInfo.pages);

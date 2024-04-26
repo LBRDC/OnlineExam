@@ -554,7 +554,7 @@
                                                     $exam_ch10 = $row['exam_ch10'];
                                                     $exqstn_answer = $row['exqstn_answer'];
                                             ?>
-                                            <tr id="scrollRow">
+                                            <tr class="question-container">
                                                 <td>
                                                     <ul class="list-group">
                                                         <li class="list-group-item">
@@ -562,7 +562,7 @@
                                                                 <div class="col-md-6">
                                                                     <?php $i++; ?>
                                                                     <h6 class="list-group-item-heading"><span class="font-weight-bold"><?php echo htmlspecialchars($i); ?>.)</span> <?php echo htmlspecialchars($exam_question); ?></h5>
-                                                                    <div class="row questions scrollQuest" id="questionsContainer">
+                                                                    <div class="row questions" id="questionsContainer">
                                                                         <div class="col-md-6">
                                                                             <?php 
                                                                             $ch_id++; 
@@ -870,6 +870,8 @@
     document.getElementById('nxt-btn').addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+    </script>
+    <script>
     </script>
 </body>
 </html>
