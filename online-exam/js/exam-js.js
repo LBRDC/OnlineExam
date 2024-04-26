@@ -175,23 +175,32 @@ document.addEventListener('DOMContentLoaded', function() {
             });*/
 
             // Select all radio buttons within question containers
-           const radioButtons = document.querySelectorAll('.question-container input[type="radio"]');
+            const radioButtons = document.querySelectorAll('.question-container input[type="radio"]');
 
-           radioButtons.forEach(function(radioButton) {
-               radioButton.addEventListener('click', function() {
-                   // Find the current question container
-                   const currentQuestionContainer = this.closest('.question-container');
+            radioButtons.forEach(function(radioButton) {
+                radioButton.addEventListener('click', function() {
+                    // Find the current question container
+                    const currentQuestionContainer = this.closest('.question-container');
 
-                   // Find the next question container
-                   const nextQuestionContainer = currentQuestionContainer.nextElementSibling;
+                    // Find the next question container
+                    const nextQuestionContainer = currentQuestionContainer.nextElementSibling;
 
-                   // Check if there is a next question container
-                   if (nextQuestionContainer) {
-                       // Scroll to the next question container
-                       nextQuestionContainer.scrollIntoView({ behavior: 'smooth' });
-                   }
-               });
-           });
+                    // Check if there is a next question container
+                    if (nextQuestionContainer) {
+                        // Calculate the position to scroll to
+                        // Get the position of the next question container
+                        const nextQuestionPosition = nextQuestionContainer.getBoundingClientRect().top + window.pageYOffset;
+                        // Calculate the center position
+                        const centerPosition = nextQuestionPosition - (window.innerHeight / 5);
+
+                        // Scroll to the calculated position
+                        window.scrollTo({
+                            top: centerPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
 
             var pageInfo = this.api().page.info();
             $('.current-page').text(pageInfo.page + 1); // Adding 1 to convert zero-based index to 1-based index
