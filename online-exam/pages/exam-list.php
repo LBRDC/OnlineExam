@@ -30,7 +30,7 @@
                                 </div>
                                 <div>Examination List
                                     <div class="page-title-subheading">
-                                        View Pending Exams.
+                                        View Exams.
                                     </div>
                                 </div>
                             </div>

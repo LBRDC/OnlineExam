@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         title: 'Instructions',
         text: exDesc,
         icon: 'info',
+        allowOutsideClick: false,
     }).then((result) => {
         if (result.value) {
             table.page.len(display_Limit).draw();
@@ -159,24 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
         order: [],
         //responsive: true,
         drawCallback: function() {
-            // Select all radio buttons
-            /*var radioButtons = document.querySelectorAll('#questionsContainer input[type="radio"]');
-
-            // Add event listener to each radio button
-            radioButtons.forEach(function(radioButton) {
-                radioButton.addEventListener('change', function() {
-                    // Find the next question
-                    var nextQuestion = this.closest('.col-md-6').nextElementSibling;
-                    if (nextQuestion) {
-                        // Scroll to the next question
-                        nextQuestion.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });*/
-
-            // Select all radio buttons within question containers
             const radioButtons = document.querySelectorAll('.question-container input[type="radio"]');
-
             radioButtons.forEach(function(radioButton) {
                 radioButton.addEventListener('click', function() {
                     // Find the current question container
@@ -244,24 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
             table.page(currentPage + 1).draw('page');
         }
     });
-    
-    // View Image Modal
-    /*document.querySelectorAll('#viewimg-btn').forEach(function(viewimgbtn) {
-        viewimgbtn.addEventListener('click', function() {
-            var imageFilename = this.getAttribute('data-view-img');
 
-            var imageUrl = '../uploads/exam_question/' + imageFilename;
-
-            // Update the image source in the modal
-            var modalImage = document.querySelector('#mdlViewImage .modal-body img');
-            modalImage.src = imageUrl;
-            modalImage.alt = 'Image for exam ID ' + imageFilename;
-        });
-    });*/
-
-    
+    var submitBtn = document.getElementById('submit-btn');
+    submitBtn.addEventListener('click', function() {
+        document.getElementById('examAction').value = "ontime";
+    });
 });
-
-
-
-

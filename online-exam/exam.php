@@ -5,28 +5,24 @@
     if (isset($_SESSION['ex_user']['exmne_fname']) && isset($_SESSION['ex_user']['exmne_lname'])) {
         $exmne_fname = $_SESSION['ex_user']['exmne_fname'];
         $exmne_lname = $_SESSION['ex_user']['exmne_lname'];
-      } else {
+    } else {
         $exmne_fname = 'null';
         $exmne_lname = 'null';
-      }
-    
-      if (isset($_SESSION['ex_user']['exmne_mname'])) {
+    }
+
+    if (isset($_SESSION['ex_user']['exmne_mname'])) {
         $exmne_mname = $_SESSION['ex_user']['exmne_mname'];
         $exmne_minitial = substr($exmne_mname, 0, 1) . ". ";
-      } else {
+    } else {
         $exmne_minitial = '_ ';
-      }
-    
-      if (isset($_SESSION['ex_user']['exmne_sfname'])) {
+    }
+
+    if (isset($_SESSION['ex_user']['exmne_sfname'])) {
         $exmne_sfname = $_SESSION['ex_user']['exmne_sfname'];
-      } else {
+    } else {
         $exmne_sfname = '';
-      }  
-    
-    /*
-        Fetch Exam Display Limit (Questions Per List Group)
-        Fetch Exam Questions
-    */
+    }  
+
     $ex_id = $_GET['id'];
     $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
     $exmne_id = $_SESSION['ex_user']['exmne_id'];
@@ -489,7 +485,6 @@
 <!-- #END# navbar.php -->
 
             <div class="app-main__outer" style="padding-left: 0px;">
-            <div id="scrollTop"></div>
 
 <!-- #START# dashboard.php -->
                 <!-- ### MAIN PAGE ### -->
@@ -516,269 +511,267 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-12 col-xl-10 mb-4">
-                            <div class="card" id="examCard">
+                            <div class="card d-none" id="examCard">
                                 <div class="card-header justify-content-center"> 
                                     <span class="pr-1">Page</span><span class="current-page pr-1">1</span>of<span class="total-pages pl-1">1</span>
                                 </div>
                                 <div class="card-body">
-                                    <div class="">
-                                        <table class="table table-borderless dt-sort" id="tableList" style="width:100%">
-                                            <thead>
-                                                <th></th>
-                                            </thead>
-                                            <tbody>
-                                            <?php
-                                                //Select exqstn_id, exam_image, exam_question, exam_ch1-10, exqstn_answer
-                                                //Randomize if ex_random_qstn = yes else order by ascending
-                                                $stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id $orderBy");
-                                                $stmt2->bindParam(':ex_id', $ex_id);
-                                                $stmt2->execute();
-                                                
-                                                $i = 0;
-                                                $ch_id = 0;
+                                    <table class="table table-borderless dt-sort" id="tableList" style="width:100%">
+                                        <thead>
+                                            <th></th>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            //Select exqstn_id, exam_image, exam_question, exam_ch1-10, exqstn_answer
+                                            //Randomize if ex_random_qstn = yes else order by ascending
+                                            $stmt2 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id $orderBy");
+                                            $stmt2->bindParam(':ex_id', $ex_id);
+                                            $stmt2->execute();
+                                            
+                                            $i = 0;
+                                            $ch_id = 0;
 
-                                                //Loop through each exam ID fetched from exam_cluster_tbl
-                                                    while($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                                                    $exqstn_id = $row['exqstn_id'];
-                                                    $exam_image = $row['exam_image'];
-                                                    $exam_question = $row['exam_question'];
-                                                    $exam_ch1 = $row['exam_ch1'];
-                                                    $exam_ch2 = $row['exam_ch2'];
-                                                    $exam_ch3 = $row['exam_ch3'];
-                                                    $exam_ch4 = $row['exam_ch4'];
-                                                    $exam_ch5 = $row['exam_ch5'];
-                                                    $exam_ch6 = $row['exam_ch6'];
-                                                    $exam_ch7 = $row['exam_ch7'];
-                                                    $exam_ch8 = $row['exam_ch8'];
-                                                    $exam_ch9 = $row['exam_ch9'];
-                                                    $exam_ch10 = $row['exam_ch10'];
-                                                    $exqstn_answer = $row['exqstn_answer'];
-                                            ?>
-                                            <tr class="question-container">
-                                                <td>
-                                                    <ul class="list-group">
-                                                        <li class="list-group-item">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <?php $i++; ?>
-                                                                    <h6 class="list-group-item-heading"><span class="font-weight-bold"><?php echo htmlspecialchars($i); ?>.)</span> <?php echo htmlspecialchars($exam_question); ?></h5>
-                                                                    <div class="row questions" id="questionsContainer">
-                                                                        <div class="col-md-6">
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch1) && $exam_ch1 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch1); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="A">
-                                                                                    <?php echo htmlspecialchars($exam_ch1); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch2) && $exam_ch2 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch2); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="B">
-                                                                                    <?php echo htmlspecialchars($exam_ch2); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch3) && $exam_ch3 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch3); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="C">
-                                                                                    <?php echo htmlspecialchars($exam_ch3); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch4) && $exam_ch4 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch4); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="D">
-                                                                                    <?php echo htmlspecialchars($exam_ch4); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch5) && $exam_ch5 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch5); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="E">
-                                                                                    <?php echo htmlspecialchars($exam_ch5); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
+                                            //Loop through each exam ID fetched from exam_cluster_tbl
+                                                while($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                                                $exqstn_id = $row['exqstn_id'];
+                                                $exam_image = $row['exam_image'];
+                                                $exam_question = $row['exam_question'];
+                                                $exam_ch1 = $row['exam_ch1'];
+                                                $exam_ch2 = $row['exam_ch2'];
+                                                $exam_ch3 = $row['exam_ch3'];
+                                                $exam_ch4 = $row['exam_ch4'];
+                                                $exam_ch5 = $row['exam_ch5'];
+                                                $exam_ch6 = $row['exam_ch6'];
+                                                $exam_ch7 = $row['exam_ch7'];
+                                                $exam_ch8 = $row['exam_ch8'];
+                                                $exam_ch9 = $row['exam_ch9'];
+                                                $exam_ch10 = $row['exam_ch10'];
+                                                $exqstn_answer = $row['exqstn_answer'];
+                                        ?>
+                                        <tr class="question-container">
+                                            <td>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <?php $i++; ?>
+                                                                <h6 class="list-group-item-heading"><span class="font-weight-bold"><?php echo htmlspecialchars($i); ?>.)</span> <?php echo htmlspecialchars($exam_question); ?></h5>
+                                                                <div class="row questions" id="questionsContainer">
+                                                                    <div class="col-md-6">
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch1) && $exam_ch1 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch1); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="A">
+                                                                                <?php echo htmlspecialchars($exam_ch1); ?>
+                                                                            </label>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch6) && $exam_ch6 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch6); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="F">
-                                                                                    <?php echo htmlspecialchars($exam_ch6); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch7) && $exam_ch7 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch7); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="G">
-                                                                                    <?php echo htmlspecialchars($exam_ch7); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch8) && $exam_ch8 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch8); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="H">
-                                                                                    <?php echo htmlspecialchars($exam_ch8); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch9) && $exam_ch9 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch9); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="I">
-                                                                                    <?php echo htmlspecialchars($exam_ch9); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
-                                                                            <?php 
-                                                                            $ch_id++; 
-                                                                            if (isset($exam_ch10) && $exam_ch10 != '') {
-                                                                            ?>
-                                                                            <div class="">
-                                                                                <input 
-                                                                                type="radio" 
-                                                                                name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
-                                                                                id="choice_<?php echo htmlspecialchars($ch_id); ?>"
-                                                                                value="<?php echo htmlspecialchars($exam_ch10); ?>"
-                                                                                onclick="updateHiddenInput(this)">
-                                                                                <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="J">
-                                                                                    <?php echo htmlspecialchars($exam_ch10); ?>
-                                                                                </label>
-                                                                            </div>
-                                                                            <?php } ?>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch2) && $exam_ch2 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch2); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="B">
+                                                                                <?php echo htmlspecialchars($exam_ch2); ?>
+                                                                            </label>
                                                                         </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch3) && $exam_ch3 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch3); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="C">
+                                                                                <?php echo htmlspecialchars($exam_ch3); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch4) && $exam_ch4 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch4); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="D">
+                                                                                <?php echo htmlspecialchars($exam_ch4); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch5) && $exam_ch5 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch5); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="E">
+                                                                                <?php echo htmlspecialchars($exam_ch5); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch6) && $exam_ch6 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch6); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="F">
+                                                                                <?php echo htmlspecialchars($exam_ch6); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch7) && $exam_ch7 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch7); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="G">
+                                                                                <?php echo htmlspecialchars($exam_ch7); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch8) && $exam_ch8 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch8); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="H">
+                                                                                <?php echo htmlspecialchars($exam_ch8); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch9) && $exam_ch9 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch9); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="I">
+                                                                                <?php echo htmlspecialchars($exam_ch9); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
+                                                                        <?php 
+                                                                        $ch_id++; 
+                                                                        if (isset($exam_ch10) && $exam_ch10 != '') {
+                                                                        ?>
+                                                                        <div class="">
+                                                                            <input 
+                                                                            type="radio" 
+                                                                            name="answer[<?php echo htmlspecialchars($exqstn_id); ?>][correct]" 
+                                                                            id="choice_<?php echo htmlspecialchars($ch_id); ?>"
+                                                                            value="<?php echo htmlspecialchars($exam_ch10); ?>"
+                                                                            onclick="updateHiddenInput(this)">
+                                                                            <label for="choice_<?php echo htmlspecialchars($ch_id); ?>" data-question-number="J">
+                                                                                <?php echo htmlspecialchars($exam_ch10); ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php } ?>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 text-center">
-                                                                <?php if ($exam_image != "") { ?>
-                                                                    <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
-                                                                        <img src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" class="img-fluid" >
-                                                                    </a>
-                                                                    <?php } else { echo ""; }?>
-                                                                </div>
                                                             </div>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                            <?php } ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                            <div class="col-md-6 text-center">
+                                                            <?php if ($exam_image != "") { ?>
+                                                                <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
+                                                                    <img src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" class="img-fluid" >
+                                                                </a>
+                                                                <?php } else { echo ""; }?>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 
-                                <form method="post" id="submitAnswerFrm">
-                                    <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>" hidden>
-                                    <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>" hidden>
-                                    <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" hidden>
-                                    <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>" hidden>
-                                    <input type="text" name="examAction" id="examAction" hidden>
-                                    <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden>
-                                    <!-- ANSWERS HIDDEN INPUTS -->
-                                    <?php 
-                                    $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
-                                    $stmt3->bindParam(':ex_id', $ex_id);
-                                    $stmt3->execute();
-
-                                    if($stmt3->rowCount() >  0) { //if stmnt
-                                        while ($qstnRow = $stmt3->fetch(PDO::FETCH_ASSOC)) { //While loop
-                                            $qstn_Id = $qstnRow['exqstn_id'];
-                                    ?>
-                                    <input type="hidden" name="answer[<?php echo htmlspecialchars($qstn_Id); ?>][correct]" id="qstnAns_<?php echo htmlspecialchars($qstn_Id); ?>" value="">
-                                    <?php 
-                                        } //END while Loop 
-                                    } //END if stmnt
-                                    ?>
                                 <div class="card-footer justify-content-center">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
-                                            <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
-                                            <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
+                                    <form method="post" id="submitAnswerFrm">
+                                        <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>" hidden readonly>
+                                        <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>" hidden readonly>
+                                        <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" hidden readonly>
+                                        <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>" hidden readonly>
+                                        <input type="text" name="examAction" id="examAction" hidden readonly>
+                                        <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden readonly>
+                                        <!-- ANSWERS HIDDEN INPUTS -->
+                                        <?php 
+                                        $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
+                                        $stmt3->bindParam(':ex_id', $ex_id);
+                                        $stmt3->execute();
+
+                                        if($stmt3->rowCount() >  0) { //if stmnt
+                                            while ($qstnRow = $stmt3->fetch(PDO::FETCH_ASSOC)) { //While loop
+                                                $qstn_Id = $qstnRow['exqstn_id'];
+                                        ?>
+                                        <input type="hidden" name="answer[<?php echo htmlspecialchars($qstn_Id); ?>][correct]" id="qstnAns_<?php echo htmlspecialchars($qstn_Id); ?>" value="" readonly>
+                                        <?php 
+                                            } //END while Loop 
+                                        } //END if stmnt
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
+                                                <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
+                                                <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- END ANSWERS HIDDEN INPUTS -->
-                                </form>
+                                        <!-- END ANSWERS HIDDEN INPUTS -->
+                                    </form>
                                 </div>
                             </div>
                         </div>
