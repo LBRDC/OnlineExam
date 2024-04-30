@@ -1,3 +1,38 @@
+<?php
+$exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
+
+// Fetch Exam IDs based on cluster
+$stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
+$stmt1->bindParam(':clu_id', $exmne_clu_id);
+$stmt1->execute();
+
+$unattemptedExamIds = [];
+
+// Loop through each exam ID fetched from exam_cluster_tbl and check if it has been attempted
+while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+    $ex_id = $row['ex_id'];
+
+    // Check if the exam has been attempted
+    $stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id");
+    $stmt2->bindParam(':ex_id', $ex_id);
+    $stmt2->execute();
+    $attempts = $stmt2->rowCount();
+
+    // If the exam has not been attempted, add it to the list
+    if ($attempts == 0) {
+        $unattemptedExamIds[] = $ex_id;
+    }
+}
+
+$ex_count = count($unattemptedExamIds);
+if (count($unattemptedExamIds) > 0) {
+    $selEx_id = $unattemptedExamIds[0];
+} else {
+    $selEx_id = '';
+}
+
+?>
+
 
 <!-- #START# dashboard.php -->
                 <!-- ### MAIN PAGE ### -->
@@ -68,7 +103,7 @@
                                                 <div class="widget-subheading">Active</div>
                                             </div>
                                             <div class="widget-content-right">
-                                                <div class="widget-numbers text-white"><span>10</span></div>
+                                                <div class="widget-numbers text-white"><span><?php echo htmlspecialchars($ex_count); ?></span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -123,18 +158,20 @@
                             </div>
                         </div>
                     </div>
+                    <?php if ($selEx_id != '') { ?>
                     <div class="row justify-content-center">
                         <div class="col-md-3">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 text-center">
-                                        <button type="button" class="btn btn-success ml-5 mr-5" style="width: 100px; height: 50px;">START EXAM</button>
+                                        <button type="button" class="btn btn-success ml-5 mr-5" id="strt-btn" style="width: 100px; height: 50px;" data-exam-id="<?php echo htmlspecialchars($selEx_id); ?>">START EXAM</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <?php } ?>
                 </div> <!-- #END# MAIN PAGE -->
 <!-- #END# dashboard.php -->

@@ -67,7 +67,7 @@ function updateTimer() {
     }
 
     if (minutes === 0 && seconds === 0) {
-        document.getElementById('examAction').value = "time out";
+        document.getElementById('examAction').value = "timeout";
         //$('#submitAnswerFrm').submit();
         stopTimer();
         return;
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             table.page.len(display_Limit).draw();
             startTimer();
             updateDisplay();
-            //showCard();
+            showCard();
         }
     });
     

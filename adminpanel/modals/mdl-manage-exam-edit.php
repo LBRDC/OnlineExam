@@ -95,7 +95,7 @@
                             </div>
                             <div class="form-row mb-2">
                                 <label for="add_QstnAns" class="font-weight-bold">Answer<span class="text-danger">*</span></label>
-                                <select class="form-control" name="add_QstnAns" id="add_QstnAns">
+                                <select class="form-control" name="add_QstnAns" id="add_QstnAns" required>
                                     <option value="" hidden>Select...</option>
                                     <option value="1">A</option>
                                     <option value="2">B</option>
@@ -248,7 +248,7 @@
                     </div>
                     <div class="form-row mb-2">
                         <label for="edit_QstnAns" class="font-weight-bold">Answer<span class="text-danger">*</span></label>
-                        <select class="form-control" name="edit_QstnAns" id="edit_QstnAns">
+                        <select class="form-control" name="edit_QstnAns" id="edit_QstnAns" required>
                             <option value="" disabled>Select...</option>
                             <option value="" selected hidden></option> <!-- selected -->
                             <option value="1">A</option>

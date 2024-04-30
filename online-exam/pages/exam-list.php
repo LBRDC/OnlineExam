@@ -84,7 +84,7 @@
                                             $clu_id = $_SESSION['ex_user']['exmne_clu_id'];
 
                                             // Fetch Exam IDs based on cluster
-                                            $stmt1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = :clu_id");
+                                            $stmt1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
                                             $stmt1->bindParam(':clu_id', $clu_id);
                                             $stmt1->execute();
 

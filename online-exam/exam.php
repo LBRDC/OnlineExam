@@ -742,12 +742,12 @@
                                 
                                 <div class="card-footer justify-content-center">
                                     <form method="post" id="submitAnswerFrm">
-                                        <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>" hidden readonly>
-                                        <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>" hidden readonly>
-                                        <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" hidden readonly>
-                                        <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>" hidden readonly>
-                                        <input type="text" name="examAction" id="examAction" hidden readonly>
-                                        <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden readonly>
+                                        <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>"  readonly>
+                                        <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>"  readonly>
+                                        <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>"  readonly>
+                                        <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>"  readonly>
+                                        <input type="text" name="examAction" id="examAction"  readonly>
+                                        <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>"  readonly>
                                         <!-- ANSWERS HIDDEN INPUTS -->
                                         <?php 
                                         $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
@@ -766,7 +766,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
-                                                <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
+                                                <button type="submit" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
                                                 <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
                                             </div>
                                         </div>

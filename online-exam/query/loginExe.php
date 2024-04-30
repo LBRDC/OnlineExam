@@ -19,7 +19,8 @@ if ($exmne_Acc) {
         'exmne_clu_id' => $exmne_Acc['exmne_clu_id'],
         'exmne_fname' => $exmne_Acc['exmne_fname'],
         'exmne_mname' => $exmne_Acc['exmne_mname'],
-        'exmne_lname' => $exmne_Acc['exmne_lname']
+        'exmne_lname' => $exmne_Acc['exmne_lname'],
+        'exmne_sfname' => $exmne_Acc['exmne_sfname'],
     );
     $res = array("res" => "success");
 } else {
