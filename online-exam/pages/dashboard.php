@@ -1,5 +1,6 @@
 <?php
 $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
+$exmne_id = $_SESSION['ex_user']['exmne_id'];
 
 // Fetch Exam IDs based on cluster
 $stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
@@ -8,19 +9,27 @@ $stmt1->execute();
 
 $unattemptedExamIds = [];
 
-// Loop through each exam ID fetched from exam_cluster_tbl and check if it has been attempted
 while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
     $ex_id = $row['ex_id'];
 
-    // Check if the exam has been attempted
-    $stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id");
-    $stmt2->bindParam(':ex_id', $ex_id);
-    $stmt2->execute();
-    $attempts = $stmt2->rowCount();
+    // Fetch the status of the exam
+    $stmt3 = $conn->prepare("SELECT ex_status FROM exam_tbl WHERE ex_id = :ex_id");
+    $stmt3->bindParam(':ex_id', $ex_id);
+    $stmt3->execute();
+    $examStatus = $stmt3->fetch(PDO::FETCH_ASSOC);
 
-    // If the exam has not been attempted, add it to the list
-    if ($attempts == 0) {
-        $unattemptedExamIds[] = $ex_id;
+    // Check if the exam is active
+    if ($examStatus['ex_status'] == 1) {
+        // Check if the exam has been attempted
+        $stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
+        $stmt2->bindParam(':ex_id', $ex_id);
+        $stmt2->bindParam(':exmne_id', $exmne_id);
+        $stmt2->execute();
+        $attempts = $stmt2->rowCount();
+
+        if ($attempts == 0) {
+            $unattemptedExamIds[] = $ex_id;
+        }
     }
 }
 
@@ -30,7 +39,6 @@ if (count($unattemptedExamIds) > 0) {
 } else {
     $selEx_id = '';
 }
-
 ?>
 
 

@@ -1,6 +1,6 @@
 <?php
 
-
+    $ex_id = $_GET['id'];
     /*
         Fetch Exam Clusters
         Fetch Examinees assigned to cluster
@@ -8,6 +8,13 @@
 
 
     */
+    $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
+    $stmt1->bindParam(':ex_id', $ex_id);
+    $stmt1->execute();
+
+    //fetch title
+    $row = $stmt1->fetch(PDO::FETCH_ASSOC);
+    $ex_title = $row['ex_title'];
 ?>
 
 <!-- #START# report-ranking.php -->
@@ -22,7 +29,7 @@
                                 </div>
                                 <div>Ranking Report
                                     <div class="page-title-subheading">
-                                        View Ranking of [EXAM]
+                                        View Ranking of <u><?php echo htmlspecialchars($ex_title); ?></u>
                                     </div>
                                 </div>
                             </div>
@@ -61,11 +68,11 @@
                                             <label for="filter_status">Ranking</label>
                                             <select class="form-control" name="filter_ranking" id="filter_ranking">
                                                 <option value="">Select...</option>
-                                                <option value="">Excellent</option>
-                                                <option value="">Very Good</option>
-                                                <option value="">Good</option>
-                                                <option value="">Danger</option>
-                                                <option value="">Not Answered</option>
+                                                <option>Excellent</option>
+                                                <option>Very Good</option>
+                                                <option>Good</option>
+                                                <option>Danger</option>
+                                                <option>Not Answered</option>
                                             </select>
                                         </div> 
                                         <div class="col-lg-2 col-md-4 mr-1 mb-2">
@@ -117,12 +124,13 @@
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
-                                    <div class="card-title">[EXAM NAME]</div>
-                                    <table class="mb-0 table table-hover dt-sort" id="tableList">
+                                    <div class="card-title"><?php echo htmlspecialchars($ex_title); ?> Rankings</div>
+                                    <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
                                         <thead class="thead-light">
                                         <tr>
-                                            <th>Ranking</th>
+                                            <th data-dt-order="disable">Ranking</th>
                                             <th>Name</th>
+                                            <th>Cluster</th>
                                             <th>Score</th>
                                             <th>Total</th>
                                             <th>Percentage</th>
@@ -133,6 +141,7 @@
                                         <tr>
                                             <th>Ranking</th>
                                             <th>Name</th>
+                                            <th>Cluster</th>
                                             <th>Score</th>
                                             <th>Total</th>
                                             <th>Percentage</th>
@@ -140,56 +149,97 @@
                                         </tr>
                                         </tfoot>-->
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <span class="mb-2 mr-2 badge badge-pill badge-warning">Excellent</span>
-                                                </td>
-                                                <td>LBRDC User</td>
-                                                <td>30</td>
-                                                <td>30</td>
-                                                <td>100%</td>
-                                                <td>2024-2-19</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="mb-2 mr-2 badge badge-pill badge-success">Very Good</span>
-                                                </td>
-                                                <td>LBRDC User</td>
-                                                <td>30</td>
-                                                <td>30</td>
-                                                <td>100%</td>
-                                                <td>2023-2-19</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="mb-2 mr-2 badge badge-pill badge-info">Good</span>
-                                                </td>
-                                                <td>LBRDC User</td>
-                                                <td>30</td>
-                                                <td>30</td>
-                                                <td>100%</td>
-                                                <td>2021-2-19</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="mb-2 mr-2 badge badge-pill badge-danger">Failed</span>
-                                                </td>
-                                                <td>LBRDC User</td>
-                                                <td>30</td>
-                                                <td>30</td>
-                                                <td>100%</td>
-                                                <td>2022-5-10</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span class="mb-2 mr-2 badge badge-pill badge-secondary">Not Answered</span>
-                                                </td>
-                                                <td>LBRDC User</td>
-                                                <td>30</td>
-                                                <td>30</td>
-                                                <td>100%</td>
-                                                <td>2020-3-19</td>
-                                            </tr>
+                                            <?php
+                                                /*
+                                                    Fetch Exam ID
+                                                    Fetch Exam Cluster
+                                                    Fetch Examinee assigned to cluster
+
+                                                    Fetch Examinee Scores
+                                                */
+
+                                                // Fetch clusters with exam id
+                                                $stmt2 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE ex_id = :ex_id");
+                                                $stmt2->bindParam(':ex_id', $ex_id);
+                                                $stmt2->execute();
+
+                                                // Iterate through each cluster
+                                                while ($cluster = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                                                    $exmne_clu_id = $cluster['clu_id']; // Assuming this is the correct column name for the cluster ID
+
+                                                    // Fetch examinees for each cluster
+                                                    $stmt3 = $conn->prepare("SELECT * FROM examinee_tbl WHERE exmne_clu_id = :exmne_clu_id");
+                                                    $stmt3->bindParam(':exmne_clu_id', $exmne_clu_id);
+                                                    $stmt3->execute();
+
+                                                    // Iterate through each examinee in the cluster
+                                                    while ($examinee = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                                                        // Prepare examinee name
+                                                        $exmne_fname = isset($examinee['exmne_fname']) ? $examinee['exmne_fname'] : 'null';
+                                                        $exmne_mname = isset($examinee['exmne_mname']) ? substr($examinee['exmne_mname'], 0, 1) . ". " : '_ ';
+                                                        $exmne_lname = isset($examinee['exmne_lname']) ? $examinee['exmne_lname'] : 'null';
+                                                        $exmne_name = $exmne_fname . ' ' . $exmne_mname . $exmne_lname;
+
+                                                        // Fetch cluster name
+                                                        $stmt4 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_id = :clu_id");
+                                                        $stmt4->bindParam(':clu_id', $exmne_clu_id);
+                                                        $stmt4->execute();
+                                                        $cluster_name = $stmt4->fetch(PDO::FETCH_ASSOC)['clu_name'];
+
+                                                        // Fetch score and total for the current examinee
+                                                        $stmt5 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
+                                                        $stmt5->bindParam(':ex_id', $ex_id);
+                                                        $stmt5->bindParam(':exmne_id', $examinee['exmne_id']); // Assuming 'exmne_id' is the correct column name for the examinee ID
+                                                        $stmt5->execute();
+                                                        $result = $stmt5->fetch(PDO::FETCH_ASSOC);
+
+                                                        // Check if there are no attempts for the examinee
+                                                        if (empty($result)) {
+                                                            // No attempts found, set score, total, and percentage to zero
+                                                            $score = '';
+                                                            $total = '';
+                                                            $percentage = 'noans';
+                                                            $date = ''; // Optionally, you can set a default date or leave it as an empty string
+                                                        } else {
+                                                            // Attempts found, calculate score, total, and percentage as before
+                                                            $score = isset($result['ex_score']) ? $result['ex_score'] : 0;
+                                                            $total = isset($result['ex_total']) ? $result['ex_total'] : 0;
+                                                            $date = isset($result['exatmpt_date']) ? $result['exatmpt_date'] : '';
+                                                            $percentage = $total > 0 ? ($score / $total) * 100 : 0;
+                                                        }
+
+                                                        // Determine the ranking based on percentage
+                                                        $ranking = '';
+                                                        if ($percentage < 50 && $percentage != 'noans') {
+                                                            $ranking = '<span class="mb-2 mr-2 badge badge-pill badge-danger">Failed</span>';
+                                                            $percentageDisplay = $percentage . '%'; // Display the percentage
+                                                        } elseif ($percentage >= 90 && $percentage != 'noans') {
+                                                            $ranking = '<span class="mb-2 mr-2 badge badge-pill badge-warning">Excellent</span>';
+                                                            $percentageDisplay = $percentage . '%'; // Display the percentage
+                                                        } elseif ($percentage >= 80 && $percentage != 'noans') {
+                                                            $ranking = '<span class="mb-2 mr-2 badge badge-pill badge-success">Very Good</span>';
+                                                            $percentageDisplay = $percentage . '%'; // Display the percentage
+                                                        } elseif ($percentage >= 50 && $percentage != 'noans') {
+                                                            $ranking = '<span class="mb-2 mr-2 badge badge-pill badge-info">Good</span>';
+                                                            $percentageDisplay = $percentage . '%'; // Display the percentage
+                                                        } else {
+                                                            $ranking = '<span class="mb-2 mr-2 badge badge-pill badge-secondary">Not Answered</span>';
+                                                            $percentageDisplay = ''; // Do not display the percentage for not answered
+                                                        }
+
+                                                        // Display examinee details with the determined ranking and percentage
+                                                        echo "<tr>";
+                                                        echo "<td>" . $ranking . "</td>"; // Display the ranking
+                                                        echo "<td>" . htmlspecialchars($exmne_name) . "</td>"; 
+                                                        echo "<td>" . htmlspecialchars($cluster_name) . "</td>"; 
+                                                        echo "<td>" . htmlspecialchars($score) . "</td>"; 
+                                                        echo "<td>" . htmlspecialchars($total) . "</td>"; 
+                                                        echo "<td>" . htmlspecialchars($percentageDisplay) . "</td>"; // Display the percentage conditionally
+                                                        echo "<td>" . htmlspecialchars($date) . "</td>"; 
+                                                        echo "</tr>";
+                                                    }
+                                                }
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         //info: false,
         //pagingType: 'simple',
         order: [],
+        responsive: true,
         columnDefs: [{
             targets: 0, // Target the first column (Ranking)
             render: function(data, type, row) {

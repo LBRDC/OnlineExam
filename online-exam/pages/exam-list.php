@@ -4,17 +4,7 @@
         Fetch Exam List
     */
     $clu_id = $_SESSION['ex_user']['exmne_clu_id'];
-    
-    //Fetch Exam based on cluster
-    $stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id");
-    $stmt1->bindParam(':clu_id', $clu_id);
-    $stmt1->execute();
-
-    //Fetch Exam Details
-    $stmt2 = $conn->prepare("SELECT * FROM exam_tbl WHERE");
-    
-
-
+    $exmne_id = $_SESSION['ex_user']['exmne_id'];
 ?>
 
 
@@ -81,22 +71,20 @@
                                         </tfoot>-->
                                         <tbody>
                                         <?php
-                                            $clu_id = $_SESSION['ex_user']['exmne_clu_id'];
-
                                             // Fetch Exam IDs based on cluster
                                             $stmt1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
                                             $stmt1->bindParam(':clu_id', $clu_id);
                                             $stmt1->execute();
 
                                             // Fetch Attempt
-                                            $stmt3 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id");
+                                            $stmt3 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
 
                                             // Loop through each exam ID fetched from exam_cluster_tbl
                                             while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
                                                 $ex_id = $row['ex_id'];
 
                                                 // Fetch Exam Details for each exam ID
-                                                $stmt2 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
+                                                $stmt2 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id AND ex_status = 1");
                                                 $stmt2->bindParam(':ex_id', $ex_id);
                                                 $stmt2->execute();
 
@@ -106,6 +94,7 @@
 
                                                     // Fetch the number of attempts for the current exam
                                                     $stmt3->bindParam(':ex_id', $ex_id);
+                                                    $stmt3->bindParam(':exmne_id', $exmne_id);
                                                     $stmt3->execute();
                                                     $attempts = $stmt3->rowCount();
 

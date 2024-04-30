@@ -26,11 +26,11 @@ $exmne_id = $_SESSION['ex_user']['exmne_id'];
 $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
 
 //Fetch Next Exam
-function fetchExam($clu_id) {
+function fetchExam($fe_clu_id, $fe_exmne_id) {
     global $conn;
     // Fetch Exam IDs based on cluster
-    $stmtFE1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = :clu_id");
-    $stmtFE1->bindParam(':clu_id', $clu_id);
+    $stmtFE1 = $conn->prepare("SELECT et.ex_id FROM exam_cluster_tbl ect JOIN exam_tbl et ON ect.ex_id = et.ex_id WHERE ect.clu_id = :clu_id AND et.ex_status = 1");
+    $stmtFE1->bindParam(':clu_id', $fe_clu_id);
     $stmtFE1->execute();
 
     $unattemptedExamIds = [];
@@ -40,8 +40,9 @@ function fetchExam($clu_id) {
         $ex_id = $row['ex_id'];
 
         // Check if the exam has been attempted
-        $stmtFE2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id");
+        $stmtFE2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
         $stmtFE2->bindParam(':ex_id', $ex_id);
+        $stmtFE2->bindParam(':exmne_id', $fe_exmne_id);
         $stmtFE2->execute();
         $attempts = $stmtFE2->rowCount();
 
@@ -104,7 +105,7 @@ if ($stmt1->rowCount() > 0) {
     $stmt2->execute();
 
     if ($stmt2->rowCount() > 0) { //Exist
-        $nxtExam = fetchExam($exmne_clu_id);
+        $nxtExam = fetchExam($exmne_clu_id, $exmne_id);
         if ($nxtExam !== "noexam") {
             $res = array("res" => "notFinished", "examId" => $nxtExam);
             echo json_encode($res);
@@ -150,7 +151,7 @@ if ($stmt1->rowCount() > 0) {
             //Compute Score
             computeScore($exmne_id, $exam_id);
             //Fetch Next Exam
-            $nxtExam = fetchExam($exmne_clu_id);
+            $nxtExam = fetchExam($exmne_clu_id, $exmne_id);
             if ($nxtExam !== "noexam") {
                 $res = array("res" => "notFinished", "examId" => $nxtExam);
                 echo json_encode($res);

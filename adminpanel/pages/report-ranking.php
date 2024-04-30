@@ -73,14 +73,14 @@
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
                                     <div class="card-title">Examinations List</div>
-                                    <table class="mb-0 table table-hover dt-sort" id="tableList">
+                                    <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
                                         <thead class="thead-light">
                                         <tr>
                                             <th>Name</th>
                                             <th>Cluster</th>
                                             <th style="display:none">Clusters_Filter</th>
                                             <th data-dt-order="disable">Description</th>
-                                            <th>Action</th>
+                                            <th data-dt-order="disable">Action</th>
                                         </tr>
                                         </thead>
                                         <!--<tfoot>
