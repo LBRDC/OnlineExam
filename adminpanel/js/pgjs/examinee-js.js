@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         //info: false,
         //pagingType: 'simple',
         order: [],
+        responsive: true,
     });
 
     //Select2

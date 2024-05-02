@@ -1,4 +1,25 @@
+<?php
+$clu_status = 1;
+$stmt1 = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status = :clu_status");
+$stmt1->bindParam(':clu_status', $clu_status);
+$stmt1->execute();
+$clusterCnt = $stmt1->rowCount();
 
+$ex_status = 1;
+$stmt3 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_status = :ex_status");
+$stmt3->bindParam(':ex_status', $ex_status);
+$stmt3->execute();
+$examCnt = $stmt3->rowCount();
+
+$exmne_status = 1;
+$stmt3 = $conn->prepare("SELECT * FROM examinee_tbl WHERE exmne_status = :exmne_status");
+$stmt3->bindParam(':exmne_status', $exmne_status);
+$stmt3->execute();
+$exmneCnt = $stmt3->rowCount();
+
+
+
+?>
 <!-- #START# dashboard.php -->
                 <!-- ### MAIN PAGE ### -->
                 <div class="app-main__inner">
@@ -69,7 +90,7 @@
                                                 <div class="widget-subheading">Active</div>
                                             </div>
                                             <div class="widget-content-right">
-                                                <div class="widget-numbers text-white"><span>10</span></div>
+                                                <div class="widget-numbers text-white"><span><?php echo htmlspecialchars($clusterCnt); ?></span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -83,7 +104,7 @@
                                                 <div class="widget-subheading">Active</div>
                                             </div>
                                             <div class="widget-content-right">
-                                                <div class="widget-numbers text-white"><span>20</span></div>
+                                                <div class="widget-numbers text-white"><span><?php echo htmlspecialchars($examCnt); ?></span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -99,7 +120,7 @@
                                                 <div class="widget-subheading">Active</div>
                                             </div>
                                             <div class="widget-content-right">
-                                                <div class="widget-numbers text-white"><span>30</span></div>
+                                                <div class="widget-numbers text-white"><span><?php echo htmlspecialchars($exmneCnt); ?></span></div>
                                             </div>
                                         </div>
                                     </div>

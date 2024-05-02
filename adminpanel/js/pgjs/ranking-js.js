@@ -14,24 +14,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    /*$('#filter-btn').click(function() {
-        var filterStatus = $('#filter_status').val().toLowerCase();
+    $('#filter-btn').click(function() {
+        var filterCluster = $('#filter_cluster').val().toLowerCase();
 
         table.columns().search('').draw();
 
-        if (filterStatus !== '') {
-            table.column(2).search(function(value, index) {
-                return filterStatus === '2' ? true : filterStatus === '1' ? value.toLowerCase() === 'active' : filterStatus === '0' ? value.toLowerCase() === 'inactive' : true;
-            }).draw();
+        // If a specific cluster is selected, apply the filter
+        if (filterCluster !== '') {
+            table.column(2).search(filterCluster).draw(); // Assuming the cluster column is the 8th column
         }
 
         table.search('').draw();
-    });*/
+    });
 
 
-    /*$('#reset-btn').click(function() {
-        $('#filter_status').val('');
+    $('#reset-btn').click(function() {
+        $('#filter_cluster').val('');
         table.columns().search('').draw();
         table.search('').draw();
-    });*/
+    });
 });

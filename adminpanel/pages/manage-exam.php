@@ -76,20 +76,22 @@
                                             <select class="form-control" name="filter_cluster" id="filter_cluster">
                                                 <option value="">Select...</option>
                                                 <?php 
-                                                $stmtflt = $conn->prepare("SELECT * FROM cluster_tbl WHERE clu_status=1 ORDER BY clu_id ASC");
+                                                $stmtflt = $conn->prepare("SELECT * FROM cluster_tbl ORDER BY clu_id ASC");
                                                 $stmtflt->execute();
                                                 $result = $stmtflt->fetchAll(PDO::FETCH_ASSOC);
                                                 
                                                 // Check if there are any clusters
                                                 if ($stmtflt->rowCount() > 0) {
                                                     foreach ($result as $row) {
-                                                        echo '<option value="' . htmlspecialchars($row['clu_name']) . '">' . htmlspecialchars($row['clu_name']) . '</option>';
+                                                        // Check if clu_status is 1 and append "Inactive" to the cluster name
+                                                        $clu_name = $row['clu_status'] == 0 ? $row['clu_name'] . " (Inactive)" : $row['clu_name'];
+                                                        echo '<option value="' . htmlspecialchars($row['clu_name']) . '">' . htmlspecialchars($clu_name) . '</option>';
                                                     }
                                                 } else {
                                                     // Display a message if there are no clusters
                                                     echo '<option value="" disabled="disabled">No clusters available</option>';
                                                 }
-                                            ?>
+                                                ?>
                                             </select>
                                         </div> 
                                         <div class="col-md-3 d-flex align-items-end mb-2">
@@ -108,7 +110,7 @@
                                 <div class="card-body">
                                     <div class="card-title">Examinations</div>
                                     <div class="table-responsive">
-                                        <table class="table table-hover dt-sort" id="tableList">
+                                        <table class="table table-hover dt-sort" id="tableList" width="100%">
                                             <thead class="thead-light">
                                             <tr>
                                                 <th>Exam Title</th>
@@ -165,7 +167,7 @@
                                                     $cluster = $stmt5->fetch(PDO::FETCH_ASSOC);
                                                     if ($cluster) {
                                                         // Append "(DISABLED)" to the cluster name if its status is 0
-                                                        $clusterName = $cluster['clu_status'] == 0 ? $cluster['clu_name'] . "(disabled)" : $cluster['clu_name'];
+                                                        $clusterName = $cluster['clu_status'] == 0 ? $cluster['clu_name'] . " (Inactive)" : $cluster['clu_name'];
                                                         $clusterNames[] = $clusterName;
                                                         $clusterCount++;
                                                     }

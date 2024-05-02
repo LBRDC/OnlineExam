@@ -84,66 +84,68 @@
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
                                     <div class="card-title">Employment Cluster</div>
-                                    <table class="mb-0 table table-hover dt-sort" id="tableList">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th data-dt-order="disable">Description</th>
-                                            <th>Status</th>
-                                            <th data-dt-order="disable">Action</th>
-                                        </tr>
-                                        </thead>
-                                        <!--<tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </tfoot>-->
-                                        <tbody>
-                                        <?php
-                                            while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                                                $clu_id = $row['clu_id'];
-                                                $clu_name = $row['clu_name'];
-                                                $clu_description = $row['clu_description'];
-                                                $clu_status = $row['clu_status'];
-                                                $statusText = ($clu_status == 1) ? 'Active' : 'Inactive';
-                                        ?>
-                                            <tr id="<?php echo htmlspecialchars($clu_id); ?>">
-                                                <td><?php echo htmlspecialchars($clu_name); ?></td>
-                                                <td><?php echo htmlspecialchars($clu_description); ?></td>
-                                                <td><?php echo htmlspecialchars($statusText); ?></td>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="btn btn-warning" id="edit-btn" data-toggle="modal" data-target="#mdlEditCluster" data-toggle="tooltip" data-placement="bottom" title="Edit"
-                                                    data-edit-id="<?php echo htmlspecialchars($clu_id); ?>" 
-                                                    data-edit-name="<?php echo htmlspecialchars($clu_name); ?>"
-                                                    data-edit-description="<?php echo htmlspecialchars($clu_description); ?>"
-                                                    data-edit-status="<?php echo htmlspecialchars($clu_status); ?>">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <?php if ($clu_status == 1) { ?>
-                                                    <a href="javascript:void(0);" class="btn btn-danger" id="disable-btn" data-toggle="modal" data-target="#mdlDisableCluster" data-toggle="tooltip" data-placement="bottom" title="Disable" 
-                                                    data-disable-id="<?php echo htmlspecialchars($clu_id); ?>" 
-                                                    data-disable-name="<?php echo htmlspecialchars($clu_name); ?>" 
-                                                    data-disable-status="<?php echo htmlspecialchars($clu_status); ?>">
-                                                        <i class="fas fa-times-circle"></i>
-                                                    </a>
-                                                    <?php } else { ?>
-                                                    <a href="javascript:void(0);" class="btn btn-success" id="enable-btn" data-toggle="modal" data-target="#mdlEnableCluster" data-toggle="tooltip" data-placement="bottom" title="Enable" 
-                                                    data-enable-id="<?php echo htmlspecialchars($clu_id); ?>" 
-                                                    data-enable-name="<?php echo htmlspecialchars($clu_name); ?>" 
-                                                    data-enable-status="<?php echo htmlspecialchars($clu_status); ?>">
-                                                        <i class="fas fa-check-circle"></i>
-                                                    </a>
-                                                    <?php } ?>
-                                                </td>
+                                    <div class="table-responsive">
+                                        <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th data-dt-order="disable">Description</th>
+                                                <th>Status</th>
+                                                <th data-dt-order="disable">Action</th>
                                             </tr>
-                                        <?php
-                                            } // End of while loop
-                                        ?>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <!--<tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </tfoot>-->
+                                            <tbody>
+                                            <?php
+                                                while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                                                    $clu_id = $row['clu_id'];
+                                                    $clu_name = $row['clu_name'];
+                                                    $clu_description = $row['clu_description'];
+                                                    $clu_status = $row['clu_status'];
+                                                    $statusText = ($clu_status == 1) ? 'Active' : 'Inactive';
+                                            ?>
+                                                <tr id="<?php echo htmlspecialchars($clu_id); ?>">
+                                                    <td><?php echo htmlspecialchars($clu_name); ?></td>
+                                                    <td><?php echo htmlspecialchars($clu_description); ?></td>
+                                                    <td><?php echo htmlspecialchars($statusText); ?></td>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditCluster" data-toggle="tooltip" data-placement="bottom" title="Edit"
+                                                        data-edit-id="<?php echo htmlspecialchars($clu_id); ?>" 
+                                                        data-edit-name="<?php echo htmlspecialchars($clu_name); ?>"
+                                                        data-edit-description="<?php echo htmlspecialchars($clu_description); ?>"
+                                                        data-edit-status="<?php echo htmlspecialchars($clu_status); ?>">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <?php if ($clu_status == 1) { ?>
+                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableCluster" data-toggle="tooltip" data-placement="bottom" title="Disable" 
+                                                        data-disable-id="<?php echo htmlspecialchars($clu_id); ?>" 
+                                                        data-disable-name="<?php echo htmlspecialchars($clu_name); ?>" 
+                                                        data-disable-status="<?php echo htmlspecialchars($clu_status); ?>">
+                                                            <i class="fas fa-times-circle"></i>
+                                                        </a>
+                                                        <?php } else { ?>
+                                                        <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableCluster" data-toggle="tooltip" data-placement="bottom" title="Enable" 
+                                                        data-enable-id="<?php echo htmlspecialchars($clu_id); ?>" 
+                                                        data-enable-name="<?php echo htmlspecialchars($clu_name); ?>" 
+                                                        data-enable-status="<?php echo htmlspecialchars($clu_status); ?>">
+                                                            <i class="fas fa-check-circle"></i>
+                                                        </a>
+                                                        <?php } ?>
+                                                    </td>
+                                                </tr>
+                                            <?php
+                                                } // End of while loop
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
