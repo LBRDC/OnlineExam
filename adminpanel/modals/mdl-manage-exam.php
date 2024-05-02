@@ -137,12 +137,12 @@
                     <div class="col-md-12">
                         <label>Exam Options</label>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="add_ExamRandom">
-                            <label class="custom-control-label" for="add_ExamRandom" value="yes">Randomize Questions</label>
+                            <input type="checkbox" class="custom-control-input" id="add_ExamRandom" value="yes">
+                            <label class="custom-control-label" for="add_ExamRandom">Randomize Questions</label>
                         </div>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="add_ExamNoPrev">
-                            <label class="custom-control-label" for="add_ExamNoPrev" value="yes">Disable Previous</label>
+                            <input type="checkbox" class="custom-control-input" id="add_ExamNoPrev" value="yes">
+                            <label class="custom-control-label" for="add_ExamNoPrev">Disable Previous</label>
                         </div>
                     </div>
                 </div>

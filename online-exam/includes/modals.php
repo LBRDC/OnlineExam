@@ -1,3 +1,42 @@
+<!-- ADD EXAM MODAL -->
+<div class="modal fade" id="mdlFeedback" tabindex="-1" role="dialog" aria-labelledby="mdlFeedbackLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlFeedbackLabel">Feedback</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="feedbackFrm" name="feedbackFrm" method="post">
+            <div class="modal-body">
+                <input type="text" name="add_ExmneId" id="add_ExmneId" value=""  required readonly>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <label for="add_Feedback">Feedback</label>
+                        <textarea name="add_Feedback" id="add_Feedback" class="form-control" rows="5" placeholder=""></textarea>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <label>Options</label>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="add_Anonymous" value="yes">
+                            <label class="custom-control-label" for="add_Anonymous">Anonymous</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# FEEDBACK MODAL -->
+
+
 <!-- System Info MODAL -->
 <div class="modal fade" id="mdlSystemInfo" tabindex="-1" role="dialog" aria-labelledby="mdlSystemInfoLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

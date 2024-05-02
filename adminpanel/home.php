@@ -39,6 +39,9 @@
                 case 'report-examinee':
                     include("pages/report-examinee.php");
                     break;
+                case 'report-examinee-result':
+                    include("pages/report-examinee-result.php");
+                    break;
                 case 'feedback':
                     include("pages/feedback.php");
                     break;
@@ -85,6 +88,9 @@
                     break;
                 case 'report-examinee':
                     include("modals/mdl-report-examinee.php");
+                    break;
+                case 'report-examinee-exam':
+                    include("modals/mdl-report-examinee-result.php");
                     break;
                 case 'feedback':
                     include("modals/mdl-feedback.php");

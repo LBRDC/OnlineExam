@@ -28,6 +28,8 @@
   } else {
     $exmne_sfname = '';
   }  
+
+  $exmne_Id = $_SESSION['ex_user']['exmne_id'];
 ?>
 
 <!-- #START# navbar.php -->
@@ -155,6 +157,13 @@
                                 <a href="?page=exam-list" class="<?php if($activePage=="exam-list"){echo"mm-active";} ?>">
                                     <i class="metismenu-icon pe-7s-study"></i>
                                     Examination List
+                                </a>
+                            </li>
+                            <li class="app-sidebar__heading">Feedback</li>
+                            <li>
+                                <a href="javascript:void(0);" id="feedback-btn" class="" data-toggle="modal" data-target="#mdlFeedback" data-feedback-id="<?php echo htmlspecialchars($exmne_Id); ?>">
+                                    <i class="metismenu-icon pe-7s-comment"></i>
+                                    Feedback
                                 </a>
                             </li>
                             <li class="app-sidebar__heading"><hr class="sidebar-divider"></li>

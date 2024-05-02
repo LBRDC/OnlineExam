@@ -51,8 +51,13 @@
             $pages_js = '<script src="./js/pgjs/ranking-exam-js.js"></script>';
             break;
         case 'report-examinee':
+            $pages_js = '<script src="./js/pgjs/report-examinee-js.js"></script>';
+            break;
+        case 'report-examinee-result':
+            $pages_js = '<script src="./js/pgjs/report-examinee-result-js.js"></script>';
             break;
         case 'feedback':
+            $pages_js = '<script src="./js/pgjs/feedback-js.js"></script>';
             break;
         case 'manage-admin':
             break;
