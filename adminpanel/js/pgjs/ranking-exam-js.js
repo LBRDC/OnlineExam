@@ -8,65 +8,59 @@ document.addEventListener('DOMContentLoaded', function() {
         //pagingType: 'simple',
         order: [],
         responsive: true,
-        columnDefs: [{
-            targets: 0, // Target the first column (Ranking)
-            render: function(data, type, row) {
-                // Map ranking text to numeric value for sorting
-                if (type === 'sort') {
-                    var rankingValue = {
-                        'Excellent': 100,
-                        'Very Good': 90,
-                        'Good': 70,
-                        'Failed': 30
-                    }[data];
-                    return rankingValue;
-                }
-                // For display purposes, return the original data
-                return data;
-            }
-        }],
     });
 
 
     $('#filter-btn').click(function() {
-        var filterStatus = $('#filter_status').val().toLowerCase();
-
+        var filterRanking = $('#filter_ranking').val().toLowerCase();
+        var filterDateFrom = $('#filter_datefrom').val();
+        var filterDateTo = $('#filter_dateto').val();
+    
+        // Clear any existing search
         table.columns().search('').draw();
-
-        if (filterStatus !== '') {
-            table.column(2).search(function(value, index) {
-                return filterStatus === '2' ? true : filterStatus === '1' ? value.toLowerCase() === 'active' : filterStatus === '0' ? value.toLowerCase() === 'inactive' : true;
+    
+        // Apply ranking filter if ranking is not empty
+        if (filterRanking!== '') {
+            table.column(0).search(function(value, index) {
+                return value.toLowerCase() === filterRanking;
             }).draw();
         }
-
-        table.search('').draw();
+    
+        // Apply date range filter
+        if (filterDateFrom && filterDateTo) {
+            // Convert date strings to Date objects for comparison
+            var fromDate = new Date(filterDateFrom);
+            var toDate = new Date(filterDateTo);
+    
+            // Apply the date range filter
+            table.column(6).search(function(value, index) {
+                var dateValue = new Date(value);
+                return dateValue >= fromDate && dateValue <= toDate;
+            }).draw();
+        }
     });
+    
 
 
     $('#reset-btn').click(function() {
-        $('#filter_status').val('');
+        $('#filter_ranking').val('');
+        $('#filter_datefrom').val('');
+        $('#filter_dateto').val('');
         table.columns().search('').draw();
         table.search('').draw();
     });
+    
+    document.querySelector('#save-btn').addEventListener('click', function() {
+       var examId = this.getAttribute('data-save-id');
 
+       document.getElementById('save_examId').value = examId;
+    });
+    
+    /*document.querySelectorAll('#save-btn').forEach(function(saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            var examId = this.getAttribute('data-save-id');
 
-    /*document.querySelectorAll('#edit-btn').forEach(function(editBtn) {
-        editBtn.addEventListener('click', function() {
-            var cluId = this.getAttribute('data-edit-id');
-            var cluName = this.getAttribute('data-edit-name');
-            var cluDescription = this.getAttribute('data-edit-description');
-            var cluStatus = this.getAttribute('data-edit-status');
-
-            document.getElementById('edit_CluId').value = cluId;
-            document.getElementById('edit_CluName').value = cluName;
-            document.getElementById('edit_CluDesc').value = cluDescription;
-            document.getElementById('edit_CluStatus').value = cluStatus;
-
-            var modalTitle = document.querySelector('#mdlEditCluster .modal-title span');
-            modalTitle.textContent = cluName;
-
-            // ERROR
-            //$('#mdlEditCluster').modal('show');
+            document.getElementById('save_ExamId').value = examId;
         });
     });*/
 

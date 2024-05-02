@@ -1431,6 +1431,93 @@ $(document).on("submit","#enableExamineeFrm" , function(event) {
         }
     });
 });
-
-
 /* ########## END EXAMINEE ########## */
+
+
+/* ########## RANKING ########## */
+$(document).on("submit","#saveRankingFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'save_examId': $('#save_examId').val(),
+        'save_datefrom' : $('#save_datefrom').val(),
+        'save_dateto' : $('#save_dateto').val(),
+    }
+
+    var isValid;
+    if (formData['save_examId'] == '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED");
+    //console.log(formData);
+
+    $.ajax({
+        url: 'query/save_ExamRankingExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " exported.",
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    location.reload();
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while exporting Rankings. Please try again.",
+                });
+            } else if (response.res == "nodata") {
+                Swal.fire({
+                    icon: "info",
+                    title: "Disabled",
+                    text: "Date Range resulted in no records. Please try different range.",
+                })
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of Exam" + response.msg + " found.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+})
+/* ########## END RANKING ########## */

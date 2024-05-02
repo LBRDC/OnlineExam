@@ -55,7 +55,7 @@
                                     <h5 class="card-title">Actions</h5>
                                     <div class="row mb-2">
                                         <div class="col-md-12">
-                                            <a href="query/export_ExamQuestExe.php?id=">
+                                            <a href="javascript:void(0);" id="save-btn" data-toggle="modal" data-target="#mdlSaveRanking" data-save-id="<?php echo htmlspecialchars($ex_id); ?>">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Ranking">
                                                     <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
                                                 </div>
@@ -71,7 +71,7 @@
                                                 <option>Excellent</option>
                                                 <option>Very Good</option>
                                                 <option>Good</option>
-                                                <option>Danger</option>
+                                                <option>Failed</option>
                                                 <option>Not Answered</option>
                                             </select>
                                         </div> 
@@ -150,14 +150,6 @@
                                         </tfoot>-->
                                         <tbody>
                                             <?php
-                                                /*
-                                                    Fetch Exam ID
-                                                    Fetch Exam Cluster
-                                                    Fetch Examinee assigned to cluster
-
-                                                    Fetch Examinee Scores
-                                                */
-
                                                 // Fetch clusters with exam id
                                                 $stmt2 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE ex_id = :ex_id");
                                                 $stmt2->bindParam(':ex_id', $ex_id);
@@ -241,6 +233,80 @@
                                                 }
                                             ?>
                                         </tbody>
+                                        <!--<tbody>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-danger">Failed</span></td>
+                                                <td>User 1</td>
+                                                <td>Cluster 1</td>
+                                                <td>0</td>
+                                                <td>10</td>
+                                                <td>0%</td>
+                                                <td>2022-01-01</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-success">Very Good</span></td>
+                                                <td>User 2</td>
+                                                <td>Cluster 2</td>
+                                                <td>8</td>
+                                                <td>10</td>
+                                                <td>80%</td>
+                                                <td>2023-01-01</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-info">Good</span></td>
+                                                <td>User 3</td>
+                                                <td>Cluster 3</td>
+                                                <td>5</td>
+                                                <td>10</td>
+                                                <td>50%</td>
+                                                <td>2024-03-29</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-secondary">Not Answered</span></td>
+                                                <td>User 4</td>
+                                                <td>Cluster 4</td>
+                                                <td>0</td>
+                                                <td>10</td>
+                                                <td>0%</td>
+                                                <td>2024-03-10</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-danger">Failed</span></td>
+                                                <td>User 5</td>
+                                                <td>Cluster 5</td>
+                                                <td>0</td>
+                                                <td>10</td>
+                                                <td>0%</td>
+                                                <td>2023-01-01</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-success">Very Good</span></td>
+                                                <td>User 6</td>
+                                                <td>Cluster 6</td>
+                                                <td>8</td>
+                                                <td>10</td>
+                                                <td>80%</td>
+                                                <td>2024-02-01</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-info">Good</span></td>
+                                                <td>User 7</td>
+                                                <td>Cluster 7</td>
+                                                <td>5</td>
+                                                <td>10</td>
+                                                <td>50%</td>
+                                                <td>2024-03-01</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="mb-2 mr-2 badge badge-pill badge-secondary">Not Answered</span></td>
+                                                <td>User 8</td>
+                                                <td>Cluster 8</td>
+                                                <td>0</td>
+                                                <td>10</td>
+                                                <td>0%</td>
+                                                <td>2024-02-19</td>
+                                            </tr>
+                                        </tbody>-->
                                     </table>
                                 </div>
                             </div>

@@ -104,6 +104,12 @@
                                                 $ex_status = $row['ex_status'];
                                                 $statusText = ($ex_status == 1) ? 'Active' : 'Inactive';
 
+                                                if ($statusText != 'Active') {
+                                                    $titleText = $ex_title . ' (' . $statusText . ')';
+                                                } else {
+                                                    $titleText = $ex_title;
+                                                }
+
                                                 $stmt4 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE ex_id = :ex_id");
                                                 $stmt4->bindParam(':ex_id', $ex_id);
                                                 $stmt4->execute();
@@ -133,7 +139,7 @@
 
 
                                                 <tr>
-                                                    <td><?php echo htmlspecialchars($ex_title); ?></td>
+                                                    <td><?php echo htmlspecialchars($titleText); ?></td>
                                                     <td>
                                                         <?php 
                                                         if ($clusterCount > 2) {
