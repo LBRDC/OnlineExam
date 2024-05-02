@@ -1463,7 +1463,8 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
     //console.log("INPUT VALIDATED");
     //console.log(formData);
 
-    $.ajax({
+    //NOT FULLY IMPLEMENTED
+    /*$.ajax({
         url: 'query/save_ExamRankingExe.php',
         type: 'POST',
         dataType : "json",
@@ -1518,6 +1519,6 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
             console.log(jqXHR.responseText);
             location.reload();
         }
-    });
+    });*/
 })
 /* ########## END RANKING ########## */
