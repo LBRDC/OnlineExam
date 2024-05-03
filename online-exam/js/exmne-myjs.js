@@ -5,8 +5,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('add_ExmneId').value = exmne_Id;
     })
-
-    document.getElementById('logout-btn').addEventListener('click', function() {
-        sessionStorage.removeItem("reminderShown");
-    });
 })

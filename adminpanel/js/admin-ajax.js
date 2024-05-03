@@ -1108,8 +1108,8 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
         return;
     }
 
-    console.log("INPUT VALIDATED " + isValid);
-    console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/add_ExamineeExe.php',
@@ -1132,7 +1132,7 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: response.msg + "already exists.",
+                    text: "Existing Data Found. Please input different details.",
                 });
             } else if (response.res == "failed") {
                 Swal.fire({
@@ -1522,3 +1522,93 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
     });*/
 })
 /* ########## END RANKING ########## */
+
+
+/* ########## ADMIN ########## */
+// manage-cluster ADD 
+$(document).on("submit","#addUserFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'add_UserFname': $('#add_UserFname').val(),
+        'add_UserLname': $('#add_UserLname').val(),
+        'add_UserPosition': $('#add_UserPosition').val(),
+        'add_UserSuper': $('#add_UserSuper').val(),
+        'add_UserName': $('#add_UserName').val(),
+        'add_UserPass': $('#add_UserPass').val()
+    };
+
+    //console.log(formData); //DEBUG
+    
+    var isValid;
+    if (formData['add_UserFname'] === '' || formData['add_UserLname'] === '' || formData['add_UserName'] === '' || formData['add_UserPass'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required fields.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
+
+    $.ajax({
+        url: 'query/add_UserExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " added.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-admin';
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + " already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while adding User. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in all fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+/* ########## END ADMIN ########## */

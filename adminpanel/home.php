@@ -46,7 +46,11 @@
                     include("pages/feedback.php");
                     break;
                 case 'manage-admin':
-                    include("pages/manage-admin.php");
+                    if (!isset($_SESSION['user']['admin_super']) || $_SESSION['user']['admin_super'] == 1) {
+                        include("pages/manage-admin.php");
+                    } else {
+                        include("pages/404.php");
+                    }
                     break;
                 default:
                     include("pages/404.php");
@@ -96,7 +100,9 @@
                     include("modals/mdl-feedback.php");
                     break;
                 case 'manage-admin':
-                    include("modals/mdl-manage-admin.php");
+                    if (!isset($_SESSION['user']['admin_super']) || $_SESSION['user']['admin_super'] == 1) {
+                        include("modals/mdl-manage-admin.php");
+                    }
                     break;
                 default:
                     break;

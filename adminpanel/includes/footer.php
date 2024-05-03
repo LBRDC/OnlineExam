@@ -60,6 +60,7 @@
             $pages_js = '<script src="./js/pgjs/feedback-js.js"></script>';
             break;
         case 'manage-admin':
+            $pages_js = '<script src="./js/pgjs/admin-js.js"></script>';
             break;
         default:
             break;

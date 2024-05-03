@@ -234,6 +234,14 @@
                                     </i>Feedbacks
                                 </a>
                             </li>
+                            <li class="app-sidebar__heading">Page Management</li>
+                            <li>
+                                <a href="?page=page-message" class="<?php if($activePage=="message"){echo"mm-active";} ?>">
+                                    <i class="metismenu-icon pe-7s-speaker">
+                                    </i>Messsages
+                                </a>
+                            </li>
+                            <?php if(!isset($_SESSION['user']['admin_super']) || $_SESSION['user']['admin_super'] == 1) { ?>
                             <li class="app-sidebar__heading">Admin Management</li>
                             <li>
                                 <a href="?page=manage-admin" class="<?php if($activePage=="manage-admin"){echo"mm-active";} ?>">
@@ -241,6 +249,7 @@
                                     </i>User Accounts
                                 </a>
                             </li>
+                            <?php } ?>
                             <li class="app-sidebar__heading"><hr class="sidebar-divider"></li>
                             <li style="padding-right: 139px;">
                                 <a href="javascript:void(0);" class="m-0 p-0 text-monospace text-primary" data-toggle="modal" data-target="#mdlSystemInfo">

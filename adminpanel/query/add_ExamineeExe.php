@@ -21,8 +21,9 @@ if(empty($add_ExmneFname) || empty($add_ExmneLname) || empty($add_ExmneCluster) 
 }
 
 // Prepare and execute the SELECT statement to check for existing records
-$stmt1 = $conn->prepare("SELECT * FROM examinee_tbl WHERE (exmne_fname = :add_ExmneFname AND exmne_lname = :add_ExmneLname) OR exmne_email = :add_ExmneEmail");
+$stmt1 = $conn->prepare("SELECT * FROM examinee_tbl WHERE (exmne_fname = :add_ExmneFname AND exmne_lname = :add_ExmneLname AND exmne_sfname = :add_ExmneSfname) OR exmne_email = :add_ExmneEmail");
 $stmt1->bindParam(':add_ExmneFname', $add_ExmneFname);
+$stmt1->bindParam(':add_ExmneSfname', $add_ExmneSfname);
 $stmt1->bindParam(':add_ExmneLname', $add_ExmneLname);
 $stmt1->bindParam(':add_ExmneEmail', $add_ExmneEmail);
 $stmt1->execute();
