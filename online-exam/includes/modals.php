@@ -1,4 +1,4 @@
-<!-- ADD EXAM MODAL -->
+<!-- FEEDBACK MODAL -->
 <div class="modal fade" id="mdlFeedback" tabindex="-1" role="dialog" aria-labelledby="mdlFeedbackLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -10,7 +10,7 @@
             </div>
             <form id="feedbackFrm" name="feedbackFrm" method="post">
             <div class="modal-body">
-                <input type="text" name="add_ExmneId" id="add_ExmneId" value=""  required readonly>
+                <input type="text" name="add_ExmneId" id="add_ExmneId" value="" hidden required readonly>
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <label for="add_Feedback">Feedback</label>

@@ -15,13 +15,12 @@ function fetchExamId() {
 
 function fetchUserId() {
 const user = document.getElementById('examUser').value;
-//console.log(user); //Debug
 return user;
 }
 
 function init() {
-    //var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
-    var savedTimeKey = 'Debug_TIMER'; //DEBUG
+    var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
+    //var savedTimeKey = 'Debug_TIMER'; //DEBUG
     var savedTime = localStorage.getItem(savedTimeKey);
     //console.log(savedTimeKey); //Debug
     if (savedTime) {
@@ -43,7 +42,7 @@ function startTimer() {
 }
 
 function stopTimer() {
-clearInterval(timerInterval);
+    clearInterval(timerInterval);
 }
 
 function updateTimer() {
@@ -68,7 +67,7 @@ function updateTimer() {
 
     if (minutes === 0 && seconds === 0) {
         document.getElementById('examAction').value = "timeout";
-        //$('#submitAnswerFrm').submit();
+        $('#submitAnswerFrm').submit();
         stopTimer();
         return;
     }
@@ -83,7 +82,7 @@ function updateTimer() {
     updateDisplay();
 
     var currentTime = { minutes: minutes, seconds: seconds };
-    //localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+    localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
 }
 
 function updateDisplay() {
@@ -98,7 +97,12 @@ window.onload = init();
 //Other Scripts
 // Disable Refresh Key (F5)
 document.addEventListener('keydown', function (event) {
-    if (event.keyCode === 116) { // 116 is for F5 in keyboard
+    // Prevent F5 key
+    if (event.key === 'F5') {
+        event.preventDefault();
+    }
+    // Prevent Ctrl+R or Cmd+R (Mac)
+    if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
         event.preventDefault();
     }
 });
@@ -114,23 +118,22 @@ window.addEventListener('online', function () {
 
 function fetchDispLimit() {
     const exLimit = document.getElementById('examLimit').value;
-    //console.log(user); //Debug
     return exLimit;
 }
 
 // Function to show the card
 function showCard() {
-    // Show the card
     document.getElementById('examCard').classList.remove('d-none');
 }
 
 var display_Limit = fetchDispLimit();
 
 document.addEventListener('DOMContentLoaded', function() {
+    var pgActive = 0;
+    var anticheatCnt = 0;
     //Display Instructions
     stopTimer();
     var exDesc = document.getElementById('exDesc').innerText;
-    //console.log("Description: " + exDesc); //DEBUG
     Swal.fire({
         title: 'Instructions',
         text: exDesc,
@@ -142,6 +145,32 @@ document.addEventListener('DOMContentLoaded', function() {
             startTimer();
             updateDisplay();
             showCard();
+            pgActive = 1;
+        }
+    });
+
+    //Anticheat
+    document.addEventListener("visibilitychange", (event) => {
+        if (document.visibilityState != "visible" && pgActive == 1 && anticheatCnt < 3) {
+          console.log("tab inactive");
+          pgActive = 0;
+          anticheatCnt++;
+          Swal.fire({
+            title: 'WARNING',
+            //text: 'Avoid using other tabs or windows while exam is in progress.',
+            html: `
+                    Avoid using other tabs or windows while exam is in progress.
+                  `,
+            icon: 'warning',
+            allowOutsideClick: false,
+          }).then((result) => {
+                if (anticheatCnt >= 3) {
+                    stopTimer();
+                    document.getElementById('examAction').value = "cheat";
+                    $('#submitAnswerFrm').submit();
+                }
+                pgActive = 1;
+          });
         }
     });
     
@@ -187,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             var pageInfo = this.api().page.info();
-            $('.current-page').text(pageInfo.page + 1); // Adding 1 to convert zero-based index to 1-based index
+            $('.current-page').text(pageInfo.page + 1);
             $('.total-pages').text(pageInfo.pages);
 
             // Previous Button

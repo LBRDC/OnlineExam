@@ -141,7 +141,7 @@
                                                     $exmne_email = $row['exmne_email'];
                                                     $exmne_pass = $row['exmne_pass'];
                                                     $exmne_status = $row['exmne_status'];
-                                                    $statusText = ($exmne_status == 1) ? 'Active' : 'Inactive';
+                                                    $statusText = ($exmne_status == 1) ? 'Active' : (($exmne_status == 3) ? 'Disabled' : 'Inactive');
                                                     // Fetch the cluster name and status
                                                     $clusterName = '';
                                                     $stmt3 = $conn->prepare("SELECT clu_name, clu_status FROM cluster_tbl WHERE clu_id = :exmne_clu_id");
@@ -214,7 +214,7 @@
                                                     data-disable-status="<?php echo htmlspecialchars($exmne_status); ?>">
                                                         <i class="fas fa-times-circle"></i>
                                                     </a>
-                                                    <?php } else { ?>
+                                                    <?php } else if ($exmne_status == 0) { ?>
                                                     <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExaminee" data-toggle="tooltip" data-placement="bottom" title="Enable" 
                                                     data-enable-id="<?php echo htmlspecialchars($exmne_id); ?>" 
                                                     data-enable-fname="<?php echo htmlspecialchars($exmne_fname); ?>" 
@@ -223,8 +223,6 @@
                                                         <i class="fas fa-check-circle"></i>
                                                     </a>
                                                     <?php } ?>
-                                                    
-                                                    
                                                 </td>
                                             </tr>
                                             <?php } ?>

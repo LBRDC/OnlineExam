@@ -742,12 +742,12 @@
                                 
                                 <div class="card-footer justify-content-center">
                                     <form method="post" id="submitAnswerFrm">
-                                        <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>"  readonly>
-                                        <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>"  readonly>
-                                        <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>"  readonly>
-                                        <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>"  readonly>
-                                        <input type="text" name="examAction" id="examAction"  readonly>
-                                        <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>"  readonly>
+                                        <input type="text" name="exam_id" id="exam_id" value="<?php echo htmlspecialchars($ex_id); ?>" hidden readonly>
+                                        <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>" hidden readonly>
+                                        <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" hidden readonly>
+                                        <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>" hidden readonly>
+                                        <input type="text" name="examAction" id="examAction" hidden readonly>
+                                        <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden readonly>
                                         <!-- ANSWERS HIDDEN INPUTS -->
                                         <?php 
                                         $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
@@ -758,7 +758,7 @@
                                             while ($qstnRow = $stmt3->fetch(PDO::FETCH_ASSOC)) { //While loop
                                                 $qstn_Id = $qstnRow['exqstn_id'];
                                         ?>
-                                        <input type="hidden" name="answer[<?php echo htmlspecialchars($qstn_Id); ?>][correct]" id="qstnAns_<?php echo htmlspecialchars($qstn_Id); ?>" value="" readonly>
+                                        <input type="hidden" name="answer[<?php echo htmlspecialchars($qstn_Id); ?>][correct]" id="qstnAns_<?php echo htmlspecialchars($qstn_Id); ?>" value="" hidden readonly>
                                         <?php 
                                             } //END while Loop 
                                         } //END if stmnt

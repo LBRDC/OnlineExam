@@ -251,6 +251,7 @@ foreach ($resultmdl1 as $row) {
                                 <option value="">Select...</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
+                                <option value="3">Disabled</option>
                             </select>
                         </div>
                     </div>
@@ -393,6 +394,7 @@ foreach ($resultmdl1 as $row) {
                                 <option value="">Select...</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
+                                <option value="3" hidden>Disabled</option>
                             </select>
                         </div>
                     </div>
