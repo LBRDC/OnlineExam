@@ -1610,5 +1610,4 @@ $(document).on("submit","#addUserFrm" , function(event) {
         }
     });
 });
-
 /* ########## END ADMIN ########## */

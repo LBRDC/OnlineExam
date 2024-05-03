@@ -128,17 +128,17 @@
                                                 <td><?php echo htmlspecialchars($admin_username); ?></td>
                                                 <td><?php echo htmlspecialchars($superuser); ?></td>
                                                 <td>
-                                                    <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="modal" data-target="#mdlViewExaminee" data-toggle="tooltip" data-placement="bottom" title="View"
+                                                    <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="modal" data-target="#mdlViewUser" data-toggle="tooltip" data-placement="bottom" title="View"
                                                     >
                                                         <i class="fas fa-info-circle"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditExaminee" data-toggle="tooltip" data-placement="bottom" title="Edit"
+                                                    <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditUser" data-toggle="tooltip" data-placement="bottom" title="Edit"
                                                     >
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);" class="btn btn-danger m-1" id="disable-btn" data-toggle="modal" data-target="#mdlDisableExaminee" data-toggle="tooltip" data-placement="bottom" title="Disable" 
+                                                    <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-btn" data-toggle="modal" data-target="#mdlDeleteUser" data-toggle="tooltip" data-placement="bottom" title="Delete" 
                                                     >
-                                                        <i class="fas fa-times-circle"></i>
+                                                        <i class="fas fa-trash"></i>
                                                     </a>
                                                 </td>
                                             </tr>

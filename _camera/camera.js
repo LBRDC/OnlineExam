@@ -1,3 +1,6 @@
+/*
+HTTPS/SSL Required
+*/
 document.getElementById('startRecording').addEventListener('click', async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
