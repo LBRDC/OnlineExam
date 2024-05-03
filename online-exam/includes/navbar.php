@@ -169,7 +169,7 @@
                             <li class="app-sidebar__heading"><hr class="sidebar-divider"></li>
                             <li style="padding-right: 139px;">
                                 <a href="javascript:void(0);" class="m-0 p-0 text-monospace text-muted" data-toggle="modal" data-target="#mdlSystemInfo">
-                                    v0.3.0-alpha
+                                    v0.3.0
                                 </a>
                             </li>
                         </ul>

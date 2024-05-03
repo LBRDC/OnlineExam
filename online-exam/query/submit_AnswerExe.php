@@ -19,8 +19,8 @@ session_start();
 include("../../conn.php");
 
 extract($_POST);
-//var_dump($_POST);
-//exit();
+//var_dump($_POST); //DEBUG
+//exit(); //DEBUG
 
 $exmne_id = $_SESSION['ex_user']['exmne_id'];
 $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];

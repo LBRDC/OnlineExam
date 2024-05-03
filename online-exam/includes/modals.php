@@ -100,7 +100,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="query/logoutExe.php" class="btn btn-primary">Logout</a>
+                <a href="query/logoutExe.php" class="btn btn-primary" id="logout-btn">Logout</a>
             </div>
         </div>
     </div>
