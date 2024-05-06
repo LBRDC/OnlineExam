@@ -109,15 +109,17 @@
                                             <tbody>
                                             <?php 
                                             while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                                                $admin_Id = isset($row['admin_id']) ? $row['admin_id'] : 'null';
                                                 $admin_fname = isset($row['admin_fname']) ? $row['admin_fname'] : 'null';
                                                 $admin_lname = isset($row['admin_lname']) ? $row['admin_lname'] : 'null';
                                                 $admin_pos = isset($row['admin_pos']) ? $row['admin_pos'] : 'null';
                                                 $admin_username = isset($row['admin_username']) ? $row['admin_username'] : 'null';
+                                                $admin_password = isset($row['admin_password']) ? $row['admin_password'] : '';
                                                 $admin_super = isset($row['admin_super']) ? $row['admin_super'] : 'null';
                                                 $superuser = $admin_super == 1 ? 'Yes' : 'No';
 
                                             ?>
-                                            <tr>
+                                            <tr id="<?php echo htmlspecialchars($admin_Id); ?>">
                                                 <td>
                                                 <?php 
                                                     echo htmlspecialchars($admin_fname) . " ";
@@ -129,15 +131,27 @@
                                                 <td><?php echo htmlspecialchars($superuser); ?></td>
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="modal" data-target="#mdlViewUser" data-toggle="tooltip" data-placement="bottom" title="View"
-                                                    >
+                                                    data-view-fname = "<?php echo htmlspecialchars($admin_fname); ?>" 
+                                                    data-view-lname = "<?php echo htmlspecialchars($admin_lname); ?>" 
+                                                    data-view-position = "<?php echo htmlspecialchars($admin_pos); ?>" 
+                                                    data-view-Super = "<?php echo htmlspecialchars($admin_super); ?>"
+                                                    data-view-username = "<?php echo htmlspecialchars($admin_username); ?>"
+                                                    data-view-pass = "<?php echo htmlspecialchars($admin_password); ?>">
                                                         <i class="fas fa-info-circle"></i>
                                                     </a>
                                                     <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-btn" data-toggle="modal" data-target="#mdlEditUser" data-toggle="tooltip" data-placement="bottom" title="Edit"
-                                                    >
+                                                    data-edit-id = "<?php echo htmlspecialchars($admin_Id); ?>"
+                                                    data-edit-fname = "<?php echo htmlspecialchars($admin_fname); ?>" 
+                                                    data-edit-lname = "<?php echo htmlspecialchars($admin_lname); ?>" 
+                                                    data-edit-position = "<?php echo htmlspecialchars($admin_pos); ?>" 
+                                                    data-edit-Super = "<?php echo htmlspecialchars($admin_super); ?>"
+                                                    data-edit-username = "<?php echo htmlspecialchars($admin_username); ?>"
+                                                    data-edit-pass = "<?php echo htmlspecialchars($admin_password); ?>">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-btn" data-toggle="modal" data-target="#mdlDeleteUser" data-toggle="tooltip" data-placement="bottom" title="Delete" 
-                                                    >
+                                                    data-delete-id = "<?php echo htmlspecialchars($admin_Id); ?>"
+                                                    data-delete-username = "<?php echo htmlspecialchars($admin_username); ?>">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                 </td>

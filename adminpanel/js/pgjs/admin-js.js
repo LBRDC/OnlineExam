@@ -11,67 +11,65 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+    document.querySelectorAll('#view-btn').forEach(function(viewBtn) {
+        viewBtn.addEventListener('click', function() {
+            var viewFName = this.getAttribute('data-view-fname');
+            var viewLName = this.getAttribute('data-view-lname');
+            var viewPosition = this.getAttribute('data-view-position');
+            var viewSuper = this.getAttribute('data-view-super');
+            var viewUserName = this.getAttribute('data-view-username');
+            var viewPass = this.getAttribute('data-view-pass');
+
+            document.getElementById('view_UserFname').value = viewFName;
+            document.getElementById('view_UserLname').value = viewLName;
+            document.getElementById('view_UserPosition').value = viewPosition;
+            document.getElementById('view_UserSuper').checked = viewSuper === '1';
+            document.getElementById('view_UserName').value = viewUserName;
+            document.getElementById('view_UserPass').value = viewPass;
+
+            var modalTitle = document.querySelector('#mdlViewUser .modal-title span');
+            modalTitle.textContent = viewUserName;
+        });
+    });
+
+
     document.querySelectorAll('#edit-btn').forEach(function(editBtn) {
         editBtn.addEventListener('click', function() {
-            var cluId = this.getAttribute('data-edit-id');
-            var cluName = this.getAttribute('data-edit-name');
-            var cluDescription = this.getAttribute('data-edit-description');
-            var cluStatus = this.getAttribute('data-edit-status');
+            var editId = this.getAttribute('data-edit-id');
+            var editFName = this.getAttribute('data-edit-fname');
+            var editLName = this.getAttribute('data-edit-lname');
+            var editPosition = this.getAttribute('data-edit-position');
+            var editSuper = this.getAttribute('data-edit-super');
+            var editUserName = this.getAttribute('data-edit-username');
+            var editPass = this.getAttribute('data-edit-pass');
 
-            document.getElementById('edit_CluId').value = cluId;
-            document.getElementById('edit_CluName').value = cluName;
-            document.getElementById('edit_CluDesc').value = cluDescription;
-            document.getElementById('edit_CluStatus').value = cluStatus;
+            document.getElementById('edit_UserId').value = editId;
+            document.getElementById('edit_UserFname').value = editFName;
+            document.getElementById('edit_UserLname').value = editLName;
+            document.getElementById('edit_UserPosition').value = editPosition;
+            document.getElementById('edit_UserSuper').checked = editSuper === '1';
+            document.getElementById('edit_UserName').value = editUserName;
+            document.getElementById('edit_UserPass').value = editPass;
 
-            var modalTitle = document.querySelector('#mdlEditCluster .modal-title span');
-            modalTitle.textContent = cluName;
-
-            // ERROR
-            //$('#mdlEditCluster').modal('show');
+            var modalTitle = document.querySelector('#mdlEditUser .modal-title span');
+            modalTitle.textContent = editUserName;
         });
     });
 
 
-    document.querySelectorAll('#disable-btn').forEach(function(disableBtn) {
-        disableBtn.addEventListener('click', function() {
-            var cluId = this.getAttribute('data-disable-id');
-            var cluName = this.getAttribute('data-disable-name');
-            var cluStatus = this.getAttribute('data-disable-status');
+    document.querySelectorAll('#delete-btn').forEach(function(deleteBtn) {
+        deleteBtn.addEventListener('click', function() {
+            var deleteId = this.getAttribute('data-delete-id');
+            var deleteUserName = this.getAttribute('data-delete-username');
 
-            document.getElementById('disable_CluId').value = cluId;
-            document.getElementById('disable_CluName').value = cluName;
-            document.getElementById('disable_CluStatus').value = cluStatus;
+            document.getElementById('delete_UserId').value = deleteId;
+            document.getElementById('delete_Username').value = deleteUserName;
 
-            var modalTitle = document.querySelector('#mdlDisableCluster .modal-title span');
-            modalTitle.textContent = cluName;
+            var modalTitle = document.querySelector('#mdlDeleteUser .modal-title span');
+            modalTitle.textContent = deleteUserName;
 
-            var modalBodyName = document.querySelector('#mdlDisableCluster .modal-body span.font-weight-bold');
-            modalBodyName.textContent = cluName;
-
-            // ERROR
-            //$('#mdlDisableCluster').modal('show');
-        });
-    });
-
-
-    document.querySelectorAll('#enable-btn').forEach(function(enableBtn) {
-        enableBtn.addEventListener('click', function() {
-            var cluId = this.getAttribute('data-enable-id');
-            var cluName = this.getAttribute('data-enable-name');
-            var cluStatus = this.getAttribute('data-enable-status');
-
-            document.getElementById('enable_CluId').value = cluId;
-            document.getElementById('enable_CluName').value = cluName;
-            document.getElementById('enable_CluStatus').value = cluStatus;
-
-            var modalTitle = document.querySelector('#mdlEnableCluster .modal-title span');
-            modalTitle.textContent = cluName;
-
-            var modalBodyName = document.querySelector('#mdlEnableCluster .modal-body span.font-weight-bold');
-            modalBodyName.textContent = cluName;
-
-            // ERROR
-            //$('#mdlEnableCluster').modal('show');
+            var modalBodyName = document.querySelector('#mdlDeleteUser .modal-body span.font-weight-bold');
+            modalBodyName.textContent = deleteUserName;
         });
     });
 });

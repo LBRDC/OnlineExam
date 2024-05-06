@@ -1434,6 +1434,7 @@ $(document).on("submit","#enableExamineeFrm" , function(event) {
 /* ########## END EXAMINEE ########## */
 
 
+
 /* ########## RANKING ########## */
 $(document).on("submit","#saveRankingFrm" , function(event) {
     event.preventDefault();
@@ -1524,8 +1525,9 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
 /* ########## END RANKING ########## */
 
 
+
 /* ########## ADMIN ########## */
-// manage-cluster ADD 
+// manage-admin ADD 
 $(document).on("submit","#addUserFrm" , function(event) {
     event.preventDefault();
 
@@ -1587,6 +1589,176 @@ $(document).on("submit","#addUserFrm" , function(event) {
                     icon: "error",
                     title: "Failed",
                     text: "An error occurred while adding User. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in all fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+// manage-admin EDIT 
+$(document).on("submit","#editUserFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'edit_UserId': $('#edit_UserId').val(),
+        'edit_UserFname': $('#edit_UserFname').val(),
+        'edit_UserLname': $('#edit_UserLname').val(),
+        'edit_UserPosition': $('#edit_UserPosition').val(),
+        'edit_UserSuper': $('#edit_UserSuper').val(),
+        'edit_UserName': $('#edit_UserName').val(),
+        'edit_UserPass': $('#edit_UserPass').val()
+    };
+
+    //console.log(formData); //DEBUG
+    
+    var isValid;
+    if (formData['edit_UserId'] === '' || formData['edit_UserFname'] === '' || formData['edit_UserLname'] === '' || formData['edit_UserName'] === '' || formData['edit_UserPass'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required fields.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
+
+    $.ajax({
+        url: 'query/edit_UserExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: response.msg + " updated.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-admin';
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + " already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while updating User. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in all fields.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+// manage-admin DELETE 
+$(document).on("submit","#deleteUserFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'delete_UserId': $('#delete_UserId').val()
+    };
+
+    //console.log(formData); //DEBUG
+    
+    var isValid;
+    if (formData['delete_UserId'] === '') {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required fields.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
+
+    $.ajax({
+        url: 'query/delete_UserExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        success: function(response) {
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "User deleted.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-admin';
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "User does not exist.",
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-admin';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while updating User. Please try again.",
                 });
             } else if (response.res == "incomplete") {
                 Swal.fire({
