@@ -234,13 +234,13 @@
                                     </i>Feedbacks
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Page Management</li>
+                            <!--<li class="app-sidebar__heading">Page Management</li>
                             <li>
-                                <a href="?page=page-message" class="<?php if($activePage=="message"){echo"mm-active";} ?>">
+                                <a href="?page=page-message" class="<?php //if($activePage=="page-message"){echo"mm-active";} ?>">
                                     <i class="metismenu-icon pe-7s-speaker">
                                     </i>Messsages
                                 </a>
-                            </li>
+                            </li>-->
                             <?php if(!isset($_SESSION['user']['admin_super']) || $_SESSION['user']['admin_super'] == 1) { ?>
                             <li class="app-sidebar__heading">Admin Management</li>
                             <li>

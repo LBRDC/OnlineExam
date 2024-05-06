@@ -10,14 +10,14 @@
         $exmne_lname = 'null';
     }
 
-    if (isset($_SESSION['ex_user']['exmne_mname'])) {
+    if ($_SESSION['ex_user']['exmne_mname'] != "") {
         $exmne_mname = $_SESSION['ex_user']['exmne_mname'];
         $exmne_minitial = substr($exmne_mname, 0, 1) . ". ";
     } else {
         $exmne_minitial = '_ ';
     }
 
-    if (isset($_SESSION['ex_user']['exmne_sfname'])) {
+    if ($_SESSION['ex_user']['exmne_sfname'] != "") {
         $exmne_sfname = $_SESSION['ex_user']['exmne_sfname'];
     } else {
         $exmne_sfname = '';

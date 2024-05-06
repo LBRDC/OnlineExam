@@ -1,16 +1,6 @@
 // exam SUBMIT
-$(document).on("submit","#submitAnswerFrm" , function(event) {
+/*$(document).on("submit","#submitAnswerFrm" , function(event) {
     event.preventDefault();
-    /*
-        If time out = Show time out Alert
-        If submitted = Show Processing
-
-        Fetch Inputs
-        Ajax Submit_AnswerExe
-
-        If res finished = h.ref home.php
-        If res nextexam = h.ref exam.php?id=
-    */
 
     var examAction = $('#examAction').val();
     examSubmitted = true;
@@ -186,7 +176,7 @@ $(document).on("submit","#submitAnswerFrm" , function(event) {
     }
 
     return false;
-});
+});*/
 
 
 //Feedback Submit

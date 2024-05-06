@@ -36,6 +36,8 @@ if (!examCompleted) {
     var isInternetDownNotifShown = false;
     var exId = fetchExamId();
     var user = fetchUserId();
+    var anticheatsts = 'disabled';
+    var examSubmitted = false;
 
     function fetchExamId() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -49,8 +51,8 @@ if (!examCompleted) {
     }
 
     function init() {
-        var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
-        //var savedTimeKey = 'Debug_TIMER'; //DEBUG
+        //var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
+        var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
         if (savedTime) {
@@ -79,6 +81,7 @@ if (!examCompleted) {
         if (!navigator.onLine) {
             stopTimer();
             isInternetDownNotifShown = true;
+            anticheatsts = 'disabled';
             instanceSwalNotification = Swal.fire({
             title: 'No Internet Connection',
             text: 'Please check your internet connection.',
@@ -92,12 +95,13 @@ if (!examCompleted) {
             if (isInternetDownNotifShown) {
             instanceSwalNotification.close();
             isInternetDownNotifShown = false;
+            anticheatsts = 'enabled';
             }
         }
 
         if (minutes === 0 && seconds === 0) {
             document.getElementById('examAction').value = "timeout";
-            $('#submitAnswerFrm').submit();
+            //$('#submitAnswerFrm').submit();
             stopTimer();
             return;
         }
@@ -112,7 +116,7 @@ if (!examCompleted) {
         updateDisplay();
 
         var currentTime = { minutes: minutes, seconds: seconds };
-        localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+        //localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
     }
 
     function updateDisplay() {
@@ -144,16 +148,83 @@ if (!examCompleted) {
         }
     });
 
-
+    // Prevent Refresh/Unload Page
+    window.addEventListener('beforeunload', function (event) {
+        //console.log("Allow Exit: " + examSubmitted); //DEBUG
+        if (window.location.href.includes("exam.php?id=") && !examSubmitted == true) {
+            event.preventDefault();
+            event.returnValue = '';
+            examSubmitted = false;
+        }
+    });
 
     function fetchDispLimit() {
         const exLimit = document.getElementById('examLimit').value;
         return exLimit;
     }
 
+
+    
     // Function to show the card
     function showCard() {
         document.getElementById('examCard').classList.remove('d-none');
+    }
+
+    //Function Camera
+    async function startRecording() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+            // Start recording after the video stream is ready
+            const mediaRecorder = new MediaRecorder(stream);
+            let recordedChunks = [];
+
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) {
+                    recordedChunks.push(e.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                saveRecording(recordedChunks);
+            };
+
+            // Handle recording errors
+            mediaRecorder.onerror = (e) => {
+                console.error('Recording error:', e);
+                // Attempt to save the recording even if an error occurs
+                if (recordedChunks.length > 0) {
+                    saveRecording(recordedChunks);
+                }
+            };
+
+            mediaRecorder.start();
+
+            setTimeout(() => {
+                mediaRecorder.stop();
+            }, 5000);
+        } catch (err) {
+            console.error('Error accessing the camera:', err);
+        }
+    }
+
+    function saveRecording(recordedChunks) {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const formData = new FormData();
+        formData.append('video', blob, 'recorded_video.webm');
+
+        // Send the video file to the server
+        fetch('query/uploadVideo.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Video saved successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error saving video:', error);
+        });
     }
 
     var display_Limit = fetchDispLimit();
@@ -176,31 +247,36 @@ if (!examCompleted) {
                 updateDisplay();
                 showCard();
                 pgActive = 1;
+                anticheatsts = 'enabled';
+                startRecording();
             }
         });
 
         //Anticheat
         document.addEventListener("visibilitychange", (event) => {
-            if (document.visibilityState != "visible" && pgActive == 1 && anticheatCnt < 3) {
-            console.log("tab inactive");
-            pgActive = 0;
-            anticheatCnt++;
-            Swal.fire({
-                title: 'WARNING',
-                //text: 'Avoid using other tabs or windows while exam is in progress.',
-                html: `
-                        Avoid using other tabs or windows while exam is in progress.
-                    `,
-                icon: 'warning',
-                allowOutsideClick: false,
-            }).then((result) => {
-                    if (anticheatCnt >= 3) {
-                        stopTimer();
-                        document.getElementById('examAction').value = "cheat";
-                        $('#submitAnswerFrm').submit();
-                    }
-                    pgActive = 1;
-            });
+            if (document.visibilityState != "visible") {
+                anticheatCnt++;
+            }
+            
+            if (document.visibilityState != "visible" && pgActive == 1 && anticheatCnt < 3 && anticheatsts == 'enabled') {
+                console.log("tab inactive");
+                pgActive = 0;
+                Swal.fire({
+                    title: 'WARNING',
+                    //text: 'Avoid using other tabs or windows while exam is in progress.',
+                    html: `
+                            Avoid using other tabs or windows while exam is in progress.
+                        `,
+                    icon: 'warning',
+                    allowOutsideClick: false,
+                }).then((result) => {
+                        if (anticheatCnt >= 3) {
+                            stopTimer();
+                            document.getElementById('examAction').value = "cheat";
+                            $('#submitAnswerFrm').submit();
+                        }
+                        pgActive = 1;
+                });
             }
         });
         
@@ -239,6 +315,12 @@ if (!examCompleted) {
                             // Scroll to the calculated position
                             window.scrollTo({
                                 top: centerPosition,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            // Scroll to the bottom of the page
+                            window.scrollTo({
+                                top: document.body.scrollHeight,
                                 behavior: 'smooth'
                             });
                         }
@@ -292,5 +374,199 @@ if (!examCompleted) {
         submitBtn.addEventListener('click', function() {
             document.getElementById('examAction').value = "ontime";
         });
+    });
+
+
+    // exam SUBMIT
+    $(document).on("submit","#submitAnswerFrm" , function(event) {
+        event.preventDefault();
+        anticheatsts = 'disabled';
+        /*
+            If time out = Show time out Alert
+            If submitted = Show Processing
+
+            Fetch Inputs
+            Ajax Submit_AnswerExe
+
+            If res finished = h.ref home.php
+            If res nextexam = h.ref exam.php?id=
+        */
+
+        var examAction = $('#examAction').val();
+        //console.log("Exam Submitted: " + examSubmitted); //DEBUG
+
+        if (examAction == 'timeout') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Exam Over',
+                text: 'You ran out of time...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                timer: 10000,
+                timerProgressBar: true,
+            }).then(function() {
+                examSubmitted = true;
+                $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
+                    // Manually parse the JSON if necessary
+                    var response = JSON.parse(data);
+                    if (response.res == "finished") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Finished',
+                            text: 'Congratulations! You have finished all the exams.',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            window.location.href = 'home.php';
+                        });
+                    } else if (response.res == "notFinished") {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Loading...',
+                            text: 'Proceeding to next exam...',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            window.location.href = 'exam.php?id=' + response.examId;
+                        });
+                    } else if (response.res == "failed") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed',
+                            text: 'An error occured while submitting your answers. Please try again.',
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed',
+                            text: 'System error occurred.',
+                        });
+                    }
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert('A script error occured. Please try again.');
+                    console.error(textStatus, errorThrown);
+                    console.log(jqXHR.responseText);
+                });
+            });
+        } else if (examAction == 'ontime') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Submit Exam',
+                text: 'Are you sure you want to submit?',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then(function(result) {
+                if (result.value) {
+                    examSubmitted = true;
+                    $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
+                        // Manually parse the JSON if necessary
+                        var response = JSON.parse(data);
+                        if (response.res == "finished") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Finished',
+                                text: 'Congratulations! You have finished all the exams.',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            }).then(function() {
+                                window.location.href = 'home.php';
+                            });
+                        } else if (response.res == "notFinished") {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Loading...',
+                                text: 'Proceeding to next exam...',
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                            }).then(function() {
+                                window.location.href = 'exam.php?id=' + response.examId;
+                            });
+                        } else if (response.res == "failed") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed',
+                                text: 'An error occured while submitting your answers. Please try again.',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed',
+                                text: 'System error occurred.',
+                            });
+                        }
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        alert('A script error occured. Please try again.');
+                        console.error(textStatus, errorThrown);
+                        console.log(jqXHR.responseText);
+                    });
+                }
+            });
+        } else if (examAction == 'cheat') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Exam Over',
+                text: 'System detected cheating...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                timer: 10000,
+                timerProgressBar: true,
+            }).then(function() {
+                examSubmitted = true;
+                $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
+                    // Manually parse the JSON if necessary
+                    var response = JSON.parse(data);
+                    if (response.res == "finished") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Finished',
+                            text: 'Congratulations! You have finished all the exams.',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            window.location.href = 'home.php';
+                        });
+                    } else if (response.res == "notFinished") {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Loading...',
+                            text: 'Proceeding to next exam...',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            window.location.href = 'exam.php?id=' + response.examId;
+                        });
+                    } else if (response.res == "failed") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed',
+                            text: 'An error occured while submitting your answers. Please try again.',
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed',
+                            text: 'System error occurred.',
+                        });
+                    }
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert('A script error occured. Please try again.');
+                    console.error(textStatus, errorThrown);
+                    console.log(jqXHR.responseText);
+                });
+            });
+        } else {
+            alert('A system error occured. Please try again.');
+        }
+
+        return false;
     });
 }

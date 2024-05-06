@@ -150,8 +150,9 @@ if (count($unattemptedExamIds) > 0) {
                                     <h3 class="card-title"><i class="metismenu-icon pe-7s-tools"></i> Requirements <i class="metismenu-icon pe-7s-tools"></i></h3>
                                     <ul class="list-group">
                                         <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">1.)</span> PC Specifications</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">1.)</span> Device Specifications</h5>
+                                            <div class="list-group-item-text pl-4">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</div>
+                                            <div class="list-group-item-text pl-4">Camera - Donec id elit non mi porta gravida at eget metus. Test camera <a href="javascript:void(0);" data-toggle="modal" data-target="#mdlCameraTest"><u>here</u></a>.</div>
                                         </li>
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">2.)</span> Internet Specifications</h5>
