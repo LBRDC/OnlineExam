@@ -95,7 +95,7 @@
                                         <tbody>
                                         <?php 
                                         //exatmpt_id, exmne_id, ex_id, ex_score, ex_total, exatmpt_no, exatmpt_date, exatmpt_time, exatmpt_created FROM examinee_attempt WHERE 1
-                                        $stmt1 = $conn->prepare("SELECT * FROM examinee_attempt");
+                                        $stmt1 = $conn->prepare("SELECT * FROM examinee_attempt ORDER BY exatmpt_id DESC");
                                         $stmt1->execute();
 
                                         while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {

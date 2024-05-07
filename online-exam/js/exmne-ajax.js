@@ -180,12 +180,6 @@
 
 
 //Feedback Submit
-$("#feedbackFrm").submit(function(event) {
-    event.preventDefault();
-
-
-})
-
 $(document).on("submit","#feedbackFrm" , function(event) {
     event.preventDefault();
 

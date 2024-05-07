@@ -486,7 +486,7 @@
 
             <div class="app-main__outer" style="padding-left: 0px;">
 
-<!-- #START# dashboard.php -->
+<!-- #START# exam.php -->
                 <!-- ### MAIN PAGE ### -->
                 <div class="app-main__inner">
                     <div class="app-page-title">
@@ -777,7 +777,7 @@
                         </div>
                     </div>
                 </div> <!-- #END# MAIN PAGE -->
-<!-- #END# dashboard.php -->
+<!-- #END# exam.php -->
 
 
 <!-- #START# footer.php -->
@@ -789,14 +789,14 @@
                                 <div class="copyright text-center my-auto">
                                     <div class="col-md-12">
                                         <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by
-                                        <b><a href="https://lbpresources.com" target="_blank">LBP Resources and Development Corp.</a></b>
+                                        <b class="text-primary">LBP Resources and Development Corp.</b>
                                         </span>
                                     </div>
-                                    <div class="col-md-12">
+                                    <!--<div class="col-md-12">
                                         <a href="javascript:void(0);" class="text-monospace justify-content-center" data-toggle="modal" data-target="#mdlSystemInfo">
-                                            <u>v0.3.0-alpha</u>
+                                            <u >v0.3.0-alpha</u>
                                         </a>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -863,8 +863,6 @@
     document.getElementById('nxt-btn').addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    </script>
-    <script>
     </script>
 </body>
 </html>

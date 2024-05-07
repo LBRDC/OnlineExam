@@ -1,4 +1,7 @@
-<script>sessionStorage.removeItem("reminderShown");</script>
+<script>
+    sessionStorage.removeItem("reminderShown");
+    sessionStorage.removeItem("camWorking");
+</script>
 
 <?php 
 session_start();

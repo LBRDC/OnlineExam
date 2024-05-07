@@ -152,7 +152,6 @@ if (count($unattemptedExamIds) > 0) {
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">1.)</span> Device Specifications</h5>
                                             <div class="list-group-item-text pl-4">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</div>
-                                            <div class="list-group-item-text pl-4">Camera - Donec id elit non mi porta gravida at eget metus. Test camera <a href="javascript:void(0);" data-toggle="modal" data-target="#mdlCameraTest"><u>here</u></a>.</div>
                                         </li>
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">2.)</span> Internet Specifications</h5>
@@ -169,12 +168,26 @@ if (count($unattemptedExamIds) > 0) {
                     </div>
                     <?php if ($selEx_id != '') { ?>
                     <div class="row justify-content-center">
-                        <div class="col-md-3">
+                        <div class="col-md-12 col-xl-6">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 text-center">
+                                            <?php 
+                                                //Select one Random
+                                                $stmt4 = $conn->prepare("SELECT * FROM `page_messages` ORDER BY RAND() LIMIT 1");
+                                                $stmt4->execute();
+                                                $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
+                                                $msg_txt = $msg['msg_text'];
+                                                $msg_src = $msg['src_text'];
+
+                                                echo "<span class='font-italic font-weight-bold'>" . htmlspecialchars($msg_txt) . "<br>-" . htmlspecialchars($msg_src) . "</span>";
+                                            ?>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12 text-center">
-                                        <button type="button" class="btn btn-success ml-5 mr-5" id="strt-btn" style="width: 100px; height: 50px;" data-exam-id="<?php echo htmlspecialchars($selEx_id); ?>">START EXAM</button>
+                                            <button type="button" class="btn btn-success ml-5 mr-5" style="width: 100px; height: 50px;" data-toggle="modal" data-target="#mdlStartExam">START EXAM</button>
                                         </div>
                                     </div>
                                 </div>

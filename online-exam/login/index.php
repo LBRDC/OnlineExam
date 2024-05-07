@@ -62,5 +62,9 @@
 	<script src="../../js/sweetalert.js"></script>
 	<script src="login/js/main.js"></script>
 	<script src="login/js/myjs.js"></script>
+	<script>
+    	sessionStorage.removeItem("reminderShown");
+    	sessionStorage.removeItem("camWorking");
+	</script>
 </body>
 </html>
