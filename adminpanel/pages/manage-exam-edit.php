@@ -283,7 +283,7 @@
                                     <div class="main-card mb-3 card">
                                         <div class="card-body">
                                             <h5 class="card-title">Exam Questions<span class="ml-2 mb-2 mr-2 badge badge-pill badge-success"><?php echo htmlspecialchars($counteq1); ?></span></h5>
-                                            <div class="m-3 scroll-area-lg">
+                                            <div class="m-3 scroll-area-lg border">
                                                 <div class="scrollbar-container ps--active-y">
                                                 <table class="mb-0 table table-hover">
                                                     <thead>

@@ -14,7 +14,7 @@
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <label for="add_Feedback">Feedback</label>
-                        <textarea name="add_Feedback" id="add_Feedback" class="form-control" rows="5" placeholder=""></textarea>
+                        <textarea name="add_Feedback" id="add_Feedback" class="form-control" rows="5" placeholder="" required></textarea>
                     </div>
                 </div>
                 <div class="row mb-2">

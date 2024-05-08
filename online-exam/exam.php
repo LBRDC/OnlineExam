@@ -32,12 +32,21 @@
     $stmt1->execute();
 
     $ex_details = $stmt1->fetch(PDO::FETCH_ASSOC);
+    if ($ex_details) {
     $ex_title = $ex_details['ex_title'];
     $ex_description = $ex_details['ex_description'];
     $ex_time_limit = $ex_details['ex_time_limit'];
     $ex_qstn_limit = $ex_details['ex_qstn_limit'];
     $ex_disable_prv = $ex_details['ex_disable_prv'];
     $ex_random_qstn = $ex_details['ex_random_qstn'];
+    } else {
+        $ex_title = 'null';
+        $ex_description = 'null';
+        $ex_time_limit = 'null';
+        $ex_qstn_limit = 'null';
+        $ex_disable_prv = 'null';
+        $ex_random_qstn = 'null';
+    }
 
     if ($ex_random_qstn == 'yes') {
         $orderBy = "ORDER BY RAND()";
@@ -766,7 +775,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
-                                                <button type="submit" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
+                                                <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
                                                 <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
                                             </div>
                                         </div>

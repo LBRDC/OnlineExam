@@ -428,6 +428,7 @@ if (!examCompleted && camWorking) {
         var submitBtn = document.getElementById('submit-btn');
         submitBtn.addEventListener('click', function() {
             document.getElementById('examAction').value = "ontime";
+            $('#submitAnswerFrm').submit();
         });
     });
 
@@ -435,9 +436,6 @@ if (!examCompleted && camWorking) {
     // exam SUBMIT
     $(document).on("submit","#submitAnswerFrm" , function(event) {
         event.preventDefault();
-        stopTimer();
-        anticheatsts = 'disabled';
-        stopRecording();
         /*
             If time out = Show time out Alert
             If submitted = Show Processing
@@ -452,7 +450,10 @@ if (!examCompleted && camWorking) {
         var examAction = $('#examAction').val();
         //console.log("Exam Submitted: " + examSubmitted); //DEBUG
 
-        if (examAction == 'timeout') {
+        if (examAction == 'timeout') {        
+            stopTimer();
+            anticheatsts = 'disabled';
+            stopRecording();
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Over',
@@ -531,7 +532,10 @@ if (!examCompleted && camWorking) {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
             }).then(function(result) {
-                if (result.value) {
+                if (result.value) {            
+                    stopTimer();
+                    anticheatsts = 'disabled';
+                    stopRecording();
                     examSubmitted = true;
                     $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
                         // Manually parse the JSON if necessary
@@ -594,7 +598,9 @@ if (!examCompleted && camWorking) {
         } else if (examAction == 'cheat') {
             seconds = 0;
             minutes = 0;
-            
+            stopTimer();
+            anticheatsts = 'disabled';
+            stopRecording();
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
