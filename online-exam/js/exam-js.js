@@ -122,7 +122,6 @@ if (!examCompleted && camWorking) {
         if (minutes === 0 && seconds === 0) {
             document.getElementById('examAction').value = "timeout";
             $('#submitAnswerFrm').submit();
-            stopTimer();
             return;
         }
 
@@ -194,12 +193,12 @@ if (!examCompleted && camWorking) {
     let mediaRecorder;
     async function startRecording() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
             // Specify options for the MediaRecorder
             const options = {
                 mimeType: 'video/webm; codecs=vp9', // Use VP9 codec for better compression
-                videoBitsPerSecond: 250000 // Lower bitrate for smaller file size
+                videoBitsPerSecond: 200000 // Lower bitrate for smaller file size
             };
 
             // Check if the specified options are supported
@@ -232,12 +231,18 @@ if (!examCompleted && camWorking) {
             };
 
             mediaRecorder.start();
-
-            //setTimeout(() => {
-            //    mediaRecorder.stop();
-            //}, 5000);
         } catch (err) {
             console.error('Error accessing camera:', err);
+            stopTimer();
+            anticheatsts = 'disabled';
+            swalCamera = Swal.fire({
+            title: 'No Camera Access',
+            text: 'Camera is required',
+            icon: 'info',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            timer: null
+            });
         }
     }
 
@@ -430,6 +435,7 @@ if (!examCompleted && camWorking) {
     // exam SUBMIT
     $(document).on("submit","#submitAnswerFrm" , function(event) {
         event.preventDefault();
+        stopTimer();
         anticheatsts = 'disabled';
         stopRecording();
         /*
@@ -586,6 +592,9 @@ if (!examCompleted && camWorking) {
                 }
             });
         } else if (examAction == 'cheat') {
+            seconds = 0;
+            minutes = 0;
+            
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
