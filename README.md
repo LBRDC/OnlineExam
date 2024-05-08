@@ -47,3 +47,5 @@
 <b>metismenu:</b> 3.0.3  
 <b>FullCalendar:</b> 3.10.0  
 <b>ChartJS:</b> 2.7.3  
+#### EXTERNAL
+<b>ffmpeg</b> 7.0  
