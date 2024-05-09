@@ -1,2 +1,12 @@
 /vendor/
-/uploads/
+/uploads/exam_question/
+/uploads/_tempDL/
+/uploads/_delete/
+/uploads/_temp/
+/uploads/recordings/*.webm
+/uploads/recordings/*.mp4
+/uploads/recordings/*.mkv
+/uploads/recordings/*.avi
+/uploads/recordings/*.mov
+/uploads/recordings/*.flv
+/uploads/recordings/*.wmv

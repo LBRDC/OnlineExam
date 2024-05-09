@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Event listener for the file input change
             document.getElementById('add_ExamImg').addEventListener('change', function() {
                 var file = this.files[0];
-                var fileSize = file.size / (1024 * 1024) * 4; // in 4MB
+                var fileSize = file.size / (1024 * 1024); // in 4MB
                 var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.webp)$/i;
             
                 if (!allowedExtensions.exec(file.name)) {

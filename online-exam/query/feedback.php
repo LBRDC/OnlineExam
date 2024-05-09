@@ -21,11 +21,11 @@ if ($add_Anonymous != "yes") {
 
     if ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
         // Prepare examinee name
-        $exmne_fname = isset($row['exmne_fname']) ? $row['exmne_fname'] : 'null';
-        $exmne_mname = isset($row['exmne_mname']) ? substr($row['exmne_mname'], 0, 1) . ". " : '_ ';
-        $exmne_lname = isset($row['exmne_lname']) ? $row['exmne_lname'] : 'null';
-        $exmne_sfname = isset($row['exmne_sfname']) ? $row['exmne_sfname'] : '';
-        $exmne_name = $exmne_fname . ' ' . $exmne_mname . $exmne_lname . ' ' . $exmne_sfname;
+        $exmne_fname = $row['exmne_fname'] != '' ? $row['exmne_fname'] : 'null';
+        $exmne_mname = $row['exmne_mname'] != '' ? substr($row['exmne_mname'], 0, 1) . ". " : '_ ';
+        $exmne_lname = $row['exmne_lname'] != '' ? $row['exmne_lname'] : 'null';
+        $exmne_sfname = $row['exmne_sfname'] != '' ? $row['exmne_sfname'] : '';
+        $exmne_name = $exmne_lname . ", " . $exmne_fname . " " . $exmne_mname . $exmne_sfname;
     }
 } else {
     $exmne_name = "Anonymous";

@@ -1,3 +1,5 @@
+let swalLoad;
+
 /* ########## CLUSTER ########## */
 // manage-cluster ADD 
 $(document).on("submit","#addClusterFrm" , function(event) {
@@ -8,7 +10,7 @@ $(document).on("submit","#addClusterFrm" , function(event) {
         'add_CluDesc': $('#add_CluDesc').val()
     };
 
-    console.log(formData);
+    //console.log(formData); //DEBUG
     
     var isValid;
     if (formData['add_CluName'] === '') {
@@ -26,15 +28,26 @@ $(document).on("submit","#addClusterFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/add_ClusterExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -50,7 +63,7 @@ $(document).on("submit","#addClusterFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: response.msg + "already exists.",
+                    text: response.msg + " already exists.",
                 });
             } else if (response.res == "failed") {
                 Swal.fire({
@@ -73,6 +86,7 @@ $(document).on("submit","#addClusterFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -108,15 +122,26 @@ $(document).on("submit","#editClusterFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED");
-    //console.log(formData);
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/edit_ClusterExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -150,7 +175,7 @@ $(document).on("submit","#editClusterFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "No record of Cluster" + response.msg + " found.",
+                    text: "No record of Cluster " + response.msg + " found.",
                 });
             } else {
                 Swal.fire({
@@ -161,6 +186,7 @@ $(document).on("submit","#editClusterFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -195,15 +221,26 @@ $(document).on("submit","#disableClusterFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED");
-    //console.log(formData);
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/status_ClusterDisable.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -231,7 +268,7 @@ $(document).on("submit","#disableClusterFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "No record of Cluster" + response.msg + " found.",
+                    text: "No record of Cluster " + response.msg + " found.",
                 });
             } else {
                 Swal.fire({
@@ -242,6 +279,7 @@ $(document).on("submit","#disableClusterFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -276,15 +314,26 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/status_ClusterEnable.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -323,6 +372,7 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -337,10 +387,7 @@ $(document).on("submit","#enableClusterFrm" , function(event) {
 /* ########## EXAM ########## */
 //Function
 function currentPg(){
-    // Define the URL with the ID you want to fetch
     var currentUrl = window.location.href;
-
-    // Extract the 'id' parameter in one line
     var id = new URL(currentUrl).searchParams.get('id');
     return id;
 }
@@ -352,14 +399,14 @@ $(document).on("submit","#addExamFrm" , function(event) {
     var formData = {
         'add_ExamTitle': $('#add_ExamTitle').val(),
         'add_ExamDesc': $('#add_ExamDesc').val(),
-        'add_ExamCluster': $('#add_ExamCluster').val(), //Array
+        'add_ExamCluster': $('#add_ExamCluster').val(), 
         'add_ExamQuestLimit': $('#add_ExamQuestLimit').val(),
         'add_ExamTimeLimit': $('#add_ExamTimeLimit').val(),
-        'add_ExamRandom': $('#add_ExamRandom').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
-        'add_ExamNoPrev': $('#add_ExamNoPrev').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
+        'add_ExamRandom': $('#add_ExamRandom').is(':checked') ? 'yes' : '', 
+        'add_ExamNoPrev': $('#add_ExamNoPrev').is(':checked') ? 'yes' : '', 
     };
 
-    //console.log(formData);
+    //console.log(formData); //DEBUG
     
     var isValid;
     if (formData['add_ExamTitle'] === '' || formData['add_ExamCluster'].length === 0 || formData['add_ExamQuestLimit'] === '' || formData['add_ExamTimeLimit'] === '') {
@@ -377,15 +424,26 @@ $(document).on("submit","#addExamFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/add_ExamExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -401,7 +459,7 @@ $(document).on("submit","#addExamFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Failed",
-                    text: response.msg + "already exists.",
+                    text: response.msg + " already exists.",
                 });
             } else if (response.res == "failed") {
                 Swal.fire({
@@ -430,6 +488,7 @@ $(document).on("submit","#addExamFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -464,15 +523,26 @@ $(document).on("submit","#disableExamFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED");
-    //console.log(formData);
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/status_ExamDisable.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -500,7 +570,7 @@ $(document).on("submit","#disableExamFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "No record of Exam" + response.msg + " found.",
+                    text: "No record of Exam " + response.msg + " found.",
                 });
             } else {
                 Swal.fire({
@@ -511,6 +581,7 @@ $(document).on("submit","#disableExamFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -545,15 +616,26 @@ $(document).on("submit","#enableExamFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/status_ExamEnable.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -592,6 +674,7 @@ $(document).on("submit","#enableExamFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -615,12 +698,12 @@ $(document).on("submit","#editExamFrm" , function(event) {
         'edit_ExamTimeLimit': $('#edit_ExamTimeLimit').val(),
         'edit_ExamRandom': $('#edit_ExamRandom').val(),
         'edit_ExamNoPrev': $('#edit_ExamNoPrev').val(),
-        'edit_ExamRandom': $('#edit_ExamRandom').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
-        'edit_ExamNoPrev': $('#edit_ExamNoPrev').is(':checked') ? 'yes' : '', // Check if the checkbox is checked
+        'edit_ExamRandom': $('#edit_ExamRandom').is(':checked') ? 'yes' : '',
+        'edit_ExamNoPrev': $('#edit_ExamNoPrev').is(':checked') ? 'yes' : '',
         'edit_ExamStatus': $('#edit_ExamStatus').val()
     };
     
-    //console.log(formData);
+    //console.log(formData); //DEBUG
     
     var isValid;
     if (formData['edit_ExamId'] === '' || formData['edit_ExamTitle'] === '' || formData['edit_ExamCluster'].length === 0 || formData['edit_ExamQuestLimit'] === '' || formData['edit_ExamTimeLimit'] === '') {
@@ -638,15 +721,26 @@ $(document).on("submit","#editExamFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/edit_ExamExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -657,7 +751,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
                     timerProgressBar: true,
                 }).then(function() {
                     window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-information';
-                    //location.reload();
+                    //location.reload(); //Alternative
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
@@ -692,6 +786,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -740,7 +835,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
 
 
     // Display the appended values in the console
-    /*for (var pair of formData.entries()) {
+    /*for (var pair of formData.entries()) { //DEBUG
         console.log(pair[0]+ ', ' + pair[1]); 
     }*/
 
@@ -751,7 +846,6 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
         formData.append('add_ExamImg', examImgFile);
     }
 
-    // Validation
     var isValid = formData.get('add_Question') !== '' && formData.get('add_QstnAns') !== '' && formData.get('add_QstnExamId') !== '';
     if (!isValid) {
         Swal.fire({
@@ -762,8 +856,8 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/add_ExamQuestExe.php',
@@ -773,8 +867,8 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
         processData: false, 
         contentType: false,
         beforeSend: function() {
-            Swal.fire({
-                title: 'Uploading...',
+            swalLoad = Swal.fire({
+                title: 'Loading...',
                 html: 'Please wait while your question is being processed.',
                 allowOutsideClick: false,
                 onBeforeOpen: () => {
@@ -783,7 +877,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             });
         },
         success: function(response) {
-            Swal.close(); 
+            swalLoad.close(); 
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -794,7 +888,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
                     timerProgressBar: true,
                 }).then(function() {
                     window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
-                    //location.reload();
+                    //location.reload(); //Alternative
                 });
             } else if (response.res == "exists") {
                 Swal.fire({
@@ -829,7 +923,7 @@ $(document).on("submit","#addQuestionFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            Swal.close();
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -844,7 +938,6 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
 
     var page = currentPg();
 
-    //Append fields to formData
     var formData = new FormData();
     formData.append('edit_QstnId', $('#edit_QstnId').val()); 
     formData.append('edit_QstnExamId', $('#edit_QstnExamId').val()); 
@@ -880,7 +973,7 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
 
 
     // DEBUG: Display the appended values in the console
-    /*for (var pair of formData.entries()) {
+    /*for (var pair of formData.entries()) { //DEBUG
         console.log(pair[0]+ ', ' + pair[1]); 
     }*/
 
@@ -902,8 +995,8 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/edit_ExamQuestExe.php',
@@ -913,8 +1006,8 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
         processData: false, 
         contentType: false,
         beforeSend: function() {
-            Swal.fire({
-                title: 'Uploading...',
+            swalLoad = Swal.fire({
+                title: 'Loading...',
                 html: 'Please wait while your question is being processed.',
                 allowOutsideClick: false,
                 onBeforeOpen: () => {
@@ -923,7 +1016,7 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
             });
         },
         success: function(response) {
-            Swal.close(); 
+            swalLoad.close(); 
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -934,7 +1027,7 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
                     timerProgressBar: true,
                 }).then(function() {
                     window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
-                    //location.reload();
+                    //location.reload(); //Alternative
                 });
             } else if (response.res == "fileerror") {
                 Swal.fire({
@@ -981,11 +1074,10 @@ $(document).on("submit","#EditQuestionFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            Swal.close();
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
-            //window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
             location.reload();
         }
     });
@@ -1017,15 +1109,26 @@ $(document).on("submit","#deleteQuestionFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED");
-    //console.log(formData);
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/delete_ExamQuestExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1064,6 +1167,7 @@ $(document).on("submit","#deleteQuestionFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1116,7 +1220,18 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1155,6 +1270,7 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1197,15 +1313,26 @@ $(document).on("submit","#EditExamineeFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/edit_ExamineeExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1244,6 +1371,7 @@ $(document).on("submit","#EditExamineeFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1252,7 +1380,7 @@ $(document).on("submit","#EditExamineeFrm" , function(event) {
     });
 });
 
-// manage-cluster DISABLE 
+// manage-examinee DISABLE 
 $(document).on("submit","#disableExamineeFrm" , function(event) {
     event.preventDefault();
 
@@ -1287,7 +1415,18 @@ $(document).on("submit","#disableExamineeFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1334,6 +1473,7 @@ $(document).on("submit","#disableExamineeFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1342,7 +1482,7 @@ $(document).on("submit","#disableExamineeFrm" , function(event) {
     });
 });
 
-// manage-cluster ENABLE 
+// manage-examinee ENABLE 
 $(document).on("submit","#enableExamineeFrm" , function(event) {
     event.preventDefault();
 
@@ -1377,7 +1517,18 @@ $(document).on("submit","#enableExamineeFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1413,7 +1564,7 @@ $(document).on("submit","#enableExamineeFrm" , function(event) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "No record of examinee" + response.msg + " found.",
+                    text: "No record of examinee " + response.msg + " found.",
                 });
             } else {
                 Swal.fire({
@@ -1424,6 +1575,7 @@ $(document).on("submit","#enableExamineeFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1436,6 +1588,7 @@ $(document).on("submit","#enableExamineeFrm" , function(event) {
 
 
 /* ########## RANKING ########## */
+// report-ranking-exam SAVE
 $(document).on("submit","#saveRankingFrm" , function(event) {
     event.preventDefault();
 
@@ -1461,16 +1614,27 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED");
-    //console.log(formData);
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
 
-    //NOT FULLY IMPLEMENTED
-    /*$.ajax({
+    //Save Exam Ranking
+    /*$.ajax({ //NOT IMPLEMENTED
         url: 'query/save_ExamRankingExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1515,13 +1679,14 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
             location.reload();
         }
     });*/
-})
+});
 /* ########## END RANKING ########## */
 
 
@@ -1566,7 +1731,18 @@ $(document).on("submit","#addUserFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1605,6 +1781,7 @@ $(document).on("submit","#addUserFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1653,7 +1830,18 @@ $(document).on("submit","#editUserFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1692,6 +1880,7 @@ $(document).on("submit","#editUserFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);
@@ -1734,7 +1923,18 @@ $(document).on("submit","#deleteUserFrm" , function(event) {
         type: 'POST',
         dataType : "json",
         data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
+            swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
                     icon: "success",
@@ -1775,6 +1975,7 @@ $(document).on("submit","#deleteUserFrm" , function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
             alert('A script error occured. Please try again.');
             console.error(textStatus, errorThrown);
             console.log(jqXHR.responseText);

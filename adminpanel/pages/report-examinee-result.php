@@ -1,14 +1,4 @@
 <?php
-    /*
-        Fetch Exam Details
-        Fetch Exam Details
-
-        Fetch Exam Questions
-        Fetch Examinee Answers
-
-        SELECT `exans_id`, `exmne_id`, `exam_id`, `exqstn_id`, `exmne_answer`, `exatmpt_no`, `exans_created` FROM `examinee_answers` WHERE 1
-        SELECT `exqstn_id`, `ex_id`, `exam_image`, `exam_question`, `exam_ch1`, `exam_ch2`, `exam_ch3`, `exam_ch4`, `exam_ch5`, `exam_ch6`, `exam_ch7`, `exam_ch8`, `exam_ch9`, `exam_ch10`, `exqstn_answer` FROM `exam_question_tbl` WHERE 1
-    */
     $exmne_Id = $_GET['exmne'];
     $ex_id = $_GET['exam'];
 
@@ -19,11 +9,11 @@
 
     if ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
         // Prepare examinee name
-        $exmne_fname = isset($row['exmne_fname']) ? $row['exmne_fname'] : 'null';
-        $exmne_mname = isset($row['exmne_mname']) ? substr($row['exmne_mname'], 0, 1) . ". " : '_ ';
-        $exmne_lname = isset($row['exmne_lname']) ? $row['exmne_lname'] : 'null';
-        $exmne_sfname = isset($row['exmne_sfname']) ? $row['exmne_sfname'] : '';
-        $exmne_name = $exmne_fname . ' ' . $exmne_mname . $exmne_lname . ' ' . $exmne_sfname;
+        $exmne_fname = $row['exmne_fname'] != '' ? $row['exmne_fname'] : 'null';
+        $exmne_mname = $row['exmne_mname'] != '' ? substr($row['exmne_mname'], 0, 1) . ". " : '_ ';
+        $exmne_lname = $row['exmne_lname'] != '' ? $row['exmne_lname'] : 'null';
+        $exmne_sfname = $row['exmne_sfname'] != '' ? $row['exmne_sfname'] : '';
+        $exmne_name = $exmne_lname . ', ' . $exmne_fname . ' ' . $exmne_mname . $exmne_sfname;
     }
 
     //Fetch Exam Details

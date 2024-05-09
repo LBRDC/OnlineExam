@@ -106,7 +106,7 @@
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
-                                    <div class="card-title">Employment Cluster</div>
+                                    <div class="card-title">Examinee List</div>
                                     <div class="table-responsive">
                                         <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
                                             <thead class="thead-light">
@@ -142,6 +142,13 @@
                                                     $exmne_pass = $row['exmne_pass'];
                                                     $exmne_status = $row['exmne_status'];
                                                     $statusText = ($exmne_status == 1) ? 'Active' : (($exmne_status == 3) ? 'Disabled' : 'Inactive');
+
+                                                    $disp_fname = $row['exmne_fname'] != '' ? $row['exmne_fname'] : 'null';
+                                                    $disp_mname = $row['exmne_mname'] != '' ? substr($row['exmne_mname'], 0, 1) . ". " : '_ ';
+                                                    $disp_lname = $row['exmne_lname'] != '' ? $row['exmne_lname'] : 'null';
+                                                    $disp_sfname = $row['exmne_sfname'] != '' ? $row['exmne_sfname'] : '';
+                                                    $exmne_name = $disp_lname . ', ' . $disp_fname . ' ' . $disp_mname . $disp_sfname;
+
                                                     // Fetch the cluster name and status
                                                     $clusterName = '';
                                                     $stmt3 = $conn->prepare("SELECT clu_name, clu_status FROM cluster_tbl WHERE clu_id = :exmne_clu_id");
@@ -163,23 +170,12 @@
                                                     }
                                             ?>
                                             <tr id="<?php echo htmlspecialchars($exmne_id); ?>">
-                                                <td><?php 
-                                                    echo htmlspecialchars($exmne_fname) . " ";
-                                                    if (!empty($exmne_mname)) {
-                                                        echo htmlspecialchars(substr($exmne_mname, 0, 1)) . ". ";
-                                                    } else {
-                                                        echo "_ ";
-                                                    }
-                                                    echo htmlspecialchars($exmne_lname) . " ";
-                                                    echo htmlspecialchars($exmne_sfname);
-                                                    ?>
-                                                </td>
+                                                <td><?php echo htmlspecialchars($exmne_name) ?></td>
                                                 <td><?php echo htmlspecialchars($cluster) ?></td>
                                                 <td><?php echo htmlspecialchars($exmne_email) ?></td>
                                                 <td><?php echo htmlspecialchars($statusText) ?></td>
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="modal" data-target="#mdlViewExaminee" data-toggle="tooltip" data-placement="bottom" title="View"
-                                                    data-view-id = "<?php echo htmlspecialchars($exmne_id); ?>"
                                                     data-view-fname = "<?php echo htmlspecialchars($exmne_fname); ?>"
                                                     data-view-mname = "<?php echo htmlspecialchars($exmne_mname); ?>"
                                                     data-view-lname = "<?php echo htmlspecialchars($exmne_lname); ?>"

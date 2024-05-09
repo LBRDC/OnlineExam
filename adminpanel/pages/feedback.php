@@ -61,45 +61,44 @@
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
                                     <div class="card-title">Feedback List</div>
-                                    <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Feedback</th>
-                                            <th>Date</th>
-                                        </tr>
-                                        </thead>
-                                        <!--<tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Feedback</th>
-                                            <th>Date</th>
-                                        </tr>
-                                        </tfoot>-->
-                                        <tbody>
-                                        <?php
-                                        //Fetch Feedback
-                                        $stmt1 = $conn->prepare("SELECT * FROM feedback_tbl ORDER BY fb_id DESC");
-                                        $stmt1->execute();
+                                    <div class="table-responsive">
+                                        <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Feedback</th>
+                                                <th>Date</th>
+                                            </tr>
+                                            </thead>
+                                            <!--<tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Feedback</th>
+                                                <th>Date</th>
+                                            </tr>
+                                            </tfoot>-->
+                                            <tbody>
+                                            <?php
+                                            //Fetch Feedback
+                                            $stmt1 = $conn->prepare("SELECT * FROM feedback_tbl ORDER BY fb_id DESC");
+                                            $stmt1->execute();
 
-                                        while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                                            $fb_id = $row['fb_id'];
-                                            $exmne_id = $row['exmne_id'];
-                                            $fb_exmne_as = $row['fb_exmne_as'];
-                                            $fb_feedback = $row['fb_feedback'];
-                                            $fb_date = $row['fb_date'];
-                                        ?>
-
-                                        <tr>
-                                            <td><?= $fb_exmne_as ?></td>
-                                            <td><?= $fb_feedback ?></td>
-                                            <td><?= $fb_date ?></td>
-                                        </tr>
-                                        <?php
-                                        }
-                                        ?>
-                                        </tbody>
-                                    </table>
+                                            while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                                                $fb_id = $row['fb_id'];
+                                                $exmne_id = $row['exmne_id'];
+                                                $fb_exmne_as = $row['fb_exmne_as'];
+                                                $fb_feedback = $row['fb_feedback'];
+                                                $fb_date = $row['fb_date'];
+                                            ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($fb_exmne_as); ?></td>
+                                                <td><?php echo htmlspecialchars($fb_feedback); ?></td>
+                                                <td><?php echo htmlspecialchars($fb_date); ?></td>
+                                            </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -238,10 +238,10 @@
                     <input type="text" name="delete_UserId" id="delete_UserId" value="" hidden required>
                     <input type="text" name="delete_Username" id="delete_Username" value="" hidden required>
                     <div class="form-row justify-content-center mb-2">
-                        Are you sure you want to DELETE&nbsp;<span class="font-weight-bold"></span>?
+                        Are you sure you want to DELETE&nbsp;<span class="text-danger font-weight-bold"></span>?
                     </div>
                     <div class="form-row justify-content-center mb-2">
-                        <small class="text-muted">This action is irreversible!</small>
+                        <span class="font-weight-bold">This action is irreversible!</span>
                     </div>
                 </div>
             </div>

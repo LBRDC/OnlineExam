@@ -355,7 +355,7 @@
                                                                     <td>
                                                                         <?php if (!empty($exam_image)) { ?>
                                                                         <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
-                                                                        <img src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" style="width: 50%; height: 50%;">
+                                                                        <img class="img-fluid w-10" src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" style="max-width: 40%; height: auto;">
                                                                         </a>
                                                                         <?php } ?>
                                                                     </td>

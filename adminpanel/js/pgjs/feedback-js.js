@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
     $('#reset-btn').click(function() {
         $('#filter_datefrom').val('');
         $('#filter_dateto').val('');

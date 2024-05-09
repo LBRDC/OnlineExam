@@ -5,13 +5,13 @@ $(document).on("submit","#feedbackFrm" , function(event) {
     var formData = {
         'add_ExmneId': $('#add_ExmneId').val(),
         'add_Feedback': $('#add_Feedback').val(),
-        'add_Anonymous': $('#add_Anonymous').val()
+        'add_Anonymous': $('#add_Anonymous').is(':checked') ? 'yes' : '',
     };
 
-    console.log(formData);
+    //console.log(formData); //DEBUG
     
     var isValid;
-    if (formData['add_ExmneId'] === '') {
+    if (formData['add_ExmneId'] === '' || formData['add_Feedback'] === '') {
         isValid = false;
     } else {
         isValid = true;
@@ -39,7 +39,7 @@ $(document).on("submit","#feedbackFrm" , function(event) {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: " Feedback submitted.",
+                    text: "Feedback submitted.",
                     showConfirmButton: false,
                     timer: 3000,
                     timerProgressBar: true,

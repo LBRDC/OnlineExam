@@ -129,7 +129,12 @@ foreach ($resultmdl1 as $row) {
                         <div class="col-lg-6 col-md-12">
                             <div class="form-row">
                                 <label for="add_ExmnePass">Password<span class="text-danger">*</span></label>
-                                <input type="password" name="add_ExmnePass" id="add_ExmnePass" class="form-control" placeholder="" autocomplete="off" requried>
+                                <div class="input-group">
+                                    <input type="password" name="add_ExmnePass" id="add_ExmnePass" class="form-control" placeholder="" autocomplete="off" required>
+                                    <div class="input-group-append" id="toggleAddPass">
+                                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-eye" id="addRevealIcon"></i></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -270,8 +275,8 @@ foreach ($resultmdl1 as $row) {
                                 <label for="view_ExmnePass">Password<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="password" name="view_ExmnePass" id="view_ExmnePass" class="form-control" placeholder="" autocomplete="off" value="" required disabled>
-                                    <div class="input-group-append" id="togglePassword">
-                                        <button class="btn btn-outline-secondary"><i class="fas fa-eye" id="revealIcon"></i></button>
+                                    <div class="input-group-append" id="toggleViewPass">
+                                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-eye" id="viewRevealIcon"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -409,10 +414,19 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
-                            <div class="form-row">
+                            <!--<div class="form-row">
                                 <label for="edit_ExmnePass">Password<span class="text-danger">*</span></label>
                                 <input type="password" name="edit_ExmnePass" id="edit_ExmnePass" class="form-control" placeholder="" autocomplete="off" value="" required>
-                                <!--<small class="form-text text-muted">Only Administrator can modify the password.</small>-->
+                                <small class="form-text text-muted">Only Administrator can modify the password.</small>
+                            </div>-->
+                            <div class="form-row">
+                                <label for="edit_ExmnePass">Password<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" name="edit_ExmnePass" id="edit_ExmnePass" class="form-control" placeholder="" autocomplete="off" value="" required>
+                                    <div class="input-group-append" id="toggleEditPass">
+                                        <button type="button" class="btn btn-outline-secondary"><i class="fas fa-eye" id="editRevealIcon"></i></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -432,37 +446,36 @@ foreach ($resultmdl1 as $row) {
 <!-- DISABLE EXAMINEE MODAL -->
 <div class="modal fade" id="mdlDisableExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlDisableExamineeLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mdlDisableExamineeLabel">Disable "<span class="font-weight-bold text-danger">NAME</span>"</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="disableExamineeFrm" name="disableExamineeFrm" method="post">
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <input type="text" name="disable_ExmneId" id="disable_ExmneId" value=""  required>
-                        <input type="text" name="disable_ExmneFname" id="disable_ExmneFname" value=""  required>
-                        <input type="text" name="disable_ExmneLname" id="disable_ExmneLname" value=""  required>
-                        <input type="text" name="disable_ExmneStatus" id="disable_ExmneStatus" value=""  required>
-                        <div class="form-row mb-2">
-                            Are you sure you want to DISABLE&nbsp;<span class="font-weight-bold text-danger"></span>?
-                        </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlDisableExamineeLabel">Disable "<span class="font-weight-bold text-danger">NAME</span>"</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="disableExamineeFrm" name="disableExamineeFrm" method="post">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <input type="text" name="disable_ExmneId" id="disable_ExmneId" value="" hidden required>
+                    <input type="text" name="disable_ExmneFname" id="disable_ExmneFname" value="" hidden required>
+                    <input type="text" name="disable_ExmneLname" id="disable_ExmneLname" value="" hidden required>
+                    <input type="text" name="disable_ExmneStatus" id="disable_ExmneStatus" value="" hidden required>
+                    <div class="form-row justify-content-center mb-2">
+                        Are you sure you want to DISABLE&nbsp;<span class="font-weight-bold text-danger"></span>?
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">DISABLE</button>
-                </div>
-                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">DISABLE</button>
+            </div>
+            </form>
+        </div>
     </div>
-</div> <!-- #END# DISABLE CLUSTER MODAL -->
+</div> <!-- #END# DISABLE EXAMINEE MODAL -->
 
 
-<!-- DISABLE EXAMINEE MODAL -->
+<!-- DISABLE EXAMINEE MODAL 
 <div class="modal fade" id="mdlDisableExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlDisableExamineeLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         
@@ -498,31 +511,30 @@ foreach ($resultmdl1 as $row) {
 <!-- ENABLE EXAMINEE MODAL -->
 <div class="modal fade" id="mdlEnableExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlEnableExamineeLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mdlEnableExamineeLabel">Enable "<span class="font-weight-bold text-success">NAME</span>"</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="enableExamineeFrm" name="enableExamineeFrm" method="post">
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <input type="text" name="enable_ExmneId" id="enable_ExmneId" value=""  required>
-                        <input type="text" name="enable_ExmneFname" id="enable_ExmneFname" value=""  required>
-                        <input type="text" name="enable_ExmneLname" id="enable_ExmneLname" value=""  required>
-                        <input type="text" name="enable_ExmneStatus" id="enable_ExmneStatus" value=""  required>
-                        <div class="form-row mb-2">
-                            Are you sure you want to ENABLE&nbsp;<span class="font-weight-bold text-success"></span>?
-                        </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlEnableExamineeLabel">Enable "<span class="font-weight-bold text-success">NAME</span>"</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="enableExamineeFrm" name="enableExamineeFrm" method="post">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <input type="text" name="enable_ExmneId" id="enable_ExmneId" value="" hidden required>
+                    <input type="text" name="enable_ExmneFname" id="enable_ExmneFname" value="" hidden required>
+                    <input type="text" name="enable_ExmneLname" id="enable_ExmneLname" value="" hidden required>
+                    <input type="text" name="enable_ExmneStatus" id="enable_ExmneStatus" value="" hidden required>
+                    <div class="form-row justify-content-center mb-2">
+                        Are you sure you want to ENABLE&nbsp;<span class="font-weight-bold text-success"></span>?
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">ENABLE</button>
-                </div>
-                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">ENABLE</button>
+            </div>
+            </form>
+        </div>
     </div>
 </div> <!-- #END# ENABLE CLUSTER MODAL -->
