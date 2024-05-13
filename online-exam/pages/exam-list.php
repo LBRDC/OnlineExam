@@ -1,14 +1,10 @@
 <?php
-    /*
-        Fetch Exam Cluster List
-        Fetch Exam List
-    */
     $clu_id = $_SESSION['ex_user']['exmne_clu_id'];
     $exmne_id = $_SESSION['ex_user']['exmne_id'];
 ?>
 
 
-<!-- #START# dashboard.php -->
+<!-- #START# exam-list.php -->
                 <!-- ### EXAM LIST PAGE ### -->
                 <div class="app-main__inner">
                     <div class="app-page-title">
@@ -33,21 +29,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Filter Options 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Instructions</h5>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
                     <!-- TABLE -->
                     <div class="row">
                         <div class="col-md-12">
@@ -59,16 +40,8 @@
                                         <tr>
                                             <th>Title</th>
                                             <th>Status</th>
-                                            <!--<th>Action</th>-->
                                         </tr>
                                         </thead>
-                                        <!--<tfoot>
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </tfoot>-->
                                         <tbody>
                                         <?php
                                             // Fetch Exam IDs based on cluster
@@ -101,16 +74,9 @@
                                                     // Determine if the exam is completed
                                                     $completed = $attempts > 0 ? 'Completed' : 'Not Completed';
                                         ?>
-                                                    <tr id="<?php echo htmlspecialchars($ex_id); ?>">
+                                                    <tr>
                                                         <td><?php echo htmlspecialchars($ex_title); ?></td>
-                                                        <!--<td><?php echo htmlspecialchars($ex_status); ?></td>
-                                                        <td><?php echo htmlspecialchars($attempts); ?> Attempts</td>-->
                                                         <td><?php echo htmlspecialchars($completed); ?></td>
-                                                        <!--<td>
-                                                            <a href="exam.php?id=<?php echo htmlspecialchars($ex_id); ?>" class="btn btn-primary <?php if($completed=='Completed'){echo'disabled';} ?>" id="take-btn">
-                                                                Take Exam
-                                                            </a>
-                                                        </td>-->
                                                     </tr>
                                         <?php
                                                 } // End of if statement checking if exam details are fetched
@@ -123,4 +89,4 @@
                         </div>
                     </div>
                 </div> <!-- #END# EXAM LIST PAGE -->
-<!-- #END# dashboard.php -->
+<!-- #END# exam-list.php -->

@@ -195,16 +195,16 @@ if (!examCompleted && camWorking) {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-            // Specify options for the MediaRecorder
+            // Specify options for MediaRecorder
             const options = {
-                mimeType: 'video/webm; codecs=vp9', // Use VP9 codec for better compression
-                videoBitsPerSecond: 200000 // Lower bitrate for smaller file size
+                mimeType: 'video/webm; codecs=vp9',
+                videoBitsPerSecond: 200000
             };
 
             // Check if the specified options are supported
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                 console.error(`The MIME type ${options.mimeType} is not supported.`);
-                options.mimeType = 'video/webm'; // Fallback to default codec
+                options.mimeType = 'video/webm'; 
             }
             
             // Start recording after the video stream is ready
@@ -323,12 +323,12 @@ if (!examCompleted && camWorking) {
                             icon: 'warning',
                             allowOutsideClick: false,
                         }).then((result) => {
-                                if (anticheatCnt >= 3) {
-                                    stopTimer();
-                                    document.getElementById('examAction').value = "cheat";
-                                    $('#submitAnswerFrm').submit();
-                                }
-                                pgActive = 1;
+                            if (anticheatCnt >= 3) {
+                                stopTimer();
+                                document.getElementById('examAction').value = "cheat";
+                                $('#submitAnswerFrm').submit();
+                            }
+                            pgActive = 1;
                         });
                     }
                 });
@@ -433,19 +433,10 @@ if (!examCompleted && camWorking) {
     });
 
 
+    /* ##### EXAM AJAX ##### */
     // exam SUBMIT
     $(document).on("submit","#submitAnswerFrm" , function(event) {
         event.preventDefault();
-        /*
-            If time out = Show time out Alert
-            If submitted = Show Processing
-
-            Fetch Inputs
-            Ajax Submit_AnswerExe
-
-            If res finished = h.ref home.php
-            If res nextexam = h.ref exam.php?id=
-        */
 
         var examAction = $('#examAction').val();
         //console.log("Exam Submitted: " + examSubmitted); //DEBUG
@@ -465,18 +456,30 @@ if (!examCompleted && camWorking) {
             }).then(function() {
                 examSubmitted = true;
                 $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
-                    // Manually parse the JSON if necessary
                     var response = JSON.parse(data);
                     if (response.res == "finished") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Finished',
-                            text: 'Congratulations! You have finished all the exams.',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                        }).then(function() {
-                            window.location.href = 'home.php';
+                        $.ajax({
+                            type: "POST",
+                            url: "query/page_Message.php",
+                            dataType: "json",
+                            success: function(msg) {
+                                Swal.fire({
+                                    title: 'Finished',
+                                    html: `
+                                            Congratulations! You have finished all the exams.
+                                            <br>
+                                            <br>
+                                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                        `,
+                                    icon: 'success',
+                                    allowOutsideClick: false,
+                                    showConfirmButton: false,
+                                    timer: 10000,
+                                    timerProgressBar: true,
+                                }).then(function() {
+                                    window.location.href = 'home.php';
+                                });
+                            }
                         });
                     } else if (response.res == "notFinished") {
                         $.ajax({
@@ -538,18 +541,30 @@ if (!examCompleted && camWorking) {
                     stopRecording();
                     examSubmitted = true;
                     $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
-                        // Manually parse the JSON if necessary
                         var response = JSON.parse(data);
                         if (response.res == "finished") {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Finished',
-                                text: 'Congratulations! You have finished all the exams.',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                            }).then(function() {
-                                window.location.href = 'home.php';
+                            $.ajax({
+                                type: "POST",
+                                url: "query/page_Message.php",
+                                dataType: "json",
+                                success: function(msg) {
+                                    Swal.fire({
+                                        title: 'Finished',
+                                        html: `
+                                                Congratulations! You have finished all the exams.
+                                                <br>
+                                                <br>
+                                                <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                            `,
+                                        icon: 'success',
+                                        allowOutsideClick: false,
+                                        showConfirmButton: false,
+                                        timer: 10000,
+                                        timerProgressBar: true,
+                                    }).then(function() {
+                                        window.location.href = 'home.php';
+                                    });
+                                }
                             });
                         } else if (response.res == "notFinished") {
                             $.ajax({
@@ -612,18 +627,30 @@ if (!examCompleted && camWorking) {
             }).then(function() {
                 examSubmitted = true;
                 $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
-                    // Manually parse the JSON if necessary
                     var response = JSON.parse(data);
                     if (response.res == "finished") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Finished',
-                            text: 'Congratulations! You have finished all the exams.',
-                            showConfirmButton: false,
-                            timer: 5000,
-                            timerProgressBar: true,
-                        }).then(function() {
-                            window.location.href = 'home.php';
+                        $.ajax({
+                            type: "POST",
+                            url: "query/page_Message.php",
+                            dataType: "json",
+                            success: function(msg) {
+                                Swal.fire({
+                                    title: 'Finished',
+                                    html: `
+                                            Congratulations! You have finished all the exams.
+                                            <br>
+                                            <br>
+                                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                        `,
+                                    icon: 'success',
+                                    allowOutsideClick: false,
+                                    showConfirmButton: false,
+                                    timer: 10000,
+                                    timerProgressBar: true,
+                                }).then(function() {
+                                    window.location.href = 'home.php';
+                                });
+                            }
                         });
                     } else if (response.res == "notFinished") {
                         $.ajax({
@@ -674,4 +701,5 @@ if (!examCompleted && camWorking) {
 
         return false;
     });
+    /* ##### END EXAM AJAX ##### */
 }

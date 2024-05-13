@@ -26,8 +26,8 @@ $(document).on("submit","#feedbackFrm" , function(event) {
         return;
     }
 
-    //console.log("INPUT VALIDATED " + isValid);
-    //console.log(formData);
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
 
     $.ajax({
         url: 'query/feedback.php',

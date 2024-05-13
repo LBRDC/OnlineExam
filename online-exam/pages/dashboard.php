@@ -117,9 +117,6 @@ if (count($unattemptedExamIds) > 0) {
                                     </div>
                                 </div> <!-- #END# Total Clusters -->
                             </div>
-                            <div class="row">
-                            </div>
-                            
                         </div>
                     </div>
                     <div class="row">
@@ -175,14 +172,14 @@ if (count($unattemptedExamIds) > 0) {
                                         <div class="col-md-12 text-center">
                                             <?php 
                                                 //Select one Random
-                                                $stmt4 = $conn->prepare("SELECT * FROM `page_messages` ORDER BY RAND() LIMIT 1");
+                                                $stmt4 = $conn->prepare("SELECT * FROM page_messages ORDER BY RAND() LIMIT 1");
                                                 $stmt4->execute();
                                                 $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
                                                 $msg_txt = $msg['msg_text'];
                                                 $msg_src = $msg['src_text'];
-
-                                                echo "<span class='font-italic font-weight-bold'>" . htmlspecialchars($msg_txt) . "<br>-" . htmlspecialchars($msg_src) . "</span>";
                                             ?>
+
+                                            <span class='font-italic font-weight-bold'><?php echo htmlspecialchars($msg_txt) ?><br> -<?php echo htmlspecialchars($msg_src) ?></span>
                                         </div>
                                     </div>
                                     <div class="row">
