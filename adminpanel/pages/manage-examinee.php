@@ -114,6 +114,7 @@
                                                 <th>Name</th>
                                                 <th>Cluster</th>
                                                 <th>Email</th>
+                                                <th>Properties</th>
                                                 <th>Status</th>
                                                 <th data-dt-order="disable">Action</th>
                                             </tr>
@@ -123,6 +124,7 @@
                                                 <th>Name</th>
                                                 <th>Cluster</th>
                                                 <th>Email</th>
+                                                <th>Properties</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -138,10 +140,12 @@
                                                     $exmne_sfname = $row['exmne_sfname'];
                                                     $exmne_sex = $row['exmne_sex'];
                                                     $exmne_birthdate = $row['exmne_birthdate'];
+                                                    $exmne_disablecam = $row['exmne_disablecam'];
                                                     $exmne_email = $row['exmne_email'];
                                                     $exmne_pass = $row['exmne_pass'];
                                                     $exmne_status = $row['exmne_status'];
                                                     $statusText = ($exmne_status == 1) ? 'Active' : (($exmne_status == 3) ? 'Disabled' : 'Inactive');
+                                                    $disableCamText = ($exmne_disablecam == 'yes') ? 'Disabled Cam' : '';
 
                                                     $disp_fname = $row['exmne_fname'] != '' ? $row['exmne_fname'] : 'null';
                                                     $disp_mname = $row['exmne_mname'] != '' ? substr($row['exmne_mname'], 0, 1) . ". " : '_ ';
@@ -173,6 +177,7 @@
                                                 <td><?php echo htmlspecialchars($exmne_name) ?></td>
                                                 <td><?php echo htmlspecialchars($cluster) ?></td>
                                                 <td><?php echo htmlspecialchars($exmne_email) ?></td>
+                                                <td><?php echo htmlspecialchars($disableCamText) ?></td>
                                                 <td><?php echo htmlspecialchars($statusText) ?></td>
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn btn-info m-1" id="view-btn" data-toggle="modal" data-target="#mdlViewExaminee" data-toggle="tooltip" data-placement="bottom" title="View"
@@ -183,6 +188,7 @@
                                                     data-view-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                     data-view-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                     data-view-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                    data-view-cam = "<?php echo htmlspecialchars($exmne_disablecam); ?>"
                                                     data-view-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                     data-view-email = "<?php echo htmlspecialchars($exmne_email); ?>"
                                                     data-view-pass = "<?php echo htmlspecialchars($exmne_pass); ?>">
@@ -197,6 +203,7 @@
                                                     data-edit-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                     data-edit-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                     data-edit-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                    data-edit-cam = "<?php echo htmlspecialchars($exmne_disablecam); ?>"
                                                     data-edit-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                     data-edit-email = "<?php echo htmlspecialchars($exmne_email); ?>"
                                                     data-edit-pass = "<?php echo htmlspecialchars($exmne_pass); ?>">

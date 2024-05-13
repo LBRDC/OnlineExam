@@ -80,8 +80,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="strt-btn" data-exam-id="<?php echo htmlspecialchars($selEx_id); ?>" disabled>START EXAM</button>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" id="strt-btn" data-exam-id="<?php echo htmlspecialchars($selEx_id); ?>" data-exam-disablecam="no" style="width: 100px; height: 50px;" disabled>START EXAM</button>
             </div>
         </div>
     </div>

@@ -735,7 +735,7 @@
                                                             <div class="col-md-6 text-center">
                                                             <?php if ($exam_image != "") { ?>
                                                                 <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
-                                                                    <img src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" class="img-fluid" >
+                                                                    <img src="../uploads/exam_question/<?php echo htmlspecialchars($exam_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" class="img-fluid w-10" style="max-width: 40%; height: auto;">
                                                                 </a>
                                                                 <?php } else { echo ""; }?>
                                                             </div>
@@ -827,7 +827,6 @@
     <script type="text/javascript" src="../../js/datatables.js"></script>
     <!-- session -->
     <script src="./js/session.js"></script>
-    <script src="./js/anticheat.js"></script>
     <!-- AJAX JS -->
     <script type="text/javascript" src="./js/exmne-ajax.js"></script>
     <!-- Custom JS -->

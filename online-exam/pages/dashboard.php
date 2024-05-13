@@ -1,6 +1,7 @@
 <?php
-$exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
-$exmne_id = $_SESSION['ex_user']['exmne_id'];
+$exmne_clu_id = isset($_SESSION['ex_user']['exmne_clu_id']) ? $_SESSION['ex_user']['exmne_clu_id'] : '';
+$exmne_id = isset($_SESSION['ex_user']['exmne_id']) ? $_SESSION['ex_user']['exmne_id'] : '';
+$exmne_disablecam = isset($_SESSION['ex_user']['exmne_disablecam']) ? $_SESSION['ex_user']['exmne_disablecam'] : '';
 
 // Fetch Exam IDs based on cluster
 $stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
@@ -184,7 +185,11 @@ if (count($unattemptedExamIds) > 0) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-success ml-5 mr-5" style="width: 100px; height: 50px;" data-toggle="modal" data-target="#mdlStartExam">START EXAM</button>
+                                            <?php if ($exmne_disablecam == 'yes') { ?>
+                                            <button type="button" class="btn btn-success ml-5 mr-5 font-weight-bold" style="width: 100px; height: 50px;" id="strt-btn" data-exam-id="<?php echo htmlspecialchars($selEx_id); ?>" data-exam-disablecam="<?php echo htmlspecialchars($exmne_disablecam); ?>">START EXAM</button>
+                                            <?php } else { ?>
+                                            <button type="button" class="btn btn-warning ml-5 mr-5 font-weight-bold" style="width: 100px; height: 50px;" data-toggle="modal" data-target="#mdlStartExam">START</button>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>

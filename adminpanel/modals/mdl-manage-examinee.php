@@ -15,8 +15,10 @@ foreach ($resultmdl1 as $row) {
         $inactiveClusters[] = $row;
     }
 }
-
 ?>
+
+
+
 <!-- ADD EXAMINEE MODAL -->
 <div class="modal fade" id="mdlAddExaminee" tabindex="-1" role="dialog" aria-labelledby="mdlAddExamineeLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -98,7 +100,7 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-2">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-row">
                                 <label for="add_ExmneSex">Sex</label>
@@ -113,6 +115,15 @@ foreach ($resultmdl1 as $row) {
                             <div class="form-row">
                                 <label for="add_ExmneBirth">Birthdate</label>
                                 <input type="date" name="add_ExmneBirth" id="add_ExmneBirth" class="form-control" placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <label>Options</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="add_DisableCam" value="yes">
+                                <label class="custom-control-label" for="add_DisableCam">Disable Camera</label>
                             </div>
                         </div>
                     </div>
@@ -249,15 +260,24 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4 justify-content-center">
-                        <div class="col-lg-4 col-md-12">
-                            <label for="view_ExmneStatus">Status<span class="text-danger">*</span></label>
-                            <select class="form-control" name="view_ExmneStatus" id="view_ExmneStatus" style="width: 100%" disabled>
-                                <option value="">Select...</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                                <option value="3">Disabled</option>
-                            </select>
+                    <div class="row mb-4">
+                        <div class="col-lg-6 col-md-12">
+                            <label>Options</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="view_DisableCam" value="yes" disabled>
+                                <label class="custom-control-label" for="view_DisableCam">Disable Camera</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="view_ExmneStatus">Status<span class="text-danger">*</span></label>
+                                <select class="form-control" name="view_ExmneStatus" id="view_ExmneStatus" style="width: 100%" disabled>
+                                    <option value="">Select...</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                    <option value="3">Disabled</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row justify-content-center m-2">
@@ -374,7 +394,7 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-2">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-row">
                                 <label for="edit_ExmneSex">Sex</label>
@@ -392,15 +412,24 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4 justify-content-center">
-                        <div class="col-lg-4 col-md-12">
-                            <label for="edit_ExmneStatus">Status<span class="text-danger">*</span></label>
-                            <select class="form-control" name="edit_ExmneStatus" id="edit_ExmneStatus" style="width: 100%" required>
-                                <option value="">Select...</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                                <option value="3" hidden>Disabled</option>
-                            </select>
+                    <div class="row mb-4">
+                        <div class="col-lg-6 col-md-12">
+                            <label>Options</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="edit_DisableCam" value="yes">
+                                <label class="custom-control-label" for="edit_DisableCam">Disable Camera</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="edit_ExmneStatus">Status<span class="text-danger">*</span></label>
+                                <select class="form-control" name="edit_ExmneStatus" id="edit_ExmneStatus" style="width: 100%" required>
+                                    <option value="">Select...</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                    <option value="3">Disabled</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row justify-content-center m-2">

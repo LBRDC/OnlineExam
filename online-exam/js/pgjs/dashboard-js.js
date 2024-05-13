@@ -1,3 +1,10 @@
+let mediaRecorder;
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Check if the reminder has been shown in this session
   if (!sessionStorage.getItem('reminderShown')) {
@@ -16,6 +23,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('strt-btn').addEventListener('click', function() {
     var examId = this.getAttribute('data-exam-id');
+    var disabledCam = this.getAttribute('data-exam-disablecam');
+
+    if (disabledCam === 'yes') {
+      sessionStorage.setItem('camWorking', 'disabled');
+    }
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'You want to take the exam now? Timer will start automatically.',
@@ -26,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
       confirmButtonText: 'Yes, start now!'
     }).then((result) => {
       if (result.value) {
+        stopRecording();
         window.location.href = "exam.php?id=" + examId;
       }
     });

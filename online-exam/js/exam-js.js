@@ -1,5 +1,5 @@
 let examCompleted = false;
-let camWorking = false;
+let camWorking;
 //Check if exam is completed
 $.ajax({
     url: 'query/checkExam.php',
@@ -29,12 +29,16 @@ $.ajax({
     }
 });
 
-//Check if camera is working
+// Check if camera is working
 if (sessionStorage.getItem('camWorking') === 'true') {
     console.log("Camera Working");
-    camWorking = true;
+    camWorking = 'true';
+} else if (sessionStorage.getItem('camWorking') === 'disabled') {
+    console.log("Camera Disabled");
+    camWorking = 'disabled';
 } else {
-    camWorking = false;
+    console.log("Camera Not Working");
+    camWorking = 'false';
     Swal.fire({
         icon: "error",
         title: "Camera Access",
@@ -48,7 +52,7 @@ if (sessionStorage.getItem('camWorking') === 'true') {
 }
 
 //Exam JS
-if (!examCompleted && camWorking) {
+if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     // Exam Timer
     var minutes, seconds;
     var timerInterval;
@@ -147,7 +151,7 @@ if (!examCompleted && camWorking) {
     
     window.onload = init();
 
-    //Other Scripts
+    /* OTHER SCRIPTS */
     // Disable Refresh
     document.addEventListener('keydown', function (event) {
         // Prevent F5 key
@@ -214,17 +218,19 @@ if (!examCompleted && camWorking) {
             mediaRecorder.ondataavailable = (e) => {
                 if (e.data.size > 0) {
                     recordedChunks.push(e.data);
+                    saveRecording(e.data);
+                    console.log('Recording pending.');
                 }
             };
 
             mediaRecorder.onstop = () => {
                 saveRecording(recordedChunks);
+                console.log('Recording stopped.');
             };
 
             // Handle recording errors
             mediaRecorder.onerror = (e) => {
                 console.error('Recording error:', e);
-                // Attempt to save the recording even if an error occurs
                 if (recordedChunks.length > 0) {
                     saveRecording(recordedChunks);
                 }
@@ -236,12 +242,12 @@ if (!examCompleted && camWorking) {
             stopTimer();
             anticheatsts = 'disabled';
             swalCamera = Swal.fire({
-            title: 'No Camera Access',
-            text: 'Camera is required',
-            icon: 'info',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            timer: null
+                title: 'No Camera Access',
+                text: 'Camera is required',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                timer: null
             });
         }
     }
@@ -252,11 +258,10 @@ if (!examCompleted && camWorking) {
         }
     }
 
-    function saveRecording(recordedChunks) {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    function saveRecording(chunk) {
+        const blob = new Blob([chunk], { type: 'video/webm' });
         const formData = new FormData();
         formData.append('video', blob, 'recorded-video.webm');
-        //append user id
         formData.append('ex_id', exId);
 
         // Send the video file to the server
@@ -294,7 +299,9 @@ if (!examCompleted && camWorking) {
                 showCard();
                 pgActive = 1;
                 anticheatsts = 'enabled';
-                startRecording();
+                if (camWorking != 'disabled') {
+                    startRecording();
+                }
             }
         });
 
@@ -302,6 +309,7 @@ if (!examCompleted && camWorking) {
         document.addEventListener("visibilitychange", (event) => {
             if (document.visibilityState != "visible" && anticheatsts == 'enabled') {
                 anticheatCnt++;
+                localStorage.setItem("anticheatCnt", anticheatCnt);
             }
             
             if (document.visibilityState != "visible" && pgActive == 1 && anticheatsts == 'enabled') {
@@ -323,7 +331,7 @@ if (!examCompleted && camWorking) {
                             icon: 'warning',
                             allowOutsideClick: false,
                         }).then((result) => {
-                            if (anticheatCnt >= 3) {
+                            if (localStorage.getItem("anticheatCnt") >= 3) {
                                 stopTimer();
                                 document.getElementById('examAction').value = "cheat";
                                 $('#submitAnswerFrm').submit();
@@ -441,10 +449,11 @@ if (!examCompleted && camWorking) {
         var examAction = $('#examAction').val();
         //console.log("Exam Submitted: " + examSubmitted); //DEBUG
 
-        if (examAction == 'timeout') {        
+        if (examAction == 'timeout') {
             stopTimer();
             anticheatsts = 'disabled';
             stopRecording();
+            localStorage.setItem("anticheatCnt", 0);
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Over',
@@ -525,6 +534,11 @@ if (!examCompleted && camWorking) {
                 });
             });
         } else if (examAction == 'ontime') {
+            localStorage.setItem("anticheatCnt", 0);
+            stopTimer();
+            anticheatsts = 'disabled';
+            stopRecording();
+            examSubmitted = true;
             Swal.fire({
                 icon: 'warning',
                 title: 'Submit Exam',
@@ -535,11 +549,7 @@ if (!examCompleted && camWorking) {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
             }).then(function(result) {
-                if (result.value) {            
-                    stopTimer();
-                    anticheatsts = 'disabled';
-                    stopRecording();
-                    examSubmitted = true;
+                if (result.value) {      
                     $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
                         var response = JSON.parse(data);
                         if (response.res == "finished") {
@@ -616,6 +626,7 @@ if (!examCompleted && camWorking) {
             stopTimer();
             anticheatsts = 'disabled';
             stopRecording();
+            localStorage.setItem("anticheatCnt", 0);
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',

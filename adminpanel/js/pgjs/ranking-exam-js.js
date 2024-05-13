@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         //pagingType: 'simple',
         order: [],
         responsive: true,
+        order: [[ 6, "desc" ]],
     });
 
 

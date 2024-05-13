@@ -20,23 +20,20 @@ if (isset($_FILES['video'])) {
     $baseName = 'ID-' . $ex_id . '_' . $exmne_name . '_' . $fileName;
     $uploadFile = $uploadDir . $baseName;
 
-    // Check if the file already exists
-    $counter = 1;
+    // BUG
+    /*$counter = 1;
     while (file_exists($uploadFile)) {
         // Append a number to the filename
         $uploadFile = $uploadDir . $baseName . '(' . $counter . ')';
         $counter++;
-    }
+    }*/
 
     // Check if the file was uploaded successfully
     if (move_uploaded_file($_FILES['video']['tmp_name'], $uploadFile)) {
-        // File uploaded successfully
-        echo json_encode(['status' => 'success', 'message' => 'Video uploaded successfully.']);
+        echo json_encode(['status' => 'success']);
     } else {
-        // File upload failed
-        echo json_encode(['status' => 'error', 'message' => 'Failed to upload video.']);
+        echo json_encode(['status' => 'error']);
     }
 } else {
-    // No file was uploaded
-    echo json_encode(['status' => 'error', 'message' => 'No file was uploaded.']);
+    echo json_encode(['status' => 'error']);
 }

@@ -21,6 +21,7 @@ if ($exmne_Acc) {
         'exmne_mname' => $exmne_Acc['exmne_mname'],
         'exmne_lname' => $exmne_Acc['exmne_lname'],
         'exmne_sfname' => $exmne_Acc['exmne_sfname'],
+        'exmne_disablecam' => $exmne_Acc['exmne_disablecam'],
     );
     $res = array("res" => "success");
 } else {

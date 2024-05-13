@@ -1192,6 +1192,7 @@ $(document).on("submit","#addExamineeFrm" , function(event) {
         'add_ExmneCluster': $('#add_ExmneCluster').val(),
         'add_ExmneSex': $('#add_ExmneSex').val(),
         'add_ExmneBirth': $('#add_ExmneBirth').val(),
+        'add_DisableCam': $('#add_DisableCam').is(':checked') ? 'yes' : '', 
         'add_ExmneEmail': $('#add_ExmneEmail').val(),
         'add_ExmnePass': $('#add_ExmnePass').val()
     };
@@ -1292,6 +1293,7 @@ $(document).on("submit","#EditExamineeFrm" , function(event) {
         'edit_ExmneCluster': $('#edit_ExmneCluster').val(),
         'edit_ExmneSex': $('#edit_ExmneSex').val(),
         'edit_ExmneBirth': $('#edit_ExmneBirth').val(),
+        'edit_DisableCam': $('#edit_DisableCam').is(':checked') ? 'yes' : '', 
         'edit_ExmneStatus': $('#edit_ExmneStatus').val(),
         'edit_ExmneEmail': $('#edit_ExmneEmail').val(),
         'edit_ExmnePass': $('#edit_ExmnePass').val()

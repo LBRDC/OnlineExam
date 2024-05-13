@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var view_cluster = this.getAttribute('data-view-cluster');
             var view_sex = this.getAttribute('data-view-sex');
             var view_birth = this.getAttribute('data-view-birth');
+            var view_cam = this.getAttribute('data-view-cam');
             var view_status = this.getAttribute('data-view-status');
             var view_email = this.getAttribute('data-view-email');
             var view_pass = this.getAttribute('data-view-pass');
@@ -125,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('view_ExmneMname').value = view_mName;
             document.getElementById('view_ExmneLname').value = view_lName;
             document.getElementById('view_ExmneBirth').value = view_birth;
+            document.getElementById('view_DisableCam').checked = view_cam === 'yes';
             document.getElementById('view_ExmneEmail').value = view_email;
             document.getElementById('view_ExmnePass').value = view_pass;
 
@@ -138,39 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    $('#toggleViewPass').on('click', function() {
-        var currentType = $('#view_ExmnePass').attr('type');
-        if (currentType === 'password') {
-            $('#view_ExmnePass').attr('type', 'text');
-            $('#viewRevealIcon').removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            $('#view_ExmnePass').attr('type', 'password');
-            $('#viewRevealIcon').removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-
-    $('#toggleAddPass').on('click', function() {
-        var currentType = $('#add_ExmnePass').attr('type');
-        if (currentType === 'password') {
-            $('#add_ExmnePass').attr('type', 'text');
-            $('#addRevealIcon').removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            $('#add_ExmnePass').attr('type', 'password');
-            $('#addRevealIcon').removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-
-    $('#toggleEditPass').on('click', function() {
-        var currentType = $('#edit_ExmnePass').attr('type');
-        if (currentType === 'password') {
-            $('#edit_ExmnePass').attr('type', 'text');
-            $('#editRevealIcon').removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            $('#edit_ExmnePass').attr('type', 'password');
-            $('#editRevealIcon').removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-
     document.querySelectorAll('#edit-btn').forEach(function(editBtn) {
         editBtn.addEventListener('click', function() {
             var editId = this.getAttribute('data-edit-id');
@@ -181,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var edit_cluster = this.getAttribute('data-edit-cluster');
             var edit_sex = this.getAttribute('data-edit-sex');
             var edit_birth = this.getAttribute('data-edit-birth');
+            var edit_cam = this.getAttribute('data-edit-cam');
             var edit_status = this.getAttribute('data-edit-status');
             var edit_email = this.getAttribute('data-edit-email');
             var edit_pass = this.getAttribute('data-edit-pass');
@@ -193,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('edit_ExmneCluster').value = edit_cluster;
             document.getElementById('edit_ExmneSex').value = edit_sex;
             document.getElementById('edit_ExmneBirth').value = edit_birth;
+            document.getElementById('edit_DisableCam').checked = edit_cam === 'yes';
             document.getElementById('edit_ExmneEmail').value = edit_email;
             document.getElementById('edit_ExmnePass').value = edit_pass;
 
@@ -248,4 +219,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    $('#toggleViewPass').on('click', function() {
+        var currentType = $('#view_ExmnePass').attr('type');
+        if (currentType === 'password') {
+            $('#view_ExmnePass').attr('type', 'text');
+            $('#viewRevealIcon').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $('#view_ExmnePass').attr('type', 'password');
+            $('#viewRevealIcon').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+
+    $('#toggleAddPass').on('click', function() {
+        var currentType = $('#add_ExmnePass').attr('type');
+        if (currentType === 'password') {
+            $('#add_ExmnePass').attr('type', 'text');
+            $('#addRevealIcon').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $('#add_ExmnePass').attr('type', 'password');
+            $('#addRevealIcon').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+
+    $('#toggleEditPass').on('click', function() {
+        var currentType = $('#edit_ExmnePass').attr('type');
+        if (currentType === 'password') {
+            $('#edit_ExmnePass').attr('type', 'text');
+            $('#editRevealIcon').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $('#edit_ExmnePass').attr('type', 'password');
+            $('#editRevealIcon').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
 });

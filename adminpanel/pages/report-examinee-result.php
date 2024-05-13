@@ -62,71 +62,73 @@
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
                                     <div class="card-title"><?php echo htmlspecialchars($ex_title); ?> Answers</div>
-                                    <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th></th>
-                                            <th>Question</th>
-                                            <th>Answer</th>
-                                            <th>Correct Answer</th>
-                                        </tr>
-                                        </thead>
-                                        <!--<tfoot>
-                                        <tr>
-                                            <th>Question</th>
-                                            <th>Answer</th>
-                                            <th>Correct Answer</th>
-                                        </tr>
-                                        </tfoot>-->
-                                        <tbody>
-                                        <?php 
-                                        //Fetch Exam Questions
-                                        $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
-                                        $stmt3->bindParam(':ex_id', $ex_id);
-                                        $stmt3->execute();
-
-                                        while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
-                                            $exqstn_id = isset($row['exqstn_id']) ? $row['exqstn_id'] : 'null';
-                                            $exqstn_question = isset($row['exam_question']) ? $row['exam_question'] : 'null';
-                                            $exqstn_answer = isset($row['exqstn_answer']) ? $row['exqstn_answer'] : 'null';
-
-                                            //Fetch Examinee Answer
-                                            $stmt4 = $conn->prepare("SELECT * FROM examinee_answers WHERE exmne_id = :exmne_id AND exqstn_id = :exqstn_id");
-                                            $stmt4->bindParam(':exmne_id', $exmne_Id);
-                                            $stmt4->bindParam(':exqstn_id', $exqstn_id);
-                                            $stmt4->execute();
-
-                                            $exmne_answer = ''; // Initialize examinee answer as null
-                                            if ($ans = $stmt4->fetch(PDO::FETCH_ASSOC)) {
-                                                $exmne_answer = isset($ans['exmne_answer']) ? $ans['exmne_answer'] : 'null';
-                                            }
-                                        ?>
-
-                                        <tr id="<?php echo $exqstn_id; ?>">
-                                            <td>
+                                    <div class="table-responsive">
+                                        <table class="mb-0 table table-hover dt-sort" id="tableList" width="100%">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th></th>
+                                                <th>Question</th>
+                                                <th>Answer</th>
+                                                <th>Correct Answer</th>
+                                            </tr>
+                                            </thead>
+                                            <!--<tfoot>
+                                            <tr>
+                                                <th>Question</th>
+                                                <th>Answer</th>
+                                                <th>Correct Answer</th>
+                                            </tr>
+                                            </tfoot>-->
+                                            <tbody>
                                             <?php 
-                                            if ($exmne_answer == $exqstn_answer) {
-                                                echo '<span class="mb-2 mr-2 badge badge-pill badge-success">Correct</span>';
-                                            } else if ($exmne_answer == '') {
-                                                echo '<span class="mb-2 mr-2 badge badge-pill badge-secondary">Not Answered</span>';
-                                            } else {
-                                                echo '<span class="mb-2 mr-2 badge badge-pill badge-danger">Incorrect</span>';
-                                            }
+                                            //Fetch Exam Questions
+                                            $stmt3 = $conn->prepare("SELECT * FROM exam_question_tbl WHERE ex_id = :ex_id");
+                                            $stmt3->bindParam(':ex_id', $ex_id);
+                                            $stmt3->execute();
+
+                                            while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                                                $exqstn_id = isset($row['exqstn_id']) ? $row['exqstn_id'] : 'null';
+                                                $exqstn_question = isset($row['exam_question']) ? $row['exam_question'] : 'null';
+                                                $exqstn_answer = isset($row['exqstn_answer']) ? $row['exqstn_answer'] : 'null';
+
+                                                //Fetch Examinee Answer
+                                                $stmt4 = $conn->prepare("SELECT * FROM examinee_answers WHERE exmne_id = :exmne_id AND exqstn_id = :exqstn_id");
+                                                $stmt4->bindParam(':exmne_id', $exmne_Id);
+                                                $stmt4->bindParam(':exqstn_id', $exqstn_id);
+                                                $stmt4->execute();
+
+                                                $exmne_answer = ''; // Initialize examinee answer as null
+                                                if ($ans = $stmt4->fetch(PDO::FETCH_ASSOC)) {
+                                                    $exmne_answer = isset($ans['exmne_answer']) ? $ans['exmne_answer'] : 'null';
+                                                }
                                             ?>
-                                            </td>
-                                            <td>
-                                                <?php echo htmlspecialchars($exqstn_question); ?>
-                                            </td>
-                                            <td>
-                                                <?php echo htmlspecialchars($exmne_answer); ?>
-                                            </td>
-                                            <td>
-                                                <?php echo htmlspecialchars($exqstn_answer); ?>
-                                            </td>
-                                        </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                    </table>
+
+                                            <tr id="<?php echo $exqstn_id; ?>">
+                                                <td>
+                                                <?php 
+                                                if ($exmne_answer == $exqstn_answer) {
+                                                    echo '<span class="mb-2 mr-2 badge badge-pill badge-success">Correct</span>';
+                                                } else if ($exmne_answer == '') {
+                                                    echo '<span class="mb-2 mr-2 badge badge-pill badge-secondary">Not Answered</span>';
+                                                } else {
+                                                    echo '<span class="mb-2 mr-2 badge badge-pill badge-danger">Incorrect</span>';
+                                                }
+                                                ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo htmlspecialchars($exqstn_question); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo htmlspecialchars($exmne_answer); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo htmlspecialchars($exqstn_answer); ?>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
