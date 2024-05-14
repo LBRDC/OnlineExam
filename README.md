@@ -49,3 +49,4 @@
 <b>ChartJS:</b> 2.7.3  
 #### EXTERNAL
 <b>ffmpeg</b> 7.0  
+<b>Composer</b> 2.7.2  
