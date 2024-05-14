@@ -40,7 +40,7 @@
                                     <h5 class="card-title">Actions</h5>
                                     <div class="row mb-2">
                                         <div class="col-md-12">
-                                            <a href="javascript:void(0);" id="save-btn" data-toggle="modal" data-target="#mdlSaveRanking" data-save-id="<?php echo htmlspecialchars($ex_id); ?>">
+                                            <a href="javascript:void(0);" id="save-btn" data-toggle="modal" data-target="#mdlSaveResult" data-save-id="<?php echo htmlspecialchars($ex_id); ?>">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Results">
                                                     <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
                                                 </div>

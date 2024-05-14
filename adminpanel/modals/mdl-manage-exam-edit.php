@@ -306,3 +306,41 @@
         </div>
     </div>
 </div> <!-- #END# DISABLE CLUSTER MODAL -->
+
+
+
+<!-- IMPORT QUESTIONS MODAL -->
+<div class="modal fade" id="mdlImportQuest" tabindex="-1" role="dialog" aria-labelledby="mdlImportQuest" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdlImportQuest">Import Question</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="importQuestFrm" name="importQuestFrm" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <label class="font-weight-bold" for="import_QuestFile">File</label>
+                            <div class="border rounded">
+                                <input name="file" id="import_QuestFile" type="file" class="form-control-file m-1">
+                            </div>
+                            <small class="form-text text-muted">Please upload zip file only.</small>
+                        </div>
+                    </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-lg-6 col-md-12 text-center">
+                            <small>NOT IMPLEMENTED</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" disabled>Import</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div> <!-- #END# IMPORT QUESTIONS MODAL -->

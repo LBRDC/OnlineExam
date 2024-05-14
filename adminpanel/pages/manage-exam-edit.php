@@ -262,13 +262,13 @@
                                                     <i class="fa fa-plus-circle icon-gradient bg-grow-early"></i>
                                                 </div>
                                             </a>
-                                            <a href="query/export_ExamQuestExe.php?id=<?php echo htmlspecialchars($ex_id); ?>">
+                                            <a href="importexport/export_ExamQuestExe.php?id=<?php echo htmlspecialchars($ex_id); ?>">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Questions">
                                                     <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
                                                 </div>
                                             </a>
                                             <a href="javascript:void(0);">
-                                                <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Import Questions">
+                                                <div class="font-icon-wrapper font-icon-lg btn" data-toggle="modal" data-target="#mdlImportQuest" data-toggle="tooltip" data-placement="bottom" title="Import Questions">
                                                     <i class="fa fa-upload icon-gradient bg-deep-blue"></i>
                                                 </div>
                                             </a>
