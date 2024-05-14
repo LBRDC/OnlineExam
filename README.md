@@ -50,3 +50,4 @@
 #### EXTERNAL
 <b>ffmpeg</b> 7.0  
 <b>Composer</b> 2.7.2  
+<b>PHPOffice</b> 2.0.0  
