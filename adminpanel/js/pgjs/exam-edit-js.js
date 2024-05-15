@@ -297,4 +297,48 @@ document.addEventListener('DOMContentLoaded', function() {
             modalBodyName.innerHTML = "Are you sure you want to DELETE Question <span class='font-weight-bold text-danger'>" + count + "</span>?<br><br> <span class='font-weight-bold'>This action is IRREVERSIBLE!</span>";
         });
     });
+
+
+    /* &&&&&&&&&&&& IMPORT QUESTION &&&&&&&&&&&& */
+    //Functions
+    function imp_resetFile () {
+        //document.getElementById('import_ClearImportBtn').style.display = 'none';
+        document.getElementById('import_QuestFile').value = '';
+    }
+
+    //Import question
+    document.querySelectorAll('#import-btn').forEach(function(importBtn) {
+        importBtn.addEventListener('click', function() {
+            var ex_Id = this.getAttribute('data-import-id');
+        
+            document.getElementById('import_QuestExamId').value = ex_Id;
+
+            // Event listener for the file input change
+            document.getElementById('import_QuestFile').addEventListener('change', function() {
+                var file = this.files[0];
+                var fileSize = file.size / (1024 * 1024);
+                var allowedExtensions = /\.(xlsx|xls)$/i;
+            
+                if (!allowedExtensions.exec(file.name)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Wrong file type. Upload xlsx only!",
+                    }).then(function() {
+                        imp_resetFile(); 
+                    });
+                } else if (fileSize > 25) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "File size exceeded. Max file size is 4MB only!",
+                    }).then(function() {
+                        imp_resetFile();
+                    });
+                } else {
+                    //Allowed
+                }
+            });
+        });
+    });
 });

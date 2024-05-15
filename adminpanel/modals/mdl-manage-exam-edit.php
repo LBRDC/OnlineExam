@@ -321,24 +321,33 @@
                 </div>
                 <form id="importQuestFrm" name="importQuestFrm" method="post">
                 <div class="modal-body">
-                    <div class="row">
+                    <input type="text" name="import_QuestId" id="import_QuestExamId" hidden required readonly>
+                    <div class="row mb-2">
                         <div class="col-lg-12 col-md-12">
-                            <label class="font-weight-bold" for="import_QuestFile">File</label>
+                            <label class="font-weight-bold" for="import_QuestFile">Excel File</label>
                             <div class="border rounded">
-                                <input name="file" id="import_QuestFile" type="file" class="form-control-file m-1">
+                                <input name="import_QuestFile" id="import_QuestFile" type="file" class="form-control-file m-1" accept=".xlsx,.xls" required>
                             </div>
-                            <small class="form-text text-muted">Please upload zip file only.</small>
+                            <small class="form-text text-muted">Please upload xlsx file only.</small>
+                            <div class="row">
+                                <!--<button type="button" class="btn btn-secondary mr-2" id="import_ClearImportBtn" style="display:none">Clear</button>-->
+                            </div>
                         </div>
                     </div>
-                    <div class="row mt-4 justify-content-center">
-                        <div class="col-lg-6 col-md-12 text-center">
-                            <small>NOT IMPLEMENTED</small>
+                    <div class="row">
+                        <div class="d-flex justify-content-end w-100">
+                            
+                        </div>
+                    </div>
+                    <div class="row mt-2 justify-content-center">
+                        <div class="col-lg-12 col-md-12 text-center">
+                            <small>NOTE: Only Text will be imported, images must be uploaded manually.</small>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" disabled>Import</button>
+                    <button type="submit" class="btn btn-primary" id="import_ImportBtn">Import</button>
                 </div>
                 </form>
             </div>

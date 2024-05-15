@@ -268,7 +268,7 @@
                                                 </div>
                                             </a>
                                             <a href="javascript:void(0);">
-                                                <div class="font-icon-wrapper font-icon-lg btn" data-toggle="modal" data-target="#mdlImportQuest" data-toggle="tooltip" data-placement="bottom" title="Import Questions">
+                                                <div class="font-icon-wrapper font-icon-lg btn" id="import-btn" data-import-id="<?php echo htmlspecialchars($ex_id); ?>" data-toggle="modal" data-target="#mdlImportQuest" data-toggle="tooltip" data-placement="bottom" title="Import Questions">
                                                     <i class="fa fa-upload icon-gradient bg-deep-blue"></i>
                                                 </div>
                                             </a>

@@ -1175,6 +1175,103 @@ $(document).on("submit","#deleteQuestionFrm" , function(event) {
         }
     });
 });
+
+// manage-exam-edit QUESTION IMPORT
+$(document).on("submit","#importQuestFrm" , function(event) {
+    event.preventDefault();
+
+    var page = currentPg();
+    var fileField = document.getElementById('import_QuestFile');
+    
+    var formData = new FormData();
+    formData.append('import_QuestFile', fileField.files[0]);
+    formData.append('import_QstnExamId', document.getElementById('import_QuestExamId').value);
+    
+    var isValid;
+    if (formData['import_QstnExamId'] === '' || formData.get('import_QuestFile') === '' || formData.get('import_QuestFile') === undefined) {
+        isValid = false;
+    } else {
+        isValid = true;
+    }
+    
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
+
+    $.ajax({
+        url: 'importexport/import_ExamQuestExe.php',
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+        success: function(response) {
+            //convert response to json
+            response = JSON.parse(response);
+            swalLoad.close();
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Questions Imported.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=exam-questions';
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while importing question. Please try again.",
+                });
+            } else if (response.res == "wrongformat") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "Excel file contains wrong format. Please use correct format.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
 /* ########## END EXAM ########## */
 
 
