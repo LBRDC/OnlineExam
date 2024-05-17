@@ -117,9 +117,9 @@
                                                 <th>Cluster</th>
                                                 <th style="display:none">Clusters_Filter</th>
                                                 <th data-dt-order="disable">Description</th>
-                                                <th>Question Limit</th>
-                                                <th>Time Limit</th>
-                                                <th>Properties</th>
+                                                <!--<th>Question Limit</th>-->
+                                                <!--<th>Time Limit</th>-->
+                                                <!--<th>Properties</th>-->
                                                 <th>Status</th>
                                                 <th data-dt-order="disable">Action</th>
                                             </tr>
@@ -190,9 +190,9 @@
                                                     </td>
                                                     <td style="display:none"><?php echo implode(', ', $clusterNames); ?></td>
                                                     <td><?php echo htmlspecialchars($ex_description); ?></td>
-                                                    <td><?php echo htmlspecialchars($ex_qstn_limit); ?></td>
-                                                    <td><?php echo htmlspecialchars($ex_time_limit); ?></td>
-                                                    <td>
+                                                    <!--<td><?php echo htmlspecialchars($ex_qstn_limit); ?></td>-->
+                                                    <!--<td><?php echo htmlspecialchars($ex_time_limit); ?></td>-->
+                                                    <!--<td>
                                                         <?php 
                                                         if ($ex_disable_prv != '') {
                                                             echo "<div>Disabled Previous</div>"; 
@@ -205,7 +205,7 @@
                                                             echo "";
                                                         } 
                                                         ?>
-                                                    </td>
+                                                    </td>-->
                                                     <td><?php echo htmlspecialchars($statusText); ?></td>
                                                     <td>
                                                         <a href="?page=manage-exam-edit&id=<?php echo htmlspecialchars($ex_id); ?>" class="btn btn-warning m-1" id="edit-btn" data-toggle="tooltip" data-placement="bottom" title="Edit">
