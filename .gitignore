@@ -1,8 +1,4 @@
 /vendor/
-/uploads/exam_question/
-/uploads/_tempDL/
-/uploads/_delete/
-/uploads/_temp/
 /uploads/recordings/*.webm
 /uploads/recordings/*.mp4
 /uploads/recordings/*.mkv
@@ -10,4 +6,14 @@
 /uploads/recordings/*.mov
 /uploads/recordings/*.flv
 /uploads/recordings/*.wmv
+/uploads/recordings/_originalVids/*.webm
+/uploads/recordings/_originalVids/*.mp4
+/uploads/recordings/_originalVids/*.mkv
+/uploads/recordings/_originalVids/*.avi
+/uploads/recordings/_originalVids/*.mov
+/uploads/recordings/_originalVids/*.flv
+/uploads/recordings/_originalVids/*.wmv
 /_cam4
+/_cam3
+/_cam2
+/.vscode
