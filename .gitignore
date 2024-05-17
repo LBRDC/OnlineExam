@@ -1,4 +1,8 @@
 /vendor/
+/uploads/exam_question/
+/uploads/_tempDL/
+/uploads/_delete/
+/uploads/_temp/
 /uploads/recordings/*.webm
 /uploads/recordings/*.mp4
 /uploads/recordings/*.mkv
