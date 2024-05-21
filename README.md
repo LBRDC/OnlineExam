@@ -15,14 +15,16 @@
 
 #### Requirements
 
-1. XAMPP latest
+1. XAMPP [apachefriends.org](https://www.apachefriends.org/)
 2. Visual Studio Code (For Coding)
+3. Composer [getcomposer.org](https://getcomposer.org/)
 
 #### instructions
 
-1. Install XAMPP, VSCode
+1. Install XAMPP, VSCode, Composer
 2. delete files inside htdocs folder (C:\xampp\htdocs)
 3. clone repository to htdocs folder (make sure path is "C:\xampp\htdocs")
+4. Launch CMD in htdocs folder, run 'composer install'
 4. Launch XAMPP Control Panel
 5. Start Apache, MySQL
 6. Go to MySQL Admin Page
