@@ -25,13 +25,14 @@ $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
 // Set the headers
-$headers = ['Question', 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5', 'Choice 6', 'Choice 7', 'Choice 8', 'Choice 9', 'Choice 10', 'Answer'];
+$headers = ['Exam Image', 'Question', 'Choice 1', 'Choice 2', 'Choice 3', 'Choice 4', 'Choice 5', 'Choice 6', 'Choice 7', 'Choice 8', 'Choice 9', 'Choice 10', 'Answer'];
 $sheet->fromArray($headers, NULL, 'A1');
 
 // Write data to the Excel file
 $row = 2; 
 foreach ($res2 as $data) {
     $dataToWrite = [
+        $data['exam_image'],
         $data['exam_question'],
         $data['exam_ch1'],
         $data['exam_ch2'],

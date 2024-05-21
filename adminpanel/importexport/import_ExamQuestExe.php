@@ -51,22 +51,23 @@ if(isset($_FILES['import_QuestFile']['name']) && in_array($_FILES['import_QuestF
                 $conn->beginTransaction();
         
                 // Prepare the SQL statement once outside the loop
-                $stmt = $conn->prepare("INSERT INTO exam_question_tbl (ex_id, exam_question, exam_ch1, exam_ch2, exam_ch3, exam_ch4, exam_ch5, exam_ch6, exam_ch7, exam_ch8, exam_ch9, exam_ch10, exqstn_answer) VALUES (:ex_id, :exam_question, :exam_ch1, :exam_ch2, :exam_ch3, :exam_ch4, :exam_ch5, :exam_ch6, :exam_ch7, :exam_ch8, :exam_ch9, :exam_ch10, :exqstn_answer)");
+                $stmt = $conn->prepare("INSERT INTO exam_question_tbl (ex_id, exam_image, exam_question, exam_ch1, exam_ch2, exam_ch3, exam_ch4, exam_ch5, exam_ch6, exam_ch7, exam_ch8, exam_ch9, exam_ch10, exqstn_answer) VALUES (:ex_id, :exam_image, :exam_question, :exam_ch1, :exam_ch2, :exam_ch3, :exam_ch4, :exam_ch5, :exam_ch6, :exam_ch7, :exam_ch8, :exam_ch9, :exam_ch10, :exqstn_answer)");
         
                 for ($i = 2; $i <= count($sheetData); $i++) {
-                    $exam_question = isset($sheetData[$i]['A'])? $sheetData[$i]['B'] : "";
-                    $exam_ch1 = isset($sheetData[$i]['B'])? $sheetData[$i]['C'] : "";
-                    $exam_ch2 = isset($sheetData[$i]['C'])? $sheetData[$i]['D'] : "";
-                    $exam_ch3 = isset($sheetData[$i]['D'])? $sheetData[$i]['E'] : "";
-                    $exam_ch4 = isset($sheetData[$i]['E'])? $sheetData[$i]['F'] : "";
-                    $exam_ch5 = isset($sheetData[$i]['F'])? $sheetData[$i]['G'] : ""; 
-                    $exam_ch6 = isset($sheetData[$i]['G'])? $sheetData[$i]['H'] : ""; 
-                    $exam_ch7 = isset($sheetData[$i]['H'])? $sheetData[$i]['I'] : ""; 
-                    $exam_ch8 = isset($sheetData[$i]['I'])? $sheetData[$i]['J'] : ""; 
-                    $exam_ch9 = isset($sheetData[$i]['J'])? $sheetData[$i]['K'] : ""; 
-                    $exam_ch10 = isset($sheetData[$i]['K'])? $sheetData[$i]['L'] : ""; 
-                    $exam_answer = isset($sheetData[$i]['L'])? $sheetData[$i]['M'] : "";
-        
+                    $exam_image = isset($sheetData[$i]['A'])? $sheetData[$i]['A'] : ""; // Assuming image URL or identifier is in column A
+                    $exam_question = isset($sheetData[$i]['B'])? $sheetData[$i]['B'] : ""; // Question text is in column B
+                    $exam_ch1 = isset($sheetData[$i]['C'])? $sheetData[$i]['C'] : "";
+                    $exam_ch2 = isset($sheetData[$i]['D'])? $sheetData[$i]['D'] : "";
+                    $exam_ch3 = isset($sheetData[$i]['E'])? $sheetData[$i]['E'] : "";
+                    $exam_ch4 = isset($sheetData[$i]['F'])? $sheetData[$i]['F'] : "";
+                    $exam_ch5 = isset($sheetData[$i]['G'])? $sheetData[$i]['G'] : ""; 
+                    $exam_ch6 = isset($sheetData[$i]['H'])? $sheetData[$i]['H'] : ""; 
+                    $exam_ch7 = isset($sheetData[$i]['I'])? $sheetData[$i]['I'] : ""; 
+                    $exam_ch8 = isset($sheetData[$i]['J'])? $sheetData[$i]['J'] : ""; 
+                    $exam_ch9 = isset($sheetData[$i]['K'])? $sheetData[$i]['K'] : ""; 
+                    $exam_ch10 = isset($sheetData[$i]['L'])? $sheetData[$i]['L'] : ""; 
+                    $exam_answer = isset($sheetData[$i]['M'])? $sheetData[$i]['M'] : "";
+
                     // Bind the parameters
                     $stmt->bindParam(':ex_id', $ex_id);
                     $stmt->bindParam(':exam_image', $exam_image);
