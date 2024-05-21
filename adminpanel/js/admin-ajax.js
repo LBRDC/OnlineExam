@@ -1224,7 +1224,7 @@ $(document).on("submit","#importQuestFrm" , function(event) {
         },
         success: function(response) {
             //convert response to json
-            response = JSON.parse(response);
+            //response = JSON.parse(response);
             swalLoad.close();
             if (response.res == "success") {
                 Swal.fire({
@@ -1700,6 +1700,11 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
     var isValid;
     if (formData['save_examId'] == '') {
         isValid = false;
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Exam ID is required.",
+        });
     } else {
         isValid = true;
     }
@@ -1717,8 +1722,8 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
     //console.log(formData); //DEBUG
 
     //Save Exam Ranking
-    /*$.ajax({ //NOT IMPLEMENTED
-        url: 'query/save_ExamRankingExe.php',
+    $.ajax({ //NOT IMPLEMENTED
+        url: 'importexport/export_ExamRankingExe.php',
         type: 'POST',
         dataType : "json",
         data: formData,
@@ -1734,17 +1739,28 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
         },
         success: function(response) {
             swalLoad.close();
-            if (response.res == "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: response.msg + " exported.",
-                    showConfirmButton: false,
-                    timer: 5000,
-                    timerProgressBar: true,
-                }).then(function() {
-                    location.reload();
-                });
+            if (response.res === "success") {
+                // Decode the base64 file content
+                var fileContent = atob(response.data);
+
+                // Convert the decoded file content to a Blob
+                var contentType = response.content_type;
+                var bytes = new Uint8Array(fileContent.length);
+                for (var i = 0; i < fileContent.length; i++) {
+                    bytes[i] = fileContent.charCodeAt(i);
+                }
+                var blob = new Blob([bytes], {type: contentType});
+
+                // Create a URL representing the Blob object
+                var url = URL.createObjectURL(blob);
+
+                // Create a link element
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = response.msg;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             } else if (response.res == "failed") {
                 Swal.fire({
                     icon: "error",
@@ -1784,7 +1800,7 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
             console.log(jqXHR.responseText);
             location.reload();
         }
-    });*/
+    });
 });
 /* ########## END RANKING ########## */
 

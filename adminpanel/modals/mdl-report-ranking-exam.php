@@ -22,15 +22,10 @@
                             <input type="date" class="form-control" name="save_dateto" id="save_dateto">
                         </div> 
                     </div>
-                    <div class="row mt-4 justify-content-center">
-                        <div class="col-lg-6 col-md-12 text-center">
-                            <small>NOT IMPLEMENTED</small>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" disabled>Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
                 </form>
             </div>
