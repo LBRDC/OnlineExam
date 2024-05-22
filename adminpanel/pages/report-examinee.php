@@ -1,10 +1,19 @@
-<div?php
+<?php
     /*
         Fetch Exam Attempts
         Fetch Examinee Details
         Fetch Exam Details
     */
-    
+    //exatmpt_id, exmne_id, ex_id, ex_score, ex_total, exatmpt_no, exatmpt_date, exatmpt_time, exatmpt_created FROM examinee_attempt WHERE 1
+    $stmt1 = $conn->prepare("SELECT * FROM examinee_attempt ORDER BY exatmpt_id DESC");
+    $stmt1->execute();
+
+    //rowcount > 0
+    if ($stmt1->rowCount() > 0) {
+        $export_Enabled = 'true';
+    } else {
+        $export_Enabled = 'false';
+    }
 ?>
 
 <!-- #START# report-examinee.php -->
@@ -37,16 +46,18 @@
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
+                                    <?php if ($export_Enabled == 'true') { ?>
                                     <h5 class="card-title">Actions</h5>
                                     <div class="row mb-2">
                                         <div class="col-md-12">
-                                            <a href="javascript:void(0);" id="save-btn" data-toggle="modal" data-target="#mdlSaveResult" data-save-id="<?php echo htmlspecialchars($ex_id); ?>">
+                                            <a href="javascript:void(0);" id="save-btn" data-toggle="modal" data-target="#mdlSaveResult">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Results">
                                                     <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
                                                 </div>
                                             </a>
                                         </div>
                                     </div>
+                                    <?php } ?>
                                     <h5 class="card-title">Filter</h5>
                                     <div class="row">
                                         <div class="col-lg-2 col-md-4 mr-1 mb-2">
@@ -95,10 +106,6 @@
                                             </tfoot>-->
                                             <tbody>
                                             <?php 
-                                            //exatmpt_id, exmne_id, ex_id, ex_score, ex_total, exatmpt_no, exatmpt_date, exatmpt_time, exatmpt_created FROM examinee_attempt WHERE 1
-                                            $stmt1 = $conn->prepare("SELECT * FROM examinee_attempt ORDER BY exatmpt_id DESC");
-                                            $stmt1->execute();
-
                                             while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
                                                 $exatmpt_id = $row['exatmpt_id'];
                                                 $exmne_id = $row['exmne_id'];

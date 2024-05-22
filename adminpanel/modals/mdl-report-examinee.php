@@ -11,7 +11,8 @@
                 </div>
                 <form id="saveResultFrm" name="saveResultFrm" method="post">
                 <div class="modal-body">
-                    <input type="text" name="savRes_examId" id="savRes_examId" value="" required hidden readonly>
+                    <!--<input type="text" name="savRes_examId" id="savRes_examId" value="" required hidden readonly>-->
+                    <input type="text" name="exp_Enabled" id="exp_Enabled" value="" hidden readonly>
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <label for="savRes_datefrom">From</label>
@@ -22,15 +23,10 @@
                             <input type="date" class="form-control" name="savRes_dateto" id="savRes_dateto">
                         </div> 
                     </div>
-                    <div class="row mt-4 justify-content-center">
-                        <div class="col-lg-6 col-md-12 text-center">
-                            <small>NOT IMPLEMENTED</small>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" disabled>Save</button>
+                    <button type="submit" id="savResBtn" class="btn btn-primary">Save</button>
                 </div>
                 </form>
             </div>

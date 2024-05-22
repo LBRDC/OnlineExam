@@ -1722,7 +1722,7 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
     //console.log(formData); //DEBUG
 
     //Save Exam Ranking
-    $.ajax({ //NOT IMPLEMENTED
+    $.ajax({ 
         url: 'importexport/export_ExamRankingExe.php',
         type: 'POST',
         dataType : "json",
@@ -1803,6 +1803,125 @@ $(document).on("submit","#saveRankingFrm" , function(event) {
     });
 });
 /* ########## END RANKING ########## */
+
+
+
+/* ########## RESULT ########## */
+// report-examinee SAVE
+$(document).on("submit","#saveResultFrm" , function(event) {
+    event.preventDefault();
+
+    var formData = {
+        'savRes_datefrom' : $('#savRes_datefrom').val(),
+        'savRes_dateto' : $('#savRes_dateto').val(),
+    }
+
+    /*var isValid;
+    if (formData['save_examId'] == '') {
+        isValid = false;
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Exam ID is required.",
+        });
+    } else {
+        isValid = true;
+    }*/
+    
+    /*if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "required field missing.",
+        });
+        return;
+    }*/
+
+    //console.log("INPUT VALIDATED"); //DEBUG
+    //console.log(formData); //DEBUG
+
+    //Save Exam Ranking
+    $.ajax({ 
+        url: 'importexport/export_ExamResultExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your query is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+        success: function(response) {
+            swalLoad.close();
+            if (response.res === "success") {
+                // Decode the base64 file content
+                var fileContent = atob(response.data);
+
+                // Convert the decoded file content to a Blob
+                var contentType = response.content_type;
+                var bytes = new Uint8Array(fileContent.length);
+                for (var i = 0; i < fileContent.length; i++) {
+                    bytes[i] = fileContent.charCodeAt(i);
+                }
+                var blob = new Blob([bytes], {type: contentType});
+
+                // Create a URL representing the Blob object
+                var url = URL.createObjectURL(blob);
+
+                // Create a link element
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = response.msg;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while exporting Rankings. Please try again.",
+                });
+            } else if (response.res == "nodata") {
+                Swal.fire({
+                    icon: "info",
+                    title: "Disabled",
+                    text: "Date Range resulted in no records. Please try different range.",
+                })
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No record of Exam" + response.msg + " found.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "required fields missing.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+/* ########## END RESULT ########## */
 
 
 

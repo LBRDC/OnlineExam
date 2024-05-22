@@ -45,7 +45,7 @@ $sheet->setCellValue('F1', 'Percentage');
 $sheet->setCellValue('G1', 'Date');
 
 // Fetch Exam Attempts with ex_id and datefrom and dateto
-$stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exatmpt_date BETWEEN :datefrom AND :dateto");
+$stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exatmpt_date BETWEEN :datefrom AND :dateto ORDER BY exatmpt_date DESC");
 $stmt2->bindParam(':ex_id', $save_examId);
 $stmt2->bindParam(':datefrom', $save_datefrom);
 $stmt2->bindParam(':dateto', $save_dateto);
@@ -57,8 +57,7 @@ if ($stmt2->rowCount() == 0) {
     exit();
 }
 
-//Insert to Spreadsheet HERE
-$rowIndex = 2; // Start inserting data from the second row (first row is headers)
+$rowIndex = 2; 
 while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
     $exatmpt_id = $row['exatmpt_id'];
     $exmne_id = $row['exmne_id'];
@@ -79,7 +78,7 @@ while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
     $exmne_mname = $exmne['exmne_mname'] != '' ? substr($exmne['exmne_mname'], 0, 1). ". " : '_ ';
     $exmne_lname = $exmne['exmne_lname'] != '' ? $exmne['exmne_lname'] : 'null';
     $exmne_sfname = $exmne['exmne_sfname'] != '' ? $exmne['exmne_sfname'] : '';
-    $exmne_name = $exmne_fname. ' '. $exmne_mname. $exmne_lname. ' '. $exmne_sfname;
+    $exmne_name = $exmne_lname . ', ' . $exmne_fname . ' ' . $exmne_mname . $exmne_sfname;
     $exmne_clu_id = $exmne['exmne_clu_id'] != '' ? $exmne['exmne_clu_id'] : 'null';
 
     // Fetch Cluster Details
@@ -114,7 +113,7 @@ while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
     $sheet->setCellValue('F'. $rowIndex, $percentage);
     $sheet->setCellValue('G'. $rowIndex, $exatmpt_date);
 
-    $rowIndex++; // Move to the next row
+    $rowIndex++; 
 }
 
 // Create a new Writer
@@ -129,15 +128,13 @@ $file_content = file_get_contents($file_name);
 // Return the file name, content type, and file content as part of a JSON response
 $res = array(
     "res" => "success",
-    "msg" => $file_name, // This will be the file name
+    "msg" => $file_name, 
     "content_type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "data" => base64_encode($file_content) // Encode the file content in base64 format
+    "data" => base64_encode($file_content) 
 );
 echo json_encode($res);
 
 // Clean up the temporary file
 unlink($file_name);
 
-//$res = array("res" => "success", "msg" => $file_name);
-//echo json_encode($res);
 exit();
