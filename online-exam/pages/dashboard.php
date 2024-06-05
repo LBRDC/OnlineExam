@@ -175,9 +175,14 @@ if (count($unattemptedExamIds) > 0) {
                                                 //Select one Random
                                                 $stmt4 = $conn->prepare("SELECT * FROM page_messages ORDER BY RAND() LIMIT 1");
                                                 $stmt4->execute();
-                                                $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
-                                                $msg_txt = $msg['msg_text'];
-                                                $msg_src = $msg['src_text'];
+                                                if ($stmt4->rowcount() > 0) {
+                                                    $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
+                                                    $msg_txt = $msg['msg_text'];
+                                                    $msg_src = $msg['src_text'];
+                                                } else {
+                                                    $msg_txt = "The LORD makes firm the steps of the one who delights in him; though he may stumble, he will not fall, for the LORD upholds him with his hand.";
+                                                    $msg_src = "Psalm 37:23-24";
+                                                }
                                             ?>
 
                                             <span class='font-italic font-weight-bold'><?php echo htmlspecialchars($msg_txt) ?><br> -<?php echo htmlspecialchars($msg_src) ?></span>
