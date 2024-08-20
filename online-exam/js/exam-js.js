@@ -64,19 +64,21 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     var examSubmitted = false;
 
     function fetchExamId() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
+        //const urlParams = new URLSearchParams(window.location.search);
+        //const id = urlParams.get('id');
+        const id = document.getElementById("exam_id").value;
+        //console.log("[SYS] ID = " + id); //DEBUG
         return id;
     }
 
     function fetchUserId() {
-    const user = document.getElementById('examUser').value;
-    return user;
+        const user = document.getElementById('examUser').value;
+        return user;
     }
 
     function init() {
-        var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
-        //var savedTimeKey = 'Debug_TIMER'; //DEBUG
+        //var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
+        var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
         if (savedTime) {
@@ -308,7 +310,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         //Anticheat
         document.addEventListener("visibilitychange", (event) => {
             if (document.visibilityState != "visible" && anticheatsts == 'enabled') {
-                anticheatCnt++;
+                //anticheatCnt++;
+                anticheatCnt = 0; // DEBUG
                 localStorage.setItem("anticheatCnt", anticheatCnt);
             }
             
@@ -454,6 +457,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Over',
@@ -510,7 +515,27 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                     timer: 5000,
                                     timerProgressBar: true,
                                 }).then(function() {
-                                    window.location.href = 'exam.php?id=' + response.examId;
+                                    //window.location.href = 'exam.php?id=' + response.examId;
+                                    // Create a form element
+                                    var form = document.createElement('form');
+                                    form.method = 'POST';
+                                    form.action = 'exam.php';
+
+                                    // Create an input field for the exam ID
+                                    var hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'nextexamid';
+                                    hiddenInput.id = 'nextexamid';
+                                    hiddenInput.value = response.examId;
+
+                                    // Append the hidden input to the form
+                                    form.appendChild(hiddenInput);
+
+                                    // Append the form to the body (or any other container element)
+                                    document.body.appendChild(form);
+
+                                    // Submit the form
+                                    form.submit();
                                 });
                             }
                         });
@@ -534,11 +559,6 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 });
             });
         } else if (examAction == 'ontime') {
-            localStorage.setItem("anticheatCnt", 0);
-            stopTimer();
-            anticheatsts = 'disabled';
-            stopRecording();
-            examSubmitted = true;
             Swal.fire({
                 icon: 'warning',
                 title: 'Submit Exam',
@@ -550,6 +570,13 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 confirmButtonText: 'Yes'
             }).then(function(result) {
                 if (result.value) {      
+                    localStorage.setItem("anticheatCnt", 0);
+                    stopTimer();
+                    anticheatsts = 'disabled';
+                    stopRecording();
+                    examSubmitted = true;
+                    var currentTime = { minutes: 0, seconds: 0 };
+                    localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
                     $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
                         var response = JSON.parse(data);
                         if (response.res == "finished") {
@@ -596,7 +623,27 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                         timer: 5000,
                                         timerProgressBar: true,
                                     }).then(function() {
-                                        window.location.href = 'exam.php?id=' + response.examId;
+                                        //window.location.href = 'exam.php?id=' + response.examId;
+                                        // Create a form element
+                                        var form = document.createElement('form');
+                                        form.method = 'POST';
+                                        form.action = 'exam.php';
+
+                                        // Create an input field for the exam ID
+                                        var hiddenInput = document.createElement('input');
+                                        hiddenInput.type = 'hidden';
+                                        hiddenInput.name = 'nextexamid';
+                                        hiddenInput.id = 'nextexamid';
+                                        hiddenInput.value = response.examId;
+
+                                        // Append the hidden input to the form
+                                        form.appendChild(hiddenInput);
+
+                                        // Append the form to the body (or any other container element)
+                                        document.body.appendChild(form);
+
+                                        // Submit the form
+                                        form.submit();
                                     });
                                 }
                             });
@@ -621,12 +668,12 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 }
             });
         } else if (examAction == 'cheat') {
-            seconds = 0;
-            minutes = 0;
             stopTimer();
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
@@ -683,7 +730,27 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                     timer: 5000,
                                     timerProgressBar: true,
                                 }).then(function() {
-                                    window.location.href = 'exam.php?id=' + response.examId;
+                                    //window.location.href = 'exam.php?id=' + response.examId;
+                                    // Create a form element
+                                    var form = document.createElement('form');
+                                    form.method = 'POST';
+                                    form.action = 'exam.php';
+
+                                    // Create an input field for the exam ID
+                                    var hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'nextexamid';
+                                    hiddenInput.id = 'nextexamid';
+                                    hiddenInput.value = response.examId;
+
+                                    // Append the hidden input to the form
+                                    form.appendChild(hiddenInput);
+
+                                    // Append the form to the body (or any other container element)
+                                    document.body.appendChild(form);
+
+                                    // Submit the form
+                                    form.submit();
                                 });
                             }
                         });

@@ -23,7 +23,7 @@
         $exmne_sfname = '';
     }  
 
-    $ex_id = $_GET['id'];
+    $ex_id = $_POST['id'];
     $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
     $exmne_id = $_SESSION['ex_user']['exmne_id'];
     //Select ex_title, ex_description, ex_time_limit, ex_qstn_limit, ex_disable_prv, ex_random_qstn
@@ -832,9 +832,8 @@
     <!-- Custom JS -->
     <script type="text/javascript" src="./js/exam-js.js"></script>
     <script>
-        //Function Update Form Hidden Input
+        // Function Update Form Hidden Input
         function updateHiddenInput(radio) {
-            // Get the name of the selected radio button
             var radioName = radio.name;
 
             // Find the hidden input field with the same name and update its value
@@ -845,7 +844,39 @@
                     break;
                 }
             }
+
+            var questionId = radioName.match(/\d+/)[0];
+            var exmneId = document.getElementById('examUser').value;
+            localStorage.setItem(`answer[${questionId}][correct][${exmneId}]`, radio.value);
         }
+
+        // Function to load saved answers from localStorage
+        function loadSavedAnswers() {
+            var exmneId = document.getElementById('examUser').value;
+
+            // Iterate over all localStorage items
+            for (let i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+
+                // Check if the key matches the pattern for saved answers with exmneId
+                var questionIdMatch = key.match(new RegExp(`answer\\[(\\d+)\\]\\[correct\\]\\[${exmneId}\\]`));
+                if (questionIdMatch) {
+                    var questionId = questionIdMatch[1];
+                    var savedValue = localStorage.getItem(key);
+                    var radioButtons = document.getElementsByName(`answer[${questionId}][correct]`);
+
+                    // Find the radio button that matches the saved value and name, then check it
+                    Array.from(radioButtons).forEach((radio) => {
+                        if (radio.value === savedValue && radio.name === `answer[${questionId}][correct]`) {
+                            //console.log('[SYS] Preselected Radio'); //DEBUG
+                            radio.checked = true;
+                        }
+                    });
+                }
+            }
+        }
+
+        loadSavedAnswers();
     </script>
     <script>
         // View Image Modal
