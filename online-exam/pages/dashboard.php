@@ -128,15 +128,19 @@ if (count($unattemptedExamIds) > 0) {
                                     <ul class="list-group">
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">1.)</span> Reminder 1</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                            <div class="list-group-item-text pl-4">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</div>
                                         </li>
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">2.)</span> Reminder 2</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                            <div class="list-group-item-text pl-4">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</div>
                                         </li>
                                         <li class="list-group-item">
-                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">3.)</span> Reminder 3</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">3.)</span> Don't leave the page</h5>
+                                            <div class="list-group-item-text pl-4">While taking the exam, avoid refreshing, clicking the back button in your browser, or closing the web page as it may disrupt the exam and you may lose progress.</div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <h6 class="list-group-item-heading"><span class="font-weight-bold">4.)</span> Don't Open Other Tabs</h5>
+                                            <div class="list-group-item-text pl-4">Refrain from opening other tabs and applications while taking the exam.</div>
                                         </li>
                                     </ul>
                                 </div>
@@ -153,11 +157,11 @@ if (count($unattemptedExamIds) > 0) {
                                         </li>
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">2.)</span> Internet Specifications</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                            <div class="list-group-item-text pl-4">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</div>
                                         </li>
                                         <li class="list-group-item">
                                             <h6 class="list-group-item-heading"><span class="font-weight-bold">3.)</span> Requirement 3</h5>
-                                            <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                            <div class="list-group-item-text pl-4">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</div>
                                         </li>
                                     </ul>
                                 </div>

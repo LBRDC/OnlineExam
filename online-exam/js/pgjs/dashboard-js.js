@@ -40,7 +40,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }).then((result) => {
       if (result.value) {
         stopRecording();
-        window.location.href = "exam.php?id=" + examId;
+        //window.location.href = "exam.php?id=" + examId;
+        // Create a form element
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'exam.php';
+
+        // Create an input field for the exam ID
+        var hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'id';
+        hiddenInput.id = 'id';
+        hiddenInput.value = examId;
+
+        // Append the hidden input to the form
+        form.appendChild(hiddenInput);
+
+        // Append the form to the body (or any other container element)
+        document.body.appendChild(form);
+
+        // Submit the form
+        form.submit();
       }
     });
   });
