@@ -8,6 +8,9 @@
     } else {
         $exmne_fname = 'null';
         $exmne_lname = 'null';
+        // If either value is not set, redirect to logout page
+        header("Location: query/logoutExe.php");
+        exit(); // Ensure no further code is executed after the redirect
     }
 
     if ($_SESSION['ex_user']['exmne_mname'] != "") {
@@ -23,7 +26,7 @@
         $exmne_sfname = '';
     }  
 
-    $ex_id = $_POST['id'];
+    $ex_id = isset($_POST['fetchid']) && !empty($_POST['fetchid']) ? $_POST['fetchid'] : 0;
     $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
     $exmne_id = $_SESSION['ex_user']['exmne_id'];
     //Select ex_title, ex_description, ex_time_limit, ex_qstn_limit, ex_disable_prv, ex_random_qstn
