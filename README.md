@@ -24,8 +24,8 @@
 1. Install XAMPP, VSCode, Composer
 2. delete files inside htdocs folder (C:\xampp\htdocs)
 3. clone repository to htdocs folder (make sure path is "C:\xampp\htdocs")
-4. Launch CMD in htdocs folder, run 'composer install'
-   4.1 If error edit php.ini, remove ";" on "extension=gd" and "extension=zip"
+4. Launch CMD in htdocs folder, run 'composer install'  
+   4.1 If error edit php.ini, remove ";" on "extension=gd" and "extension=zip"  
 6. Launch XAMPP Control Panel
 7. Start Apache, MySQL
 8. Go to MySQL Admin Page
