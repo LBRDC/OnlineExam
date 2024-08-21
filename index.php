@@ -1,10 +1,10 @@
 <?php
-    session_start();
+    //session_start();
     /* Check Session */
     // check if there is an existing session
 
-    session_unset();
-    session_destroy();
+    //session_unset();
+    //session_destroy();
     header("location:/online-exam");
     //header("location:/adminpanel");
     //header("location:https://lbpresources.com/");

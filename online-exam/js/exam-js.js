@@ -1,16 +1,80 @@
+function fetchExamId() {
+    //const urlParams = new URLSearchParams(window.location.search);
+    //const id = urlParams.get('id');
+    var id = document.getElementById("exam_id").value;
+    id = id ? id : "0"; // If id is null or "0", set it to "0"
+    console.log("[SYS] ID = " + id); //DEBUG
+    return id;
+}
+
 let examCompleted = false;
 let camWorking;
+let examCheck = fetchExamId();
 //Check if exam is completed
+
+var checkData = {
+    'test_Id': examCheck
+};
+
 $.ajax({
     url: 'query/checkExam.php',
     type: 'POST',
     dataType : "json",
+    data: checkData,
     success: function(response) {
+        console.log(response);
+        console.log(checkData);
         if (response.res == "complete") {
             Swal.fire({
                 icon: "error",
                 title: "Completed",
                 text: "You have already completed the exam.",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            }).then(function() {
+                window.location.href = 'home.php';
+            });
+            examCompleted = true;
+            return;
+        } else if (response.res == "completeCurr") {
+            Swal.fire({
+                icon: "success",
+                title: "Completed",
+                text: "You have already completed this test.",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            }).then(function() {
+                //window.location.href = 'home.php';
+                // Create a form element
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'exam.php';
+
+                // Create an input field for the exam ID
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'fetchid';
+                hiddenInput.id = 'fetchid';
+                hiddenInput.value = response.examId;
+
+                // Append the hidden input to the form
+                form.appendChild(hiddenInput);
+
+                // Append the form to the body (or any other container element)
+                document.body.appendChild(form);
+
+                // Submit the form
+                form.submit();
+            });
+            examCompleted = true;
+            return;
+        } else if (response.res == "unknown") {
+            Swal.fire({
+                icon: "error",
+                title: "Unknown Exam",
+                text: "Returning to Dashboard.",
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
@@ -63,20 +127,14 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     var anticheatsts = 'disabled';
     var examSubmitted = false;
 
-    function fetchExamId() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        return id;
-    }
-
     function fetchUserId() {
-    const user = document.getElementById('examUser').value;
-    return user;
+        const user = document.getElementById('examUser').value;
+        return user;
     }
 
     function init() {
-        var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
-        //var savedTimeKey = 'Debug_TIMER'; //DEBUG
+        //var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
+        var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
         if (savedTime) {
@@ -158,9 +216,23 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         if (event.key === 'F5') {
             event.preventDefault();
         }
-        // Prevent Ctrl+R or Cmd+R (Mac)
-        if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+        // DEBUG
+        if ((event.ctrlKey || event.metaKey) && event.key === 'r' && !event.shiftKey) {
             event.preventDefault();
+        }
+        // Prevent Keyboard Shortcuts
+        //if ((event.ctrlKey || event.metaKey) && (event.key === 'r' || (event.key === 'R' && event.shiftKey))) {
+        //    event.preventDefault();
+        //}
+    });
+
+    // Prevent page refresh from close or reload
+    window.addEventListener('beforeunload', function (event) {
+        console.log("Allow Exit: " + examSubmitted); //DEBUG
+        if (window.location.href.includes("exam.php") && !examSubmitted == true) {
+            event.preventDefault();
+            event.returnValue = '';
+            //examSubmitted = false;
         }
     });
 
@@ -168,16 +240,6 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     window.addEventListener('online', function () {
         if (isInternetDownNotifShown) {
         startTimer();
-        }
-    });
-
-    // Prevent Refresh/Unload Page
-    window.addEventListener('beforeunload', function (event) {
-        //console.log("Allow Exit: " + examSubmitted); //DEBUG
-        if (window.location.href.includes("exam.php?id=") && !examSubmitted == true) {
-            event.preventDefault();
-            event.returnValue = '';
-            //examSubmitted = false;
         }
     });
 
@@ -308,7 +370,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         //Anticheat
         document.addEventListener("visibilitychange", (event) => {
             if (document.visibilityState != "visible" && anticheatsts == 'enabled') {
-                anticheatCnt++;
+                //anticheatCnt++;
+                anticheatCnt = 0; // DEBUG
                 localStorage.setItem("anticheatCnt", anticheatCnt);
             }
             
@@ -342,6 +405,62 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 });
             }
         });
+
+        // Anticheat NEW
+        /*function handleInactivity() {
+            if (anticheatsts == 'enabled') {
+                //anticheatCnt++;
+                anticheatCnt = 0; // DEBUG
+                localStorage.setItem("anticheatCnt", anticheatCnt);
+                
+                if (pgActive == 1) {
+                    console.log("tab inactive or window out of focus");
+                    pgActive = 0;
+                    $.ajax({
+                        type: "POST",
+                        url: "query/page_Message.php",
+                        dataType: "json",
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'WARNING',
+                                html: `
+                                        Avoid using other tabs, windows, or leaving the window while the exam is in progress.
+                                        <br>
+                                        <br>
+                                        <i>${response['msg_txt']} -${response['msg_src']}</i>
+                                    `,
+                                icon: 'warning',
+                                allowOutsideClick: false,
+                            }).then((result) => {
+                                if (localStorage.getItem("anticheatCnt") >= 3) {
+                                    stopTimer();
+                                    document.getElementById('examAction').value = "cheat";
+                                    $('#submitAnswerFrm').submit();
+                                }
+                                pgActive = 1;
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        // Detect when the document visibility changes (e.g., switching tabs)
+        document.addEventListener("visibilitychange", (event) => {
+            if (document.visibilityState != "visible") {
+                handleInactivity();
+            }
+        });
+
+        // Detect when the window loses focus (e.g., clicking on taskbar or start menu)
+        window.addEventListener("blur", (event) => {
+            handleInactivity();
+        });
+
+        // Reset the state when the window or tab becomes active again
+        window.addEventListener("focus", (event) => {
+            pgActive = 1;
+        });*/
         
         //Variable
         const disableBtn = document.getElementById('disablePrevBtn').value;
@@ -454,6 +573,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Over',
@@ -510,7 +631,27 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                     timer: 5000,
                                     timerProgressBar: true,
                                 }).then(function() {
-                                    window.location.href = 'exam.php?id=' + response.examId;
+                                    //window.location.href = 'exam.php?id=' + response.examId;
+                                    // Create a form element
+                                    var form = document.createElement('form');
+                                    form.method = 'POST';
+                                    form.action = 'exam.php';
+
+                                    // Create an input field for the exam ID
+                                    var hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'fetchid';
+                                    hiddenInput.id = 'fetchid';
+                                    hiddenInput.value = response.examId;
+
+                                    // Append the hidden input to the form
+                                    form.appendChild(hiddenInput);
+
+                                    // Append the form to the body (or any other container element)
+                                    document.body.appendChild(form);
+
+                                    // Submit the form
+                                    form.submit();
                                 });
                             }
                         });
@@ -534,11 +675,6 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 });
             });
         } else if (examAction == 'ontime') {
-            localStorage.setItem("anticheatCnt", 0);
-            stopTimer();
-            anticheatsts = 'disabled';
-            stopRecording();
-            examSubmitted = true;
             Swal.fire({
                 icon: 'warning',
                 title: 'Submit Exam',
@@ -550,6 +686,13 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 confirmButtonText: 'Yes'
             }).then(function(result) {
                 if (result.value) {      
+                    localStorage.setItem("anticheatCnt", 0);
+                    stopTimer();
+                    anticheatsts = 'disabled';
+                    stopRecording();
+                    examSubmitted = true;
+                    var currentTime = { minutes: 0, seconds: 0 };
+                    localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
                     $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
                         var response = JSON.parse(data);
                         if (response.res == "finished") {
@@ -596,7 +739,28 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                         timer: 5000,
                                         timerProgressBar: true,
                                     }).then(function() {
-                                        window.location.href = 'exam.php?id=' + response.examId;
+                                        //window.location.href = 'exam.php?id=' + response.examId;
+                                        console.log("[SYS] NEXT EXAM ID = " + response.examId);
+                                        // Create a form element
+                                        var form = document.createElement('form');
+                                        form.method = 'POST';
+                                        form.action = 'exam.php';
+
+                                        // Create an input field for the exam ID
+                                        var hiddenInput = document.createElement('input');
+                                        hiddenInput.type = 'hidden';
+                                        hiddenInput.name = 'fetchid';
+                                        hiddenInput.id = 'fetchid';
+                                        hiddenInput.value = response.examId;
+
+                                        // Append the hidden input to the form
+                                        form.appendChild(hiddenInput);
+
+                                        // Append the form to the body (or any other container element)
+                                        document.body.appendChild(form);
+
+                                        // Submit the form
+                                        form.submit();
                                     });
                                 }
                             });
@@ -621,12 +785,12 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 }
             });
         } else if (examAction == 'cheat') {
-            seconds = 0;
-            minutes = 0;
             stopTimer();
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
@@ -683,7 +847,27 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                     timer: 5000,
                                     timerProgressBar: true,
                                 }).then(function() {
-                                    window.location.href = 'exam.php?id=' + response.examId;
+                                    //window.location.href = 'exam.php?id=' + response.examId;
+                                    // Create a form element
+                                    var form = document.createElement('form');
+                                    form.method = 'POST';
+                                    form.action = 'exam.php';
+
+                                    // Create an input field for the exam ID
+                                    var hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'fetchid';
+                                    hiddenInput.id = 'fetchid';
+                                    hiddenInput.value = response.examId;
+
+                                    // Append the hidden input to the form
+                                    form.appendChild(hiddenInput);
+
+                                    // Append the form to the body (or any other container element)
+                                    document.body.appendChild(form);
+
+                                    // Submit the form
+                                    form.submit();
                                 });
                             }
                         });

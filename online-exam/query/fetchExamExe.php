@@ -1,4 +1,6 @@
 <?php
+//// DEPRECATED ////
+/*
 include("../../conn.php");
 
 // Use $_POST directly instead of extract($_POST) for better security and clarity
@@ -44,3 +46,5 @@ while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 } // End of while loop for exam IDs
 
 // echo json_encode($completed);
+*/
+exit();

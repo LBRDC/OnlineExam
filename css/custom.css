@@ -28,13 +28,14 @@
   .questions label:before {
     content: attr(data-question-number);
     display: inline-block;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid;
     text-align: center;
-    line-height: 30px;
+    line-height: 36px;
     margin-right: 20px;
+    font-size: 15px;
   }
   
   /* Applying styles when checking the buttons */
@@ -52,6 +53,7 @@
   .questions label {
     display: block;
     cursor: pointer;
+    font-size: 15px;
     
     padding: 5px;
     margin-bottom: 10px;
