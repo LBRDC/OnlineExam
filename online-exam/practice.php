@@ -510,9 +510,9 @@
                                     <i class="pe-7s-pen icon-gradient bg-grow-early">
                                     </i>
                                 </div>
-                                <div><?php echo htmlspecialchars($ex_title); ?>
+                                <div>[PRACTICE] <?php echo htmlspecialchars($ex_title); ?>
                                     <div class="page-title-subheading" id="exDesc">
-                                        <?php echo htmlspecialchars($ex_description); ?>
+                                        Instructions: <?php echo htmlspecialchars($ex_description); ?>
                                     </div>
                                 </div>
                             </div>
@@ -526,7 +526,7 @@
                     <div class="row justify-content-center">
                         <div class="col-md-12 col-xl-10 mb-4">
                             <!-- ### EXAM CARD ### -->
-                            <div class="card d-none" id="examCard">
+                            <div class="card" id="examCard">
                                 <div class="card-header justify-content-center"> 
                                     <span class="pr-1">Page</span><span class="current-page pr-1">1</span>of<span class="total-pages pl-1">1</span>
                                 </div>
@@ -536,10 +536,11 @@
                                             <th></th>
                                         </thead>
                                         <tbody>
+                                        <div class="alert alert-info fade show" role="alert"><i class="metismenu-icon pe-7s-info"></i> Click on A, B, C, or D to select your answer.</div>
                                         <?php
                                             //Select prqstn_id, prac_image, prac_question, prac_ch1-10, prqstn_answer
                                             //Randomize if ex_random_qstn = yes else order by ascending
-                                            $stmt2 = $conn->prepare("SELECT * FROM practice_question_tbl WHERE ex_id = :ex_id $orderBy");
+                                            $stmt2 = $conn->prepare("SELECT * FROM exam_practice_tbl WHERE ex_id = :ex_id $orderBy");
                                             $stmt2->bindParam(':ex_id', $ex_id);
                                             $stmt2->execute();
                                             
@@ -741,7 +742,7 @@
                                                             <div class="col-md-6 text-center">
                                                             <?php if ($prac_image != "") { ?>
                                                                 <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($prac_image); ?>">
-                                                                    <img src="../uploads/prac_question/<?php echo htmlspecialchars($prac_image); ?>" alt="<?php echo htmlspecialchars($prac_image); ?>" class="img-fluid w-10" style="max-width: 40%; height: auto;">
+                                                                    <img src="../uploads/exam_question/<?php echo htmlspecialchars($prac_image); ?>" alt="<?php echo htmlspecialchars($prac_image); ?>" class="img-fluid w-10" style="max-width: 40%; height: auto;">
                                                                 </a>
                                                                 <?php } else { echo ""; }?>
                                                             </div>
@@ -765,7 +766,7 @@
                                         <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden readonly>
                                         <!-- ANSWERS HIDDEN INPUTS -->
                                         <?php 
-                                        $stmt3 = $conn->prepare("SELECT * FROM prac_question_tbl WHERE ex_id = :ex_id");
+                                        $stmt3 = $conn->prepare("SELECT * FROM exam_practice_tbl WHERE ex_id = :ex_id");
                                         $stmt3->bindParam(':ex_id', $ex_id);
                                         $stmt3->execute();
 
@@ -778,13 +779,15 @@
                                             } //END while Loop 
                                         } //END if stmnt
                                         ?>
-                                        <div class="row">
+                                        <div class="alert alert-info fade show text-center" role="alert"><i class="metismenu-icon pe-7s-info"></i> If the exam has multiple pages, you can click the <u>next button</u> to go to next page or click the <u>previous button</u> to go to previous page.</div>
+                                        <div class="row text-center">
                                             <div class="col-md-12">
                                                 <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
                                                 <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
                                                 <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
                                             </div>
                                         </div>
+                                        <div class="alert alert-info fade show text-center mt-3" role="alert"><i class="metismenu-icon pe-7s-info"></i> Click the submit button once you've reach the last question to submit your answers.</div>
                                         <!-- END ANSWERS HIDDEN INPUTS -->
                                     </form>
                                 </div>
@@ -890,7 +893,7 @@
             viewimgbtn.addEventListener('click', function() {
                 var imageFilename = this.getAttribute('data-view-img');
 
-                var imageUrl = '../uploads/prac_question/' + imageFilename;
+                var imageUrl = '../uploads/exam_question/' + imageFilename;
 
                 // Update the image source in the modal
                 var modalImage = document.querySelector('#mdlViewImage .modal-body img');

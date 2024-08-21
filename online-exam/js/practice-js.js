@@ -13,7 +13,7 @@ let examCheck = fetchExamId();
 
 //Check if exam is completed
 var checkData = {
-    'test_Id': examCheck
+    'check_Id': examCheck
 };
 
 $.ajax({
@@ -37,7 +37,7 @@ $.ajax({
                 window.location.href = 'home.php';
             });
             examCompleted = true;
-            return;
+            //return;
         } else if (response.res == "completeCurr") {
             Swal.fire({
                 icon: "success",
@@ -92,7 +92,7 @@ $.ajax({
                   }
             });
             examCompleted = true;
-            return;
+            //return;
         } else if (response.res == "unknown") {
             Swal.fire({
                 icon: "error",
@@ -105,7 +105,7 @@ $.ajax({
                 window.location.href = 'home.php';
             });
             examCompleted = true;
-            return;
+            //return;
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -156,8 +156,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     }
 
     function init() {
-        //var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
-        var savedTimeKey = 'Debug_TIMER'; //DEBUG
+        var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
+        //var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
         if (savedTime) {
@@ -165,7 +165,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         minutes = objLocalStorageTimer.minutes;
         seconds = objLocalStorageTimer.seconds;
         } else {
-        var timeLimit = $('#timeLimit').val();
+        //var timeLimit = $('#timeLimit').val();
+        var timeLimit = 500;
         minutes = parseInt(timeLimit);
         seconds = 0;
         }
@@ -184,7 +185,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
 
     function updateTimer() {
         if (!navigator.onLine) {
-            //stopTimer();
+            stopTimer();
             isInternetDownNotifShown = true;
             anticheatsts = 'disabled';
             instanceSwalNotification = Swal.fire({
@@ -219,8 +220,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
 
         updateDisplay();
 
-        var currentTime = { minutes: minutes, seconds: seconds };
-        localStorage.setItem('countTimer_user' + user + '_practice' + exId, JSON.stringify(currentTime));
+        //var currentTime = { minutes: minutes, seconds: seconds };
+        //localStorage.setItem('countTimer_user' + user + '_practice' + exId, JSON.stringify(currentTime));
     }
 
     function updateDisplay() {
@@ -262,7 +263,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     // Check Internet
     window.addEventListener('online', function () {
         if (isInternetDownNotifShown) {
-        //startTimer();
+        startTimer();
         }
     });
 
@@ -370,6 +371,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         var anticheatCnt = 0;
         //Display Instructions
         stopTimer();
+        console.log("[SYS] Show Instructions");
         var exDesc = document.getElementById('exDesc').innerText;
         Swal.fire({
             title: 'Instructions',
@@ -597,12 +599,12 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         //console.log("Exam Submitted: " + examSubmitted); //DEBUG
 
         if (examAction == 'timeout') {
-            //stopTimer();
+            stopTimer();
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
-            //var currentTime = { minutes: 0, seconds: 0 };
-            //localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Over',
@@ -667,12 +669,12 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 if (result.value) {      
                     //Proceed to Exam
                     localStorage.setItem("anticheatCnt", 0);
-                    //stopTimer();
+                    stopTimer();
                     anticheatsts = 'disabled';
                     stopRecording();
                     examSubmitted = true;
-                    //var currentTime = { minutes: 0, seconds: 0 };
-                    //localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+                    var currentTime = { minutes: 0, seconds: 0 };
+                    localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
                     Swal.fire({
                         title: 'Loading...',
                         html: `
@@ -713,12 +715,12 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 }
             });
         } else if (examAction == 'cheat') {
-            //stopTimer();
+            stopTimer();
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
-            //var currentTime = { minutes: 0, seconds: 0 };
-            //localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
