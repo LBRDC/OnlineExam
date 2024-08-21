@@ -443,16 +443,16 @@
                                                     <i class="fa fa-plus-circle icon-gradient bg-grow-early"></i>
                                                 </div>
                                             </a>
-                                            <a href="importexport/export_ExamPracExe.php?id=<?php echo htmlspecialchars($ex_id); ?>">
+                                            <!--<a href="importexport/export_ExamPracExe.php?id=<?php echo htmlspecialchars($ex_id); ?>">
                                                 <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Questions">
                                                     <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
                                                 </div>
-                                            </a>
-                                            <a href="javascript:void(0);">
+                                            </a>-->
+                                            <!--<a href="javascript:void(0);">
                                                 <div class="font-icon-wrapper font-icon-lg btn" id="import-prac-btn" data-import-id="<?php echo htmlspecialchars($ex_id); ?>" data-toggle="modal" data-target="#mdlImportPrac" data-toggle="tooltip" data-placement="bottom" title="Import Questions">
                                                     <i class="fa fa-upload icon-gradient bg-deep-blue"></i>
                                                 </div>
-                                            </a>
+                                            </a>-->
                                         </div>
                                     </div>
                                 </div>
@@ -535,29 +535,29 @@
 
                                                                     <td>
                                                                         <?php if (!empty($prac_image)) { ?>
-                                                                        <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
-                                                                        <img class="img-fluid w-10 border" src="../uploads/exam_question/<?php echo htmlspecialchars($prac_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" style="max-width: 40%; height: auto;">
+                                                                        <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($prac_image); ?>">
+                                                                        <img class="img-fluid w-10 border" src="../uploads/exam_question/<?php echo htmlspecialchars($prac_image); ?>" alt="<?php echo htmlspecialchars($prac_image); ?>" style="max-width: 40%; height: auto;">
                                                                         </a>
                                                                         <?php } ?>
                                                                     </td>
                                                                     <td>
-                                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-prac-btn" data-toggle="modal" data-target="#mdlEditPracQuestion" data-toggle="tooltip" data-placement="bottom" title="Edit" 
-                                                                        data-edit-count="<?php echo htmlspecialchars($counter); ?>" 
-                                                                        data-edit-id="<?php echo htmlspecialchars($prqstn_id); ?>" 
-                                                                        data-edit-exid="<?php echo htmlspecialchars($expr_id); ?>"
-                                                                        data-edit-img="<?php echo htmlspecialchars($prac_image); ?>" 
-                                                                        data-edit-question="<?php echo htmlspecialchars($prac_question); ?>" 
-                                                                        data-edit-ch1="<?php echo htmlspecialchars($pr_ch1); ?>"
-                                                                        data-edit-ch2="<?php echo htmlspecialchars($pr_ch2); ?>"
-                                                                        data-edit-ch3="<?php echo htmlspecialchars($pr_ch3); ?>"
-                                                                        data-edit-ch4="<?php echo htmlspecialchars($pr_ch4); ?>"
-                                                                        data-edit-ch5="<?php echo htmlspecialchars($pr_ch5); ?>"
-                                                                        data-edit-ch6="<?php echo htmlspecialchars($pr_ch6); ?>"
-                                                                        data-edit-ch7="<?php echo htmlspecialchars($pr_ch7); ?>"
-                                                                        data-edit-ch8="<?php echo htmlspecialchars($pr_ch8); ?>"
-                                                                        data-edit-ch9="<?php echo htmlspecialchars($pr_ch9); ?>"
-                                                                        data-edit-ch10="<?php echo htmlspecialchars($pr_ch10); ?>"
-                                                                        data-edit-answer="<?php echo htmlspecialchars($prqstn_answer); ?>">
+                                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-prac-btn" data-toggle="modal" data-target="#mdlEditPractice" data-toggle="tooltip" data-placement="bottom" title="Edit" 
+                                                                        data-edit-prcount="<?php echo htmlspecialchars($counter); ?>" 
+                                                                        data-edit-prid="<?php echo htmlspecialchars($prqstn_id); ?>" 
+                                                                        data-edit-prexid="<?php echo htmlspecialchars($expr_id); ?>"
+                                                                        data-edit-primg="<?php echo htmlspecialchars($prac_image); ?>" 
+                                                                        data-edit-prquestion="<?php echo htmlspecialchars($prac_question); ?>" 
+                                                                        data-edit-prch1="<?php echo htmlspecialchars($pr_ch1); ?>"
+                                                                        data-edit-prch2="<?php echo htmlspecialchars($pr_ch2); ?>"
+                                                                        data-edit-prch3="<?php echo htmlspecialchars($pr_ch3); ?>"
+                                                                        data-edit-prch4="<?php echo htmlspecialchars($pr_ch4); ?>"
+                                                                        data-edit-prch5="<?php echo htmlspecialchars($pr_ch5); ?>"
+                                                                        data-edit-prch6="<?php echo htmlspecialchars($pr_ch6); ?>"
+                                                                        data-edit-prch7="<?php echo htmlspecialchars($pr_ch7); ?>"
+                                                                        data-edit-prch8="<?php echo htmlspecialchars($pr_ch8); ?>"
+                                                                        data-edit-prch9="<?php echo htmlspecialchars($pr_ch9); ?>"
+                                                                        data-edit-prch10="<?php echo htmlspecialchars($pr_ch10); ?>"
+                                                                        data-edit-pranswer="<?php echo htmlspecialchars($prqstn_answer); ?>">
                                                                             <i class="fas fa-edit"></i>
                                                                         </a>
                                                                         <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-prac-btn" data-toggle="modal" data-target="#mdlDeletePracQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
