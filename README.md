@@ -46,7 +46,7 @@
 <b>Sizzle CSS Selector:</b> 2.3.3  
 <b>Perfect Scrollbar:</b> 1.4.0  
 <b>Bootstrap-JS:</b> 4.2.1  
-<b>Kickass:</b> 1.14.6
+<b>Kickass:</b> 1.14.6  
 <b>metismenu:</b> 3.0.3  
 <b>FullCalendar:</b> 3.10.0  
 <b>ChartJS:</b> 2.7.3  
