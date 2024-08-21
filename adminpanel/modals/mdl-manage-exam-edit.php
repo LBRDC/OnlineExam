@@ -305,7 +305,7 @@
             </form>
         </div>
     </div>
-</div> <!-- #END# DISABLE CLUSTER MODAL -->
+</div> <!-- #END# DELETE QUESTION MODAL -->
 
 
 <!-- IMPORT QUESTIONS MODAL -->
@@ -607,3 +607,33 @@
         </div>
     </div>
 </div> <!-- #END# EDIT PRACTICE MODAL -->
+
+
+<!-- DELETE PRACTICE MODAL -->
+<div class="modal fade" id="mdlDeletePractice" tabindex="-1" role="dialog" aria-labelledby="mdlDeletePracticeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlDeletePracticeLabel">Delete "<span class="font-weight-bold text-danger">NAME</span>"</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="deletePracticeFrm" name="deletePracticeFrm" method="post">
+            <div class="modal-body">
+                <div class="col-md-12 text-center">
+                    <input type="text" name="delete_PracId" id="delete_PracId" value="" hidden required>
+                    <div class="form-row mb-2 justify-content-center">
+                        <span></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">DELETE</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# DELETE PRACTICE MODAL -->

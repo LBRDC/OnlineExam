@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    /* &&&&&&&&&&&& EDIT Question &&&&&&&&&&&& */
+    /* &&&&&&&&&&&& EDIT PRACTICE &&&&&&&&&&&& */
     // Functions
     function ed_prsetImg (edit_prac_Image, img_pracStatus) {
         if (edit_prac_Image) {
@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('edit_PracResetImgBtn').style.display = 'inline-block';
     }
 
-    //edit question btn
+    //edit practice btn
     document.querySelectorAll('#edit-prac-btn').forEach(function(editbtn) {
         editbtn.addEventListener('click', function() {
             var edit_pracCount = this.getAttribute('data-edit-prcount');
@@ -543,11 +543,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         ed_prsetImg(edit_PracImg, 'img_Old');
                     });
                 } else {
-                    document.getElementById('edit_pracimagePreview').innerHTML = '';
+                    document.getElementById('edit_pracImagePreview').innerHTML = '';
                     var reader = new FileReader();
             
                     reader.onload = function(e) {
-                        document.getElementById('edit_pracimagePreview').innerHTML = '<img src="'+e.target.result+'" style="max-width:100%; max-height:200px;"/>';
+                        document.getElementById('edit_pracImagePreview').innerHTML = '<img src="'+e.target.result+'" style="max-width:100%; max-height:200px;"/>';
                         ed_prnewImg();
                         
                         // if there is existing file set to img_Replace else img_new
@@ -571,7 +571,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-
-
-
+    //Delete practice
+    document.querySelectorAll('#delete-prac-btn').forEach(function(deleteBtn) {
+        deleteBtn.addEventListener('click', function() {
+            var PracId = this.getAttribute('data-delete-prid');
+            var Praccount = this.getAttribute('data-delete-prcount');
+        
+            document.getElementById('delete_PracId').value = PracId;
+        
+            var modalTitle = document.querySelector('#mdlDeletePractice .modal-title span');
+            modalTitle.textContent = Praccount;
+        
+            var modalBodyName = document.querySelector('#mdlDeletePractice .modal-body span');
+            modalBodyName.innerHTML = "Are you sure you want to DELETE Question <span class='font-weight-bold text-danger'>" + Praccount + "</span>?<br><br> <span class='font-weight-bold'>This action is IRREVERSIBLE!</span>";
+        });
+    });
 });

@@ -560,9 +560,9 @@
                                                                         data-edit-pranswer="<?php echo htmlspecialchars($prqstn_answer); ?>">
                                                                             <i class="fas fa-edit"></i>
                                                                         </a>
-                                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-prac-btn" data-toggle="modal" data-target="#mdlDeletePracQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
-                                                                        data-delete-id="<?php echo htmlspecialchars($prqstn_id); ?>"
-                                                                        data-delete-count="<?php echo htmlspecialchars($counter); ?>">
+                                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-prac-btn" data-toggle="modal" data-target="#mdlDeletePractice" data-toggle="tooltip" data-placement="bottom" title="Delete" 
+                                                                        data-delete-prid="<?php echo htmlspecialchars($prqstn_id); ?>"
+                                                                        data-delete-prcount="<?php echo htmlspecialchars($counter); ?>">
                                                                             <i class="fas fa-trash"></i>
                                                                         </a>
                                                                     </td>

@@ -1409,6 +1409,157 @@ $(document).on("submit","#addPracticeFrm" , function(event) {
         }
     });
 });
+
+// manage-exam-edit PRACTICE EDIT
+$(document).on("submit","#EditPracticeFrm" , function(event) {
+    event.preventDefault();
+
+    var page = currentPg();
+
+    var formData = new FormData();
+    formData.append('edit_PracId', $('#edit_PracId').val()); 
+    formData.append('edit_PracExamId', $('#edit_PracExamId').val()); 
+    formData.append('edit_PracImgStatus', $('#edit_PracImgStatus').val()); 
+    formData.append('edit_Practice', $('#edit_Practice').val()); 
+    formData.append('edit_PracCh1', $('#edit_PracCh1').val());
+    formData.append('edit_PracCh2', $('#edit_PracCh2').val());
+    formData.append('edit_PracCh3', $('#edit_PracCh3').val());
+    formData.append('edit_PracCh4', $('#edit_PracCh4').val());
+    formData.append('edit_PracCh5', $('#edit_PracCh5').val());
+    formData.append('edit_PracCh6', $('#edit_PracCh6').val());
+    formData.append('edit_PracCh7', $('#edit_PracCh7').val());
+    formData.append('edit_PracCh8', $('#edit_PracCh8').val());
+    formData.append('edit_PracCh9', $('#edit_PracCh9').val());
+    formData.append('edit_PracCh10', $('#edit_PracCh10').val());
+    formData.append('edit_PracImg', $('#edit_PracImg')[0].files[0]);  
+    
+	// Append edit_PracAns based on selection
+    var selectedValue = $('#edit_PracAns').val();
+    var key = 'edit_PracCh' + selectedValue;
+
+    // Check if the selected answer is not empty or undefined, or if it is 'none'
+    if (selectedValue && (formData.get(key) || selectedValue === 'none')) {
+        formData.append('edit_PracAns', formData.get(key) || selectedValue);
+    } else {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please select an answer.",
+        });
+        return;
+    }
+
+
+    // DEBUG: Display the appended values in the console
+    /*for (var pair of formData.entries()) { //DEBUG
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }*/
+
+    // Check if a file has been selected for edit_ExamImg
+    var examImgInput = $('#edit_PracImg')[0];
+    if (examImgInput.files.length > 0) {
+        var examImgFile = examImgInput.files[0];
+        formData.append('edit_PracImg', examImgFile);
+    }
+
+    // Validation
+    var isValid = formData.get('edit_Practice') !== '' && formData.get('edit_PracAns') !== '' && formData.get('edit_PracId') !== '';
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
+
+    $.ajax({
+        url: 'query/edit_ExamPracExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        processData: false, 
+        contentType: false,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your question is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+        success: function(response) {
+            swalLoad.close(); 
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Question updated.",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=practice-questions';
+                    //location.reload(); //Alternative
+                });
+            } else if (response.res == "fileerror") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "There was an error uploading the image.",
+                });
+            } else if (response.res == "filetypeerror") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "Wrong File Type. Only PNG, JPG, JPEG and WEBP files are allowed.",
+                });
+            } else if (response.res == "filemodify") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "There was an error modifying the image. Please try again.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while updating Question. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in required fields.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Exam not found " + response.msg,
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
 /* ########## END EXAM ########## */
 
 
