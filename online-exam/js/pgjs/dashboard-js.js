@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
           cancelButtonText: 'Decline',
           width: 800,
           title: "Data Privacy Consent",
-          html: ` <div class="m-3" style="text-align: justify;">
+          html: ` <div class="m-3 text-justify">
 By selecting agree in this consent form, I (as “Data Subject”) grant my
 free, voluntary and unconditional consent, without need of notice, to the collection
 and processing of all Personal Data and Personal Information (as defined in the
@@ -133,26 +133,96 @@ the appropriate or proper body, tribunal or court. </b>
       if (result.value) {
         stopRecording();
         //window.location.href = "exam.php?id=" + examId;
-        // Create a form element
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = 'exam.php';
 
-        // Create an input field for the exam ID
-        var hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'fetchid';
-        hiddenInput.id = 'fetchid';
-        hiddenInput.value = examId;
+        var checkData = {
+          'check_Id': examId
+        };
 
-        // Append the hidden input to the form
-        form.appendChild(hiddenInput);
+        //ajax query/checkExam.php
+        $.ajax({
+          url: 'query/checkExam.php',
+          type: 'POST',
+          dataType : "json",
+          data: checkData,
+          success: function(response) {
+            //console.log(response); // DEBUG
+            //console.log(checkData); // DEBUG
+            if (response.res == "complete") {
+              Swal.fire({
+                  icon: "error",
+                  title: "Completed",
+                  text: "You have already completed the exam.",
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+              }).then(function() {
+                  window.location.href = 'home.php';
+              });
+              return;
+            } else if (response.res == "unknown") {
+              Swal.fire({
+                  icon: "error",
+                  title: "Unknown Exam",
+                  text: "Exam Not Found.",
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+              }).then(function() {
+                  window.location.href = 'home.php';
+              });
+              return;
+            }
+            if (response.res == "incomplete" && response.practice_st == 'yes') {
+              // Create a form element
+              var form = document.createElement('form');
+              form.method = 'POST';
+              form.action = 'practice.php';
 
-        // Append the form to the body (or any other container element)
-        document.body.appendChild(form);
+              // Create an input field for the exam ID
+              var hiddenInput = document.createElement('input');
+              hiddenInput.type = 'hidden';
+              hiddenInput.name = 'fetchid';
+              hiddenInput.id = 'fetchid';
+              hiddenInput.value = response.examId;
 
-        // Submit the form
-        form.submit();
+              // Append the hidden input to the form
+              form.appendChild(hiddenInput);
+
+              // Append the form to the body (or any other container element)
+              document.body.appendChild(form);
+
+              // Submit the form
+              form.submit();
+            } else {
+              // Create a form element
+              var form = document.createElement('form');
+              form.method = 'POST';
+              form.action = 'exam.php';
+
+              // Create an input field for the exam ID
+              var hiddenInput = document.createElement('input');
+              hiddenInput.type = 'hidden';
+              hiddenInput.name = 'fetchid';
+              hiddenInput.id = 'fetchid';
+              hiddenInput.value = response.examId;
+
+              // Append the hidden input to the form
+              form.appendChild(hiddenInput);
+
+              // Append the form to the body (or any other container element)
+              document.body.appendChild(form);
+
+              // Submit the form
+              form.submit();
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              alert('A script error occured. Please try again.');
+              console.error(textStatus, errorThrown);
+              console.log(jqXHR.responseText);
+              window.location.href = 'home.php';
+          }
+        });
       }
     });
   });

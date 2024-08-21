@@ -4,39 +4,83 @@ $exmne_id = isset($_SESSION['ex_user']['exmne_id']) ? $_SESSION['ex_user']['exmn
 $exmne_disablecam = isset($_SESSION['ex_user']['exmne_disablecam']) ? $_SESSION['ex_user']['exmne_disablecam'] : '';
 
 // Fetch Exam IDs based on cluster
-$stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
+$stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id");
 $stmt1->bindParam(':clu_id', $exmne_clu_id);
 $stmt1->execute();
 
-$unattemptedExamIds = [];
+$unattemptedExams = [];
 
-while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-    $ex_id = $row['ex_id'];
+while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+    $ex_id = $row1['ex_id'];
 
-    // Fetch the status of the exam
-    $stmt3 = $conn->prepare("SELECT ex_status FROM exam_tbl WHERE ex_id = :ex_id");
-    $stmt3->bindParam(':ex_id', $ex_id);
-    $stmt3->execute();
-    $examStatus = $stmt3->fetch(PDO::FETCH_ASSOC);
+    // Fetch all exam titles and check if the exam has been attempted
+    $stmt2 = $conn->prepare("
+    SELECT e.*, 
+        CASE 
+            WHEN ea.ex_id IS NOT NULL THEN 1 
+            ELSE 0 
+        END AS attempted
+    FROM exam_tbl e
+    LEFT JOIN examinee_attempt ea ON e.ex_id = ea.ex_id AND ea.exmne_id = :exmne_id
+    WHERE e.ex_id = :ex_id AND e.ex_status = 1
+    ");
+    $stmt2->bindParam(':ex_id', $ex_id);
+    $stmt2->bindParam(':exmne_id', $exmne_id);
+    $stmt2->execute();
+    $results = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-    // Check if the exam is active
-    if ($examStatus['ex_status'] == 1) {
-        // Check if the exam has been attempted
-        $stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
-        $stmt2->bindParam(':ex_id', $ex_id);
-        $stmt2->bindParam(':exmne_id', $exmne_id);
-        $stmt2->execute();
-        $attempts = $stmt2->rowCount();
+    // Filter out exams that have been attempted
+    $unattemptedExamsForCluster = array_filter($results, function ($exam) {
+        return $exam['attempted'] == 0;
+    });
 
-        if ($attempts == 0) {
-            $unattemptedExamIds[] = $ex_id;
+    // Custom sort function
+    usort($unattemptedExamsForCluster, function ($a, $b) {
+        $a_title = $a['ex_title'];
+        $b_title = $b['ex_title'];
+
+        // If a title contains "APPLICANT RISK", it should go last
+        if (stripos($a_title, 'APPLICANT RISK') !== false) return 1;
+        if (stripos($b_title, 'APPLICANT RISK') !== false) return -1;
+
+        // Extract the number from "TEST X: ..." titles
+        preg_match('/^TEST (\d+):/', $a_title, $a_match);
+        preg_match('/^TEST (\d+):/', $b_title, $b_match);
+
+        if ($a_match && $b_match) {
+            // Compare numbers if both are "TEST X: ..."
+            return (int)$a_match[1] <=> (int)$b_match[1];
+        } elseif ($a_match) {
+            // TEST entries should come before non-TEST entries
+            return -1;
+        } elseif ($b_match) {
+            return 1;
         }
+
+        // Fallback to a default string comparison
+        return strcmp($a_title, $b_title);
+    });
+
+    // DEBUG
+    /*foreach ($unattemptedExamsForCluster as $row) {
+        echo "Exam Title: " . $row['ex_title'] . "<br>";
+        echo "Exam ID: " . $row['ex_id'] . "<br>";
+        echo "Exam Practice: " . $row['ex_practice'] . "<br>";
+    }*/
+
+    // Store unattempted exam IDs and practices
+    foreach ($unattemptedExamsForCluster as $exam) {
+        $unattemptedExams[] = [
+            'ex_id' => $exam['ex_id'],
+            'ex_practice' => $exam['ex_practice']
+        ];
     }
 }
 
-$ex_count = count($unattemptedExamIds);
-if (count($unattemptedExamIds) > 0) {
-    $selEx_id = $unattemptedExamIds[0];
+
+$ex_count = count($unattemptedExams);
+if (count($unattemptedExams) > 0) {
+    $selEx_id = $unattemptedExams[0]['ex_id'];
 } else {
     $selEx_id = '';
 }
