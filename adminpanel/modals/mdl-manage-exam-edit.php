@@ -308,7 +308,6 @@
 </div> <!-- #END# DISABLE CLUSTER MODAL -->
 
 
-
 <!-- IMPORT QUESTIONS MODAL -->
 <div class="modal fade" id="mdlImportQuest" tabindex="-1" role="dialog" aria-labelledby="mdlImportQuest" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -353,3 +352,127 @@
             </div>
     </div>
 </div> <!-- #END# IMPORT QUESTIONS MODAL -->
+
+
+<!-- ADD PRACTICE MODAL -->
+<div class="modal fade" id="mdlAddPractice" tabindex="-1" role="dialog" aria-labelledby="mdlAddPractice" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdlAddPractice">Add Practice Question</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addPracticeFrm" name="addPracticeFrm" method="post">
+            <div class="modal-body">
+                <div class="scroll-area-lg">
+                    <div class="col-md-12">
+                        <input type="text" name="add_PracExamId" id="add_PracExamId" value="" hidden required>
+                        <div class="form-row">
+                            <label class="font-weight-bold">Exam Image</label>
+                        </div>
+                        <!--<div class="form-row mb-2"> NOT IMPLEMENTED
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="selImg_switch">
+                                <label class="custom-control-label" for="selImg_switch">Select Existing</label>
+                            </div>
+                        </div>-->
+                        <div class="form-row mb-2" id="uploadInput">
+                            <input name="add_PracImg" id="add_PracImg" type="file" class="form-control-file" accept="image/png, image/jpeg, image/webp">
+                            <small class="form-text text-muted">Upload png, jpg/jpeg, webp only. Max file size 4MB.</small>
+                        </div>
+                        <!--<div class="form-row mb-2" id="selectInput" style="display: none;"> NOT IMPLEMENTED
+                            <select name="existingImages" id="existingImages" class="form-control">
+                                <option value="">Select an existing image</option>
+                                <option value="image1">Image 1</option>
+                                <option value="image2">Image 2</option>
+                            </select>
+                        </div>-->
+                        <div class="form-row mb-1 border justify-content-center" style="height: 220px" id="prac_imgContainer">
+                            <div id="prac_imagePreview" class="form-group d-flex align-items-center m-0">
+                                <i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>
+                            </div>
+                        </div>
+                        <div class="form-row mb-3">
+                            <div class="d-flex justify-content-end w-100">
+                                <button type="button" class="btn btn-secondary mr-2" id="add_PracResetImgBtn" style="display:none">Reset</button>
+                                <button type="button" class="btn btn-danger mr-1" id="add_PracDeleteImgBtn" style="display:none">Delete</button>
+                            </div>
+                        </div>
+                        <div class="form-row mb-3">
+                            <label for="add_Practice" class="font-weight-bold">Question<span class="text-danger">*</span></label>
+                            <textarea name="add_Practice" id="add_Practice" class="form-control" rows="3" placeholder=""></textarea>
+                        </div>
+                        <label class="font-weight-bold">
+                            Choices<span class="text-danger">*</span>
+                        </label>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh1">Choice A</label>
+                            <input type="text" name="add_PracCh1" id="add_PracCh1" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh2">Choice B</label>
+                            <input type="text" name="add_PracCh2" id="add_PracCh2" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh3">Choice C</label>
+                            <input type="text" name="add_PracCh3" id="add_PracCh3" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh4">Choice D</label>
+                            <input type="text" name="add_PracCh4" id="add_PracCh4" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh5">Choice E</label>
+                            <input type="text" name="add_PracCh5" id="add_PracCh5" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh6">Choice F</label>
+                            <input type="text" name="add_PracCh6" id="add_PracCh6" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh7">Choice G</label>
+                            <input type="text" name="add_PracCh7" id="add_PracCh7" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh8">Choice H</label>
+                            <input type="text" name="add_PracCh8" id="add_PracCh8" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracCh9">Choice I</label>
+                            <input type="text" name="add_PracCh9" id="add_PracCh9" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-3">
+                            <label for="add_PracCh10">Choice J</label>
+                            <input type="text" name="add_PracCh10" id="add_PracCh10" class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="form-row mb-2">
+                            <label for="add_PracAns" class="font-weight-bold">Answer<span class="text-danger">*</span></label>
+                            <select class="form-control" name="add_PracAns" id="add_PracAns" required>
+                                <option value="" hidden>Select...</option>
+                                <option value="1">A</option>
+                                <option value="2">B</option>
+                                <option value="3">C</option>
+                                <option value="4">D</option>
+                                <option value="5">E</option>
+                                <option value="6">F</option>
+                                <option value="7">G</option>
+                                <option value="8">H</option>
+                                <option value="9">I</option>
+                                <option value="10">J</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> <!-- #END# ADD PRACTICE MODAL -->

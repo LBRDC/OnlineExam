@@ -700,6 +700,7 @@ $(document).on("submit","#editExamFrm" , function(event) {
         'edit_ExamNoPrev': $('#edit_ExamNoPrev').val(),
         'edit_ExamRandom': $('#edit_ExamRandom').is(':checked') ? 'yes' : '',
         'edit_ExamNoPrev': $('#edit_ExamNoPrev').is(':checked') ? 'yes' : '',
+        'edit_ExamPractice': $('#edit_ExamPractice').is(':checked') ? 'yes' : '',
         'edit_ExamStatus': $('#edit_ExamStatus').val()
     };
     
@@ -1254,6 +1255,142 @@ $(document).on("submit","#importQuestFrm" , function(event) {
                     icon: "warning",
                     title: "Incomplete",
                     text: "required fields missing.",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "System error occurred.",
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            swalLoad.close();
+            alert('A script error occured. Please try again.');
+            console.error(textStatus, errorThrown);
+            console.log(jqXHR.responseText);
+            location.reload();
+        }
+    });
+});
+
+// manage-exam-edit PRACTICE ADD
+$(document).on("submit","#addPracticeFrm" , function(event) {
+    event.preventDefault();
+
+    var page = currentPg();
+
+    //Append fields to formData
+    var formData = new FormData();
+    formData.append('add_PracExamId', $('#add_PracExamId').val()); 
+    formData.append('add_Practice', $('#add_Practice').val()); 
+    formData.append('add_PracCh1', $('#add_PracCh1').val());
+    formData.append('add_PracCh2', $('#add_PracCh2').val());
+    formData.append('add_PracCh3', $('#add_PracCh3').val());
+    formData.append('add_PracCh4', $('#add_PracCh4').val());
+    formData.append('add_PracCh5', $('#add_PracCh5').val());
+    formData.append('add_PracCh6', $('#add_PracCh6').val());
+    formData.append('add_PracCh7', $('#add_PracCh7').val());
+    formData.append('add_PracCh8', $('#add_PracCh8').val());
+    formData.append('add_PracCh9', $('#add_PracCh9').val());
+    formData.append('add_PracCh10', $('#add_PracCh10').val());
+    formData.append('add_PracImg', $('#add_PracImg')[0].files[0]);
+    
+	// Append add_QstnAns based on selection
+    var selectedValue = $('#add_PracAns').val();
+    var key = 'add_PracCh' + selectedValue;
+
+    // Check if the selected answer is not empty or undefined
+    if (selectedValue && formData.get(key)) {
+        formData.append('add_PracAns', formData.get(key));
+    } else {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please select an answer.",
+        });
+        return;
+    }
+
+    // Display the appended values in the console
+    for (var pair of formData.entries()) { //DEBUG
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }
+
+    // Check if a file has been selected for add_ExamImg
+    var examImgInput = $('#add_PracImg')[0];
+    if (examImgInput.files.length > 0) {
+        var examImgFile = examImgInput.files[0];
+        formData.append('add_PracImg', examImgFile);
+    }
+
+    var isValid = formData.get('add_Practice') !== '' && formData.get('add_PracAns') !== '' && formData.get('add_PracExamId') !== '';
+    if (!isValid) {
+        Swal.fire({
+            icon: "warning",
+            title: "Incomplete",
+            text: "Please fill in the required field.",
+        });
+        return;
+    }
+
+    //console.log("INPUT VALIDATED " + isValid); //DEBUG
+    //console.log(formData); //DEBUG
+
+    $.ajax({
+        url: 'query/add_PracQuestExe.php',
+        type: 'POST',
+        dataType : "json",
+        data: formData,
+        processData: false, 
+        contentType: false,
+        beforeSend: function() {
+            swalLoad = Swal.fire({
+                title: 'Loading...',
+                html: 'Please wait while your question is being processed.',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+        success: function(response) {
+            swalLoad.close(); 
+            if (response.res == "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Question added to " + response.msg + ".",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                }).then(function() {
+                    window.location.href = 'home.php?page=manage-exam-edit&id=' + page + '&tab=practice-questions';
+                    //location.reload(); //Alternative
+                });
+            } else if (response.res == "exists") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: response.msg + "already exists.",
+                });
+            } else if (response.res == "failed") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "An error occurred while adding Question. Please try again.",
+                });
+            } else if (response.res == "incomplete") {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Incomplete",
+                    text: "Please fill in required fields.",
+                });
+            } else if (response.res == "norecord") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Exam not found " + response.msg,
                 });
             } else {
                 Swal.fire({

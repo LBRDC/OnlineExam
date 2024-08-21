@@ -10,6 +10,7 @@ $edit_ExamQuestLimit = isset($_POST['edit_ExamQuestLimit']) ? $_POST['edit_ExamQ
 $edit_ExamTimeLimit = isset($_POST['edit_ExamTimeLimit']) ? $_POST['edit_ExamTimeLimit'] : '';
 $edit_ExamRandom = isset($_POST['edit_ExamRandom']) ? $_POST['edit_ExamRandom'] : '';
 $edit_ExamNoPrev = isset($_POST['edit_ExamNoPrev']) ? $_POST['edit_ExamNoPrev'] : '';
+$edit_ExamPractice = isset($_POST['edit_ExamPractice']) ? $_POST['edit_ExamPractice'] : '';
 $edit_ExamStatus = isset($_POST['edit_ExamStatus']) ? $_POST['edit_ExamStatus'] : '';
 
 // Check if all variables contain values
@@ -45,13 +46,14 @@ if($stmt2->rowCount() > 0 && $check_ExamTitle != $edit_ExamTitle){
 }
 
 // Prepare and execute the statement to update the exam
-$stmt3 = $conn->prepare("UPDATE exam_tbl SET ex_title = :edit_ExamTitle, ex_description = :edit_ExamDesc, ex_time_limit = :edit_ExamTimeLimit, ex_qstn_limit = :edit_ExamQuestLimit, ex_disable_prv = :edit_ExamNoPrev, ex_random_qstn = :edit_ExamRandom, ex_status = :edit_ExamStatus WHERE ex_id = :edit_ExamId");
+$stmt3 = $conn->prepare("UPDATE exam_tbl SET ex_title = :edit_ExamTitle, ex_description = :edit_ExamDesc, ex_time_limit = :edit_ExamTimeLimit, ex_qstn_limit = :edit_ExamQuestLimit, ex_disable_prv = :edit_ExamNoPrev, ex_random_qstn = :edit_ExamRandom, ex_practice = :edit_ExamPractice, ex_status = :edit_ExamStatus WHERE ex_id = :edit_ExamId");
 $stmt3->bindParam(':edit_ExamTitle', $edit_ExamTitle);
 $stmt3->bindParam(':edit_ExamDesc', $edit_ExamDesc);
 $stmt3->bindParam(':edit_ExamTimeLimit', $edit_ExamTimeLimit);
 $stmt3->bindParam(':edit_ExamQuestLimit', $edit_ExamQuestLimit);
 $stmt3->bindParam(':edit_ExamNoPrev', $edit_ExamNoPrev);
 $stmt3->bindParam(':edit_ExamRandom', $edit_ExamRandom);
+$stmt3->bindParam(':edit_ExamPractice', $edit_ExamPractice);
 $stmt3->bindParam(':edit_ExamStatus', $edit_ExamStatus);
 $stmt3->bindParam(':edit_ExamId', $edit_ExamId);
 

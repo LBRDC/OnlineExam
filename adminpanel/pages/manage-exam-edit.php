@@ -12,6 +12,8 @@
             $tab = 0;
         } else if ($_GET['tab'] == 'exam-questions') {
             $tab = 1;
+        } else if ($_GET['tab'] == 'practice-questions') {
+            $tab = 2;
         }
     } else {
         $tab = 0;
@@ -32,6 +34,7 @@
         $ex_qstn_limit = $resultei1['ex_qstn_limit'];
         $ex_disable_prv = $resultei1['ex_disable_prv'];
         $ex_random_qstn = $resultei1['ex_random_qstn'];
+        $ex_practice = $resultei1['ex_practice'];
         $ex_status = $resultei1['ex_status'];
         $ex_status_txt = ($ex_status == 1) ? 'Active' : 'Inactive';
     } else {
@@ -44,6 +47,7 @@
         $ex_qstn_limit = "";
         $ex_disable_prv = "";
         $ex_random_qstn = "";
+        $ex_practice = "";
         $ex_status = "";
     }
 
@@ -73,6 +77,16 @@
 
     //count questions
     $counteq1 = $stmteq1->rowCount();
+
+    /* ########## PRACTICE QUESTIONS ########## */
+    //Fetch Practice Questions
+    $stmtpr1 = $conn->prepare("SELECT * FROM exam_practice_tbl WHERE ex_id=:ex_id ORDER BY prqstn_id ASC");
+    $stmtpr1->bindParam(':ex_id', $ex_id);
+    $stmtpr1->execute();
+    $resultpr1 = $stmtpr1->fetchAll(PDO::FETCH_ASSOC);
+
+    //count questions
+    $countpr1 = $stmtpr1->rowCount();
 ?>
 
 <!-- #START# manage-exam.php -->
@@ -113,6 +127,11 @@
                         <li class="nav-item">
                             <a role="tab" class="nav-link <?php if($tab==1){echo'active';} ?>" id="tab-1" data-toggle="tab" href="#tab-content-1">
                                 <span>Exam Questions</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link <?php if($tab==2){echo'active';} ?>" id="tab-2" data-toggle="tab" href="#tab-content-2">
+                                <span>Practice Questions</span>
                             </a>
                         </li>
                     </ul> <!-- END Page Tabs -->
@@ -225,6 +244,10 @@
                                                             <div class="custom-control custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="edit_ExamNoPrev" <?php if($ex_disable_prv=='yes'){echo'checked';} ?>>
                                                                 <label class="custom-control-label" for="edit_ExamNoPrev">Disable Previous</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="edit_ExamPractice" <?php if($ex_practice=='yes'){echo'checked';} ?>>
+                                                                <label class="custom-control-label" for="edit_ExamPractice">Practice Included</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -402,6 +425,164 @@
                                 </div>
                             </div> <!-- END Questions -->
                         </div> <!-- END Exam Questions -->
+                        <!-- Practice Questions -->
+                        <div class="tab-pane tabs-animation fade <?php if($tab==2){echo'show active';} ?>" id="tab-content-2" role="tabpanel">
+                            <!-- Actions -->
+                            <div class="row justify-content-center <?php if($ex_practice!=''){echo'd-none';} ?>">
+                                <div class="col-md-7">
+                                <div class="alert alert-warning fade show text-center" role="alert"><b>WARNING!</b> You Must Enable <u>Practice Included</u> in Exam information otherwise Examinees will go directly to Exam.</div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-11">
+                                    <div class="main-card mb-3 card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Exam Actions</h5>
+                                            <a href="javascript:void(0);">
+                                                <div class="font-icon-wrapper font-icon-lg btn" id="add-prac-btn" data-toggle="modal" data-target="#mdlAddPractice" data-toggle="tooltip" data-placement="bottom" title="Add Question" data-add-id="<?php echo htmlspecialchars($ex_id); ?>">
+                                                    <i class="fa fa-plus-circle icon-gradient bg-grow-early"></i>
+                                                </div>
+                                            </a>
+                                            <a href="importexport/export_ExamPracExe.php?id=<?php echo htmlspecialchars($ex_id); ?>">
+                                                <div class="font-icon-wrapper font-icon-lg btn" data-toggle="tooltip" data-placement="bottom" title="Save Questions">
+                                                    <i class="fa fa-save icon-gradient bg-vicious-stance"></i>
+                                                </div>
+                                            </a>
+                                            <a href="javascript:void(0);">
+                                                <div class="font-icon-wrapper font-icon-lg btn" id="import-prac-btn" data-import-id="<?php echo htmlspecialchars($ex_id); ?>" data-toggle="modal" data-target="#mdlImportPrac" data-toggle="tooltip" data-placement="bottom" title="Import Questions">
+                                                    <i class="fa fa-upload icon-gradient bg-deep-blue"></i>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- END Actions -->                                   
+                            
+                            <!-- Questions -->
+                            <div class="row justify-content-center">
+                                <div class="col-md-11">
+                                    <div class="main-card mb-3 card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Practice Questions<span class="ml-2 mb-2 mr-2 badge badge-pill badge-success"><?php echo htmlspecialchars($countpr1); ?></span></h5>
+                                            <div class="m-3 scroll-area-lg border">
+                                                <div class="scrollbar-container ps--active-y">
+                                                <table class="mb-0 table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Question</th>
+                                                            <th style="width: 30%;">Image</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>Question</th>
+                                                            <th>Image</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                        <?php
+                                                        if ($resultpr1) {
+                                                            $counter = 1;
+                                                            foreach ($resultpr1 as $row2) {
+                                                                $prqstn_id = $row2['prqstn_id'];
+                                                                $expr_id = $row2['ex_id'];
+                                                                $prac_image = $row2['prac_image'];
+                                                                $prac_question = $row2['prac_question'];
+                                                                $pr_ch1 = $row2['prac_ch1'];
+                                                                $pr_ch2 = $row2['prac_ch2'];
+                                                                $pr_ch3 = $row2['prac_ch3'];
+                                                                $pr_ch4 = $row2['prac_ch4'];
+                                                                $pr_ch5 = $row2['prac_ch5'];
+                                                                $pr_ch6 = $row2['prac_ch6'];
+                                                                $pr_ch7 = $row2['prac_ch7'];
+                                                                $pr_ch8 = $row2['prac_ch8'];
+                                                                $pr_ch9 = $row2['prac_ch9'];
+                                                                $pr_ch10 = $row2['prac_ch10'];
+                                                                $prqstn_answer = $row2['prqstn_answer'];
+                                                                ?>
+                                                                <tr id="<?php echo $prqstn_id; ?>">
+                                                                    <td>
+                                                                        <strong><?php echo $counter; ?>).</strong> <?php echo htmlspecialchars($prac_question); ?><br>
+                                                                        <?php
+                                                                        $choices = [
+                                                                            'A' => $pr_ch1,
+                                                                            'B' => $pr_ch2,
+                                                                            'C' => $pr_ch3,
+                                                                            'D' => $pr_ch4,
+                                                                            'E' => $pr_ch5,
+                                                                            'F' => $pr_ch6,
+                                                                            'G' => $pr_ch7,
+                                                                            'H' => $pr_ch8,
+                                                                            'I' => $pr_ch9,
+                                                                            'J' => $pr_ch10
+                                                                        ];
+                                                                        $correctLetters = array_keys($choices, $prqstn_answer);
+                                                                        if (!empty($correctLetters)) {
+                                                                            $correctLetter = $correctLetters[0]; 
+                                                                        } else {
+                                                                            $correctLetter = null;
+                                                                        }
+                                                                        // Debugging: Print the correct answer for this question
+                                                                        //echo "<strong>Correct Answer:</strong> " . htmlspecialchars($correctLetter) . "<br>";
+                                                                        foreach ($choices as $letter => $choice) {
+                                                                            $isCorrect = $letter == $correctLetter;
+                                                                            echo ($isCorrect ? '<span class="pl-4 font-weight-bold text-success">' : '<span class="pl-4">') . $letter . '. ' . htmlspecialchars($choice) . ($isCorrect ? '</span>' : '') . "<br>";
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <?php if (!empty($prac_image)) { ?>
+                                                                        <a href="javascript:void(0);" id="viewimg-btn" data-toggle="modal" data-target="#mdlViewImage" data-view-img="<?php echo htmlspecialchars($exam_image); ?>">
+                                                                        <img class="img-fluid w-10 border" src="../uploads/exam_question/<?php echo htmlspecialchars($prac_image); ?>" alt="<?php echo htmlspecialchars($exam_image); ?>" style="max-width: 40%; height: auto;">
+                                                                        </a>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="javascript:void(0);" class="btn btn-warning m-1" id="edit-prac-btn" data-toggle="modal" data-target="#mdlEditPracQuestion" data-toggle="tooltip" data-placement="bottom" title="Edit" 
+                                                                        data-edit-count="<?php echo htmlspecialchars($counter); ?>" 
+                                                                        data-edit-id="<?php echo htmlspecialchars($prqstn_id); ?>" 
+                                                                        data-edit-exid="<?php echo htmlspecialchars($expr_id); ?>"
+                                                                        data-edit-img="<?php echo htmlspecialchars($prac_image); ?>" 
+                                                                        data-edit-question="<?php echo htmlspecialchars($prac_question); ?>" 
+                                                                        data-edit-ch1="<?php echo htmlspecialchars($pr_ch1); ?>"
+                                                                        data-edit-ch2="<?php echo htmlspecialchars($pr_ch2); ?>"
+                                                                        data-edit-ch3="<?php echo htmlspecialchars($pr_ch3); ?>"
+                                                                        data-edit-ch4="<?php echo htmlspecialchars($pr_ch4); ?>"
+                                                                        data-edit-ch5="<?php echo htmlspecialchars($pr_ch5); ?>"
+                                                                        data-edit-ch6="<?php echo htmlspecialchars($pr_ch6); ?>"
+                                                                        data-edit-ch7="<?php echo htmlspecialchars($pr_ch7); ?>"
+                                                                        data-edit-ch8="<?php echo htmlspecialchars($pr_ch8); ?>"
+                                                                        data-edit-ch9="<?php echo htmlspecialchars($pr_ch9); ?>"
+                                                                        data-edit-ch10="<?php echo htmlspecialchars($pr_ch10); ?>"
+                                                                        data-edit-answer="<?php echo htmlspecialchars($prqstn_answer); ?>">
+                                                                            <i class="fas fa-edit"></i>
+                                                                        </a>
+                                                                        <a href="javascript:void(0);" class="btn btn-danger m-1" id="delete-prac-btn" data-toggle="modal" data-target="#mdlDeletePracQuestion" data-toggle="tooltip" data-placement="bottom" title="Delete" 
+                                                                        data-delete-id="<?php echo htmlspecialchars($prqstn_id); ?>"
+                                                                        data-delete-count="<?php echo htmlspecialchars($counter); ?>">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php
+                                                                $counter++;
+                                                            }
+                                                        } else {
+                                                            echo '<tr><td colspan="4" class="text-center">No Questions Found</td></tr>';
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- END Questions -->
+                        </div> <!-- END Practice Questions -->
                     </div>
                 </div> <!-- #END# Exam PAGE -->
 <!-- #END# manage-exam.php -->

@@ -341,4 +341,88 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+
+    /* &&&&&&&&&&&& ADD PRACTICE &&&&&&&&&&&& */
+    //Functions
+    function ad_pracResetImg () {
+        document.getElementById('prac_imagePreview').innerHTML = '<i class="pe-7s-photo icon-gradient bg-premium-dark" style="font-size: 128px;"></i>';
+        document.getElementById('add_PracDeleteImgBtn').style.display = 'none';
+        document.getElementById('add_PracImg').value = '';
+    }
+
+    //add practice btn
+    document.querySelectorAll('#add-prac-btn').forEach(function(addbtn) {
+        addbtn.addEventListener('click', function() {
+            var examId = this.getAttribute('data-add-id');
+
+            document.getElementById('add_PracExamId').value = examId;
+            
+            //Select Existing Image NOT IMPLEMENTED
+            /*document.getElementById('selImg_switch').addEventListener('change', function() {
+                var uploadInput = document.getElementById('uploadInput');
+                var selectInput = document.getElementById('selectInput');
+        
+                if (this.checked) {
+                    // If the switch is checked, hide the upload input and show the select input
+                    uploadInput.style.display = 'none';
+                    selectInput.style.display = 'block';
+                } else {
+                    // If the switch is unchecked, show the upload input and hide the select input
+                    uploadInput.style.display = 'block';
+                    selectInput.style.display = 'none';
+                }
+            });*/
+            
+            document.getElementById('add_PracImg').addEventListener('input', function() {
+                if (!this.value) {
+                    ad_pracResetImg();
+                }
+            });
+
+            // Event listener for the file input change
+            document.getElementById('add_PracImg').addEventListener('change', function() {
+                var file = this.files[0];
+                var fileSize = file.size / (1024 * 1024); // in 4MB
+                var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.webp)$/i;
+            
+                if (!allowedExtensions.exec(file.name)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Wrong file type. Upload png, jpg, webp only!",
+                    }).then(function() {
+                        ad_pracResetImg(); 
+                    });
+                } else if (fileSize > 4) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "File size exceeded. Max file size is 4MB only!",
+                    }).then(function() {
+                        ad_pracResetImg();
+                    });
+                } else {
+                    document.getElementById('prac_imagePreview').innerHTML = '';
+                    var reader = new FileReader();
+            
+                    reader.onload = function(e) {
+                        document.getElementById('prac_imagePreview').innerHTML = '<img src="' + e.target.result + '" style="max-width:100%; max-height:200px;"/>';
+                        document.getElementById('add_PracDeleteImgBtn').style.display = 'inline-block';
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.querySelector('#add_PracDeleteImgBtn').addEventListener('click', function() {
+                ad_pracResetImg();
+                document.getElementById('add_PracImg').value = '';
+            });
+        });
+    });
+
+
+
+
 });
