@@ -25,12 +25,13 @@
 2. delete files inside htdocs folder (C:\xampp\htdocs)
 3. clone repository to htdocs folder (make sure path is "C:\xampp\htdocs")
 4. Launch CMD in htdocs folder, run 'composer install'
-4. Launch XAMPP Control Panel
-5. Start Apache, MySQL
-6. Go to MySQL Admin Page
-7. Import latest lbrdc-oe_DBS_*.sql located inside _MiscFiles folder
-8. For ADMIN, go to web browser and input "localhost/adminpanel"
-9. For EXAMINEE, go to web browser and input "localhost/online-exam"
+   4.1 If error edit php.ini, remove ";" on "extension=gd" and "extension=zip"
+6. Launch XAMPP Control Panel
+7. Start Apache, MySQL
+8. Go to MySQL Admin Page
+9. Import latest lbrdc-oe_DBS_*.sql located inside _MiscFiles folder
+10. For ADMIN, go to web browser and input "localhost/adminpanel"
+11. For EXAMINEE, go to web browser and input "localhost/online-exam"
 
 ## Dependencies Information
 #### CSS
