@@ -3,6 +3,9 @@ $exmne_clu_id = isset($_SESSION['ex_user']['exmne_clu_id']) ? $_SESSION['ex_user
 $exmne_id = isset($_SESSION['ex_user']['exmne_id']) ? $_SESSION['ex_user']['exmne_id'] : '';
 $exmne_disablecam = isset($_SESSION['ex_user']['exmne_disablecam']) ? $_SESSION['ex_user']['exmne_disablecam'] : '';
 
+//echo $_SESSION['sess']['sessionid'];
+//echo $_SESSION['sess']['time'];
+
 // Fetch Exam IDs based on cluster
 $stmt1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = ?");
 $stmt1->execute([$exmne_clu_id]);
