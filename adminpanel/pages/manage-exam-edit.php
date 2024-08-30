@@ -501,6 +501,7 @@
                                                                 $pr_ch9 = $row2['prac_ch9'];
                                                                 $pr_ch10 = $row2['prac_ch10'];
                                                                 $prqstn_answer = $row2['prqstn_answer'];
+                                                                $pr_guide = $row2['prac_guide'];
                                                                 ?>
                                                                 <tr id="<?php echo $prqstn_id; ?>">
                                                                     <td>
@@ -546,6 +547,7 @@
                                                                         data-edit-prid="<?php echo htmlspecialchars($prqstn_id); ?>" 
                                                                         data-edit-prexid="<?php echo htmlspecialchars($expr_id); ?>"
                                                                         data-edit-primg="<?php echo htmlspecialchars($prac_image); ?>" 
+                                                                        data-edit-prguide="<?php echo htmlspecialchars($pr_guide); ?>" 
                                                                         data-edit-prquestion="<?php echo htmlspecialchars($prac_question); ?>" 
                                                                         data-edit-prch1="<?php echo htmlspecialchars($pr_ch1); ?>"
                                                                         data-edit-prch2="<?php echo htmlspecialchars($pr_ch2); ?>"

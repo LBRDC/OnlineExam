@@ -4,6 +4,7 @@ include("../../conn.php");
 
 //Variables
 $add_PracExamId = isset($_POST['add_PracExamId']) ? $_POST['add_PracExamId'] : '';
+$add_Guide = isset($_POST['add_Guide']) ? $_POST['add_Guide'] : '';
 $add_Practice = isset($_POST['add_Practice']) ? $_POST['add_Practice'] : '';
 $add_PracCh1 = isset($_POST['add_PracCh1']) ? $_POST['add_PracCh1'] : '';
 $add_PracCh2 = isset($_POST['add_PracCh2']) ? $_POST['add_PracCh2'] : '';
@@ -18,8 +19,8 @@ $add_PracCh10 = isset($_POST['add_PracCh10']) ? $_POST['add_PracCh10'] : '';
 $add_PracAns = isset($_POST['add_PracAns']) ? $_POST['add_PracAns'] : '';
 
 // Check if variables contain values
-if($add_PracExamId == '' || $add_Practice == '' || $add_PracAns == '') {
-    $res = array("res" => "incomplete" , "msg" => $add_PracExamId . $add_Practice . $add_PracAns);
+if($add_Guide == '' || $add_PracExamId == '' || $add_Practice == '' || $add_PracAns == '') {
+    $res = array("res" => "incomplete" , "msg" => $add_Guide . $add_PracExamId . $add_Practice . $add_PracAns);
     echo json_encode($res);
     exit();
 }
@@ -73,9 +74,10 @@ if (isset($_FILES['add_PracImg']) && $_FILES['add_PracImg']['error'] == UPLOAD_E
 }
 
 // Prepare and execute the second statement to insert the new cluster
-$stmt2 = $conn->prepare("INSERT INTO exam_practice_tbl (ex_id, prac_image, prac_question, prac_ch1, prac_ch2, prac_ch3, prac_ch4, prac_ch5, prac_ch6, prac_ch7, prac_ch8, prac_ch9, prac_ch10, prqstn_answer) VALUES (:add_PracExamId, :add_PracImg, :add_Practice, :add_PracCh1, :add_PracCh2, :add_PracCh3, :add_PracCh4, :add_PracCh5, :add_PracCh6, :add_PracCh7, :add_PracCh8, :add_PracCh9, :add_PracCh10, :add_PracAns)");
+$stmt2 = $conn->prepare("INSERT INTO exam_practice_tbl (ex_id, prac_image, prac_question, prac_ch1, prac_ch2, prac_ch3, prac_ch4, prac_ch5, prac_ch6, prac_ch7, prac_ch8, prac_ch9, prac_ch10, prqstn_answer, prac_guide) VALUES (:add_PracExamId, :add_PracImg, :add_Practice, :add_PracCh1, :add_PracCh2, :add_PracCh3, :add_PracCh4, :add_PracCh5, :add_PracCh6, :add_PracCh7, :add_PracCh8, :add_PracCh9, :add_PracCh10, :add_PracAns, :add_Guide)");
 $stmt2->bindParam(':add_PracExamId', $add_PracExamId);
 $stmt2->bindParam(':add_PracImg', $add_PracImg);
+$stmt2->bindParam(':add_Guide', $add_Guide);
 $stmt2->bindParam(':add_Practice', $add_Practice);
 $stmt2->bindParam(':add_PracCh1', $add_PracCh1);
 $stmt2->bindParam(':add_PracCh2', $add_PracCh2);

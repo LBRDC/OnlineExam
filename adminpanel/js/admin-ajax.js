@@ -1283,6 +1283,7 @@ $(document).on("submit","#addPracticeFrm" , function(event) {
     //Append fields to formData
     var formData = new FormData();
     formData.append('add_PracExamId', $('#add_PracExamId').val()); 
+    formData.append('add_Guide', $('#add_Guide').val()); 
     formData.append('add_Practice', $('#add_Practice').val()); 
     formData.append('add_PracCh1', $('#add_PracCh1').val());
     formData.append('add_PracCh2', $('#add_PracCh2').val());
@@ -1324,7 +1325,7 @@ $(document).on("submit","#addPracticeFrm" , function(event) {
         formData.append('add_PracImg', examImgFile);
     }
 
-    var isValid = formData.get('add_Practice') !== '' && formData.get('add_PracAns') !== '' && formData.get('add_PracExamId') !== '';
+    var isValid = formData.get('add_Guide') !== '' && formData.get('add_Practice') !== '' && formData.get('add_PracAns') !== '' && formData.get('add_PracExamId') !== '';
     if (!isValid) {
         Swal.fire({
             icon: "warning",
@@ -1420,6 +1421,7 @@ $(document).on("submit","#EditPracticeFrm" , function(event) {
     formData.append('edit_PracId', $('#edit_PracId').val()); 
     formData.append('edit_PracExamId', $('#edit_PracExamId').val()); 
     formData.append('edit_PracImgStatus', $('#edit_PracImgStatus').val()); 
+    formData.append('edit_Guide', $('#edit_Guide').val()); 
     formData.append('edit_Practice', $('#edit_Practice').val()); 
     formData.append('edit_PracCh1', $('#edit_PracCh1').val());
     formData.append('edit_PracCh2', $('#edit_PracCh2').val());
@@ -1463,7 +1465,7 @@ $(document).on("submit","#EditPracticeFrm" , function(event) {
     }
 
     // Validation
-    var isValid = formData.get('edit_Practice') !== '' && formData.get('edit_PracAns') !== '' && formData.get('edit_PracId') !== '';
+    var isValid = formData.get('edit_Guide') !== '' && formData.get('edit_Practice') !== '' && formData.get('edit_PracAns') !== '' && formData.get('edit_PracId') !== '';
     if (!isValid) {
         Swal.fire({
             icon: "warning",

@@ -460,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var edit_PracId = this.getAttribute('data-edit-prid');
             var edit_PracExamId = this.getAttribute('data-edit-prexid');
             var edit_PracImg = this.getAttribute('data-edit-primg');
+            var edit_Guide = this.getAttribute('data-edit-prguide');
             var edit_Practice = this.getAttribute('data-edit-prquestion');
             var edit_prac_ch1 = this.getAttribute('data-edit-prch1');
             var edit_prac_ch2 = this.getAttribute('data-edit-prch2');
@@ -475,6 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.getElementById('edit_PracId').value = edit_PracId;
             document.getElementById('edit_PracExamId').value = edit_PracExamId;
+            document.getElementById('edit_Guide').value = edit_Guide;
             document.getElementById('edit_Practice').value = edit_Practice;
             document.getElementById('edit_PracCh1').value = edit_prac_ch1;
             document.getElementById('edit_PracCh2').value = edit_prac_ch2;

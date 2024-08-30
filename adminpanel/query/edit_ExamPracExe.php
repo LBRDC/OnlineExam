@@ -6,6 +6,7 @@ include("../../conn.php");
 $edit_QstnId = isset($_POST['edit_PracId']) ? $_POST['edit_PracId'] : '';
 $edit_QstnExamId = isset($_POST['edit_PracExamId']) ? $_POST['edit_PracExamId'] : '';
 $edit_ImgStatus = isset($_POST['edit_PracImgStatus']) ? $_POST['edit_PracImgStatus'] : '';
+$edit_Guide = isset($_POST['edit_Guide']) ? $_POST['edit_Guide'] : '';
 $edit_Question = isset($_POST['edit_Practice']) ? $_POST['edit_Practice'] : '';
 $edit_QstnCh1 = isset($_POST['edit_PracCh1']) ? $_POST['edit_PracCh1'] : '';
 $edit_QstnCh2 = isset($_POST['edit_PracCh2']) ? $_POST['edit_PracCh2'] : '';
@@ -20,7 +21,7 @@ $edit_QstnCh10 = isset($_POST['edit_PracCh10']) ? $_POST['edit_PracCh10'] : '';
 $edit_QstnAns = isset($_POST['edit_PracAns']) ? $_POST['edit_PracAns'] : '';
 
 // Check if variables contain values
-if($edit_QstnId == '' || $edit_QstnExamId == '' || $edit_Question == '' || $edit_QstnAns == '') {
+if($edit_QstnId == '' || $edit_QstnExamId == '' || $edit_Guide == '' || $edit_Question == '' || $edit_QstnAns == '') {
     $res = array("res" => "incomplete");
     echo json_encode($res);
     exit();
@@ -209,8 +210,9 @@ if (isset($_FILES['edit_PracImg'])) {
 }
 
 // update question based on exqstn_id
-$stmt3 = $conn->prepare("UPDATE exam_practice_tbl SET prac_image = :edit_ExamImg, prac_question = :edit_Question, prac_ch1 = :edit_QstnCh1, prac_ch2 = :edit_QstnCh2, prac_ch3 = :edit_QstnCh3, prac_ch4 = :edit_QstnCh4, prac_ch5 = :edit_QstnCh5, prac_ch6 = :edit_QstnCh6, prac_ch7 = :edit_QstnCh7, prac_ch8 = :edit_QstnCh8, prac_ch9 = :edit_QstnCh9, prac_ch10 = :edit_QstnCh10, prqstn_answer = :edit_QstnAns WHERE prqstn_id = :edit_QstnId");
+$stmt3 = $conn->prepare("UPDATE exam_practice_tbl SET prac_image = :edit_ExamImg, prac_question = :edit_Question, prac_ch1 = :edit_QstnCh1, prac_ch2 = :edit_QstnCh2, prac_ch3 = :edit_QstnCh3, prac_ch4 = :edit_QstnCh4, prac_ch5 = :edit_QstnCh5, prac_ch6 = :edit_QstnCh6, prac_ch7 = :edit_QstnCh7, prac_ch8 = :edit_QstnCh8, prac_ch9 = :edit_QstnCh9, prac_ch10 = :edit_QstnCh10, prqstn_answer = :edit_QstnAns, prac_guide = :edit_Guide WHERE prqstn_id = :edit_QstnId");
 $stmt3->bindParam(':edit_ExamImg', $edit_ExamImg);
+$stmt3->bindParam(':edit_Guide', $edit_Guide);
 $stmt3->bindParam(':edit_Question', $edit_Question);
 $stmt3->bindParam(':edit_QstnCh1', $edit_QstnCh1);
 $stmt3->bindParam(':edit_QstnCh2', $edit_QstnCh2);

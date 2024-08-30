@@ -401,6 +401,10 @@
                             </div>
                         </div>
                         <div class="form-row mb-3">
+                            <label for="add_Guide" class="font-weight-bold">Guide<span class="text-danger">*</span></label>
+                            <textarea name="add_Guide" id="add_Guide" class="form-control" rows="5" placeholder=""></textarea>
+                        </div>
+                        <div class="form-row mb-3">
                             <label for="add_Practice" class="font-weight-bold">Question<span class="text-danger">*</span></label>
                             <textarea name="add_Practice" id="add_Practice" class="form-control" rows="3" placeholder=""></textarea>
                         </div>
@@ -531,6 +535,10 @@
                         </div>
                     </div>
 
+                    <div class="form-row mb-3">
+                        <label for="edit_Guide" class="font-weight-bold">Guide<span class="text-danger">*</span></label>
+                        <textarea name="edit_Guide" id="edit_Guide" class="form-control" rows="5" placeholder=""></textarea>
+                    </div>
                     <div class="form-row mb-3">
                         <label for="edit_Practice" class="font-weight-bold">Question<span class="text-danger">*</span></label>
                         <textarea name="edit_Practice" id="edit_Practice" class="form-control" rows="3" placeholder=""></textarea>
