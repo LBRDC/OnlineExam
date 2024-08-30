@@ -511,8 +511,8 @@
                                     </i>
                                 </div>
                                 <div>[PRACTICE] <?php echo htmlspecialchars($ex_title); ?>
-                                    <div class="page-title-subheading" id="exDesc">
-                                        Instructions: <?php echo htmlspecialchars($ex_description); ?>
+                                    <div class="page-title-subheading instructions ml-4 mr-4 text-justify">
+                                        <b>Instructions:</b> <span id="exDesc"><?php echo nl2br(htmlspecialchars($ex_description)); ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -526,6 +526,7 @@
                     <div class="row justify-content-center">
                         <div class="col-md-12 col-xl-10 mb-4">
                             <!-- ### EXAM CARD ### -->
+                            <div class="alert alert-info fade show" role="alert"><i class="metismenu-icon pe-7s-info"></i> Click on one of the choices below the question to select your answer.</div>
                             <div class="card" id="examCard">
                                 <div class="card-header justify-content-center"> 
                                     <span class="pr-1">Page</span><span class="current-page pr-1">1</span>of<span class="total-pages pl-1">1</span>
@@ -536,7 +537,6 @@
                                             <th></th>
                                         </thead>
                                         <tbody>
-                                        <div class="alert alert-info fade show" role="alert"><i class="metismenu-icon pe-7s-info"></i> Click on A, B, C, or D to select your answer.</div>
                                         <?php
                                             //Select prqstn_id, prac_image, prac_question, prac_ch1-10, prqstn_answer
                                             //Randomize if ex_random_qstn = yes else order by ascending
@@ -551,6 +551,7 @@
                                                 while($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                                                 $prqstn_id = $row['prqstn_id'];
                                                 $prac_image = $row['prac_image'];
+                                                $prac_guide = $row['prac_guide'];
                                                 $prac_question = $row['prac_question'];
                                                 $prac_ch1 = $row['prac_ch1'];
                                                 $prac_ch2 = $row['prac_ch2'];
@@ -566,6 +567,10 @@
                                         ?>
                                         <tr class="question-container">
                                             <td>
+                                                <div class="alert alert-info fade show" role="alert">
+                                                    <i class="metismenu-icon pe-7s-info"></i> 
+                                                    <span class="text-justify"><?php echo nl2br(htmlspecialchars($prac_guide)); ?></span>
+                                                </div>
                                                 <ul class="list-group">
                                                     <li class="list-group-item">
                                                         <div class="row">
@@ -779,15 +784,21 @@
                                             } //END while Loop 
                                         } //END if stmnt
                                         ?>
-                                        <div class="alert alert-info fade show text-center" role="alert"><i class="metismenu-icon pe-7s-info"></i> If the exam has multiple pages, you can click the <u>next button</u> to go to next page or click the <u>previous button</u> to go to previous page.</div>
-                                        <div class="row text-center">
-                                            <div class="col-md-12">
+                                        <div class="alert alert-info fade show" role="alert">
+                                            <i class="metismenu-icon pe-7s-info"></i>
+                                            <span>If the exam has multiple pages, you can click the <u>next button</u> to go to next page or click the <u>previous button</u> to go to previous page.</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
                                                 <button type="button" class="btn btn-primary" id="prev-btn"><i class="fa fa-arrow-circle-left"></i> Previous</button>
-                                                <button type="button" class="btn btn-success ml-5 mr-5" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
+                                                <button type="button" class="btn btn-success ml-3 mr-3" id="submit-btn" style="width: 100px; height: 50px;">Submit</button>
                                                 <button type="button" class="btn btn-primary" id="nxt-btn">Next <i class="fa fa-arrow-circle-right"></i></button>
                                             </div>
                                         </div>
-                                        <div class="alert alert-info fade show text-center mt-3" role="alert"><i class="metismenu-icon pe-7s-info"></i> Click the submit button once you've reach the last question to submit your answers.</div>
+                                        <div class="alert alert-success fade show mt-3" role="alert">
+                                            <i class="metismenu-icon pe-7s-info"></i> 
+                                            <span>You may click the <u>submit button</u> once you are finished answering.</span>
+                                        </div>
                                         <!-- END ANSWERS HIDDEN INPUTS -->
                                     </form>
                                 </div>

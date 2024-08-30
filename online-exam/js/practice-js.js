@@ -3,7 +3,7 @@ function fetchExamId() {
     //const id = urlParams.get('id');
     var id = document.getElementById("exam_id").value;
     id = id ? id : "0"; // If id is null or "0", set it to "0"
-    console.log("[SYS] ID = " + id); //DEBUG
+    //console.log("[SYS] ID = " + id); //DEBUG
     return id;
 }
 
@@ -37,7 +37,7 @@ $.ajax({
                 window.location.href = 'home.php';
             });
             examCompleted = true;
-            //return;
+            return;
         } else if (response.res == "completeCurr") {
             Swal.fire({
                 icon: "success",
@@ -68,31 +68,31 @@ $.ajax({
       
                     // Submit the form
                     form.submit();
-                  } else {
+                } else {
                     // Create a form element
                     var form = document.createElement('form');
                     form.method = 'POST';
                     form.action = 'exam.php';
-      
+        
                     // Create an input field for the exam ID
                     var hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
                     hiddenInput.name = 'fetchid';
                     hiddenInput.id = 'fetchid';
                     hiddenInput.value = response.examId;
-      
+        
                     // Append the hidden input to the form
                     form.appendChild(hiddenInput);
-      
+        
                     // Append the form to the body (or any other container element)
                     document.body.appendChild(form);
-      
+        
                     // Submit the form
                     form.submit();
-                  }
+                }
             });
             examCompleted = true;
-            //return;
+            return;
         } else if (response.res == "unknown") {
             Swal.fire({
                 icon: "error",
@@ -105,7 +105,7 @@ $.ajax({
                 window.location.href = 'home.php';
             });
             examCompleted = true;
-            //return;
+            return;
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -118,13 +118,13 @@ $.ajax({
 
 // Check if camera is working
 if (sessionStorage.getItem('camWorking') === 'true') {
-    console.log("Camera Working");
+    //console.log("Camera Working"); //DEBUG
     camWorking = 'true';
 } else if (sessionStorage.getItem('camWorking') === 'disabled') {
-    console.log("Camera Disabled");
+    //console.log("Camera Disabled"); //DEBUG
     camWorking = 'disabled';
 } else {
-    console.log("Camera Not Working");
+    //console.log("Camera Not Working"); //DEBUG
     camWorking = 'false';
     Swal.fire({
         icon: "error",
@@ -156,8 +156,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     }
 
     function init() {
-        var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
-        //var savedTimeKey = 'Debug_TIMER'; //DEBUG
+        //var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
+        var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
         if (savedTime) {
@@ -165,13 +165,13 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         minutes = objLocalStorageTimer.minutes;
         seconds = objLocalStorageTimer.seconds;
         } else {
-        //var timeLimit = $('#timeLimit').val();
-        var timeLimit = 500;
+        var timeLimit = $('#timeLimit').val();
+        //var timeLimit = 500;
         minutes = parseInt(timeLimit);
         seconds = 0;
         }
     
-        startTimer();
+        //startTimer();
         updateDisplay();
     }
 
@@ -371,23 +371,26 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         var anticheatCnt = 0;
         //Display Instructions
         stopTimer();
-        console.log("[SYS] Show Instructions");
+        //console.log("[SYS] Show Instructions"); //DEBUG
         var exDesc = document.getElementById('exDesc').innerText;
+        var exTime = document.getElementById('timeLimit').value;
         Swal.fire({
             title: 'Instructions',
             //text: exDesc,
             width: 800,
-            html: `<div class="m-3 text-justify">
-            ${exDesc}
+            html: `
+            <div class="m-3 text-justify"><b>Time Limit:</b> ${exTime} minutes</div>
+            <div class="m-3 text-justify">${exDesc.replace(/\n/g, '<br>')}
             </div>`,
             icon: 'info',
             allowOutsideClick: false,
         }).then((result) => {
             if (result.value) {
                 table.page.len(display_Limit).draw();
-                startTimer();
+                //startTimer();
+                stopTimer();
                 updateDisplay();
-                showCard();
+                //showCard();
                 pgActive = 1;
                 anticheatsts = 'enabled';
                 if (camWorking != 'disabled') {
@@ -396,7 +399,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             }
         });
 
-        //Anticheat
+        //Anticheat OLD
         document.addEventListener("visibilitychange", (event) => {
             if (document.visibilityState != "visible" && anticheatsts == 'enabled') {
                 //anticheatCnt++;
@@ -405,7 +408,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             }
             
             if (document.visibilityState != "visible" && pgActive == 1 && anticheatsts == 'enabled') {
-                console.log("tab inactive");
+                console.log("tab inactive"); //DEBUG
                 pgActive = 0;
                 $.ajax({
                     type: "POST",
@@ -443,7 +446,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 localStorage.setItem("anticheatCnt", anticheatCnt);
                 
                 if (pgActive == 1) {
-                    console.log("tab inactive or window out of focus");
+                    console.log("tab inactive or window out of focus"); //DEBUG
                     pgActive = 0;
                     $.ajax({
                         type: "POST",
@@ -616,43 +619,50 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             }).then(function() {
                 examSubmitted = true;
 
-                //Proceed to Exam
-                Swal.fire({
-                    title: 'Loading...',
-                    html: `
-                            Proceeding to exam...
-                            <br>
-                            <br>
-                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                        `,
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    timer: 5000,
-                    timerProgressBar: true,
-                }).then(function() {
-                    //window.location.href = 'exam.php?id=' + response.examId;
-                    //console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
-                    // Create a form element
-                    var form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'exam.php';
+                $.ajax({
+                    type: "POST",
+                    url: "query/page_Message.php",
+                    dataType: "json",
+                    success: function(msg) {
+                        //Proceed to Exam
+                        Swal.fire({
+                            title: 'Loading...',
+                            html: `
+                                    Proceeding to exam...
+                                    <br>
+                                    <br>
+                                    <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                `,
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            //window.location.href = 'exam.php?id=' + response.examId;
+                            //console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                            // Create a form element
+                            var form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = 'exam.php';
 
-                    // Create an input field for the exam ID
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'fetchid';
-                    hiddenInput.id = 'fetchid';
-                    hiddenInput.value = examId;
+                            // Create an input field for the exam ID
+                            var hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'fetchid';
+                            hiddenInput.id = 'fetchid';
+                            hiddenInput.value = examId;
 
-                    // Append the hidden input to the form
-                    form.appendChild(hiddenInput);
+                            // Append the hidden input to the form
+                            form.appendChild(hiddenInput);
 
-                    // Append the form to the body (or any other container element)
-                    document.body.appendChild(form);
+                            // Append the form to the body (or any other container element)
+                            document.body.appendChild(form);
 
-                    // Submit the form
-                    form.submit();
+                            // Submit the form
+                            form.submit();
+                        });
+                    }
                 });
             });
         } else if (examAction == 'ontime') {
@@ -675,42 +685,49 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                     examSubmitted = true;
                     var currentTime = { minutes: 0, seconds: 0 };
                     localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
-                    Swal.fire({
-                        title: 'Loading...',
-                        html: `
-                                Proceeding to exam...
-                                <br>
-                                <br>
-                                <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                            `,
-                        icon: 'info',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        timer: 5000,
-                        timerProgressBar: true,
-                    }).then(function() {
-                        //window.location.href = 'exam.php?id=' + response.examId;
-                        console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
-                        // Create a form element
-                        var form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = 'exam.php';
-
-                        // Create an input field for the exam ID
-                        var hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = 'fetchid';
-                        hiddenInput.id = 'fetchid';
-                        hiddenInput.value = examId;
-
-                        // Append the hidden input to the form
-                        form.appendChild(hiddenInput);
-
-                        // Append the form to the body (or any other container element)
-                        document.body.appendChild(form);
-
-                        // Submit the form
-                        form.submit();
+                    $.ajax({
+                        type: "POST",
+                        url: "query/page_Message.php",
+                        dataType: "json",
+                        success: function(msg) {
+                            Swal.fire({
+                                title: 'Loading...',
+                                html: `
+                                        Proceeding to exam...
+                                        <br>
+                                        <br>
+                                        <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                    `,
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                            }).then(function() {
+                                //window.location.href = 'exam.php?id=' + response.examId;
+                                console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                                // Create a form element
+                                var form = document.createElement('form');
+                                form.method = 'POST';
+                                form.action = 'exam.php';
+        
+                                // Create an input field for the exam ID
+                                var hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = 'fetchid';
+                                hiddenInput.id = 'fetchid';
+                                hiddenInput.value = examId;
+        
+                                // Append the hidden input to the form
+                                form.appendChild(hiddenInput);
+        
+                                // Append the form to the body (or any other container element)
+                                document.body.appendChild(form);
+        
+                                // Submit the form
+                                form.submit();
+                            });
+                        }
                     });
                 }
             });
@@ -732,42 +749,49 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             }).then(function() {
                 examSubmitted = true;
                 //Proceed to Exam
-                Swal.fire({
-                    title: 'Loading...',
-                    html: `
-                            Proceeding to exam...
-                            <br>
-                            <br>
-                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                        `,
-                    icon: 'info',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    timer: 5000,
-                    timerProgressBar: true,
-                }).then(function() {
-                    //window.location.href = 'exam.php?id=' + response.examId;
-                    console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
-                    // Create a form element
-                    var form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'exam.php';
-
-                    // Create an input field for the exam ID
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'fetchid';
-                    hiddenInput.id = 'fetchid';
-                    hiddenInput.value = examId;
-
-                    // Append the hidden input to the form
-                    form.appendChild(hiddenInput);
-
-                    // Append the form to the body (or any other container element)
-                    document.body.appendChild(form);
-
-                    // Submit the form
-                    form.submit();
+                $.ajax({
+                    type: "POST",
+                    url: "query/page_Message.php",
+                    dataType: "json",
+                    success: function(msg) {
+                        Swal.fire({
+                            title: 'Loading...',
+                            html: `
+                                    Proceeding to exam...
+                                    <br>
+                                    <br>
+                                    <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                `,
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            //window.location.href = 'exam.php?id=' + response.examId;
+                            console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                            // Create a form element
+                            var form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = 'exam.php';
+        
+                            // Create an input field for the exam ID
+                            var hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'fetchid';
+                            hiddenInput.id = 'fetchid';
+                            hiddenInput.value = examId;
+        
+                            // Append the hidden input to the form
+                            form.appendChild(hiddenInput);
+        
+                            // Append the form to the body (or any other container element)
+                            document.body.appendChild(form);
+        
+                            // Submit the form
+                            form.submit();
+                        });
+                    }
                 });
             });
         } else {
