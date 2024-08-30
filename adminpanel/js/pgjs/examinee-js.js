@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // If a specific status is selected, apply the filter
         if (filterStatus !== '') {
-            table.column(3).search(function(value, index) {
-                return filterStatus === '2' ? true : filterStatus === '1' ? value.toLowerCase() === 'active' : filterStatus === '0' ? value.toLowerCase() === 'inactive' : true;
+            table.column(4).search(function(value, index) {
+                return filterStatus === '2' ? value.toLowerCase() === 'finished' : filterStatus === '1' ? value.toLowerCase() === 'active' : filterStatus === '0' ? value.toLowerCase() === 'inactive' : true;
             }).draw();
         }
         // If a specific cluster is selected, apply the filter

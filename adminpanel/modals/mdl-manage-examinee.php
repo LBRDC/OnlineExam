@@ -273,8 +273,9 @@ foreach ($resultmdl1 as $row) {
                                 <label for="view_ExmneStatus">Status<span class="text-danger">*</span></label>
                                 <select class="form-control" name="view_ExmneStatus" id="view_ExmneStatus" style="width: 100%" disabled>
                                     <option value="">Select...</option>
-                                    <option value="1">Active</option>
                                     <option value="0">Inactive</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Finished</option>
                                     <option value="3">Disabled</option>
                                 </select>
                             </div>
@@ -425,8 +426,9 @@ foreach ($resultmdl1 as $row) {
                                 <label for="edit_ExmneStatus">Status<span class="text-danger">*</span></label>
                                 <select class="form-control" name="edit_ExmneStatus" id="edit_ExmneStatus" style="width: 100%" required>
                                     <option value="">Select...</option>
-                                    <option value="1">Active</option>
                                     <option value="0">Inactive</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Finished</option>
                                     <option value="3">Disabled</option>
                                 </select>
                             </div>
