@@ -172,6 +172,7 @@ the appropriate or proper body, tribunal or court. </b>
               });
               return;
             }
+            
             if (response.res == "incomplete" && response.practice_st == 'yes') {
               // Create a form element
               var form = document.createElement('form');

@@ -38,8 +38,7 @@ function fetchExam($fe_clu_id, $fe_exmne_id) {
     // If no exams are found, handle this case
     if (empty($examIds)) {
         $unattemptedExamsData = [];
-        //echo "No exams found for the given cluster.";
-        return; // Or exit, depending on your application logic
+        return;
     }
 
     // Fetch all exams for the given cluster
@@ -71,10 +70,10 @@ function fetchExam($fe_clu_id, $fe_exmne_id) {
 
         // Check if the title is "APPLICANT RISK PROFILER (ARP)"
         if ($aTitle === 'APPLICANT RISK PROFILER (ARP)' && $bTitle !== 'APPLICANT RISK PROFILER (ARP)') {
-            return 1; // $a should be last
+            return 1;
         }
         if ($bTitle === 'APPLICANT RISK PROFILER (ARP)' && $aTitle !== 'APPLICANT RISK PROFILER (ARP)') {
-            return -1; // $b should be last
+            return -1;
         }
 
         // Extract the numeric part of the title for sorting
@@ -85,7 +84,7 @@ function fetchExam($fe_clu_id, $fe_exmne_id) {
 
         // If both titles are tests, sort by the number
         if ($aNumber > 0 && $bNumber > 0) {
-            return $aNumber - $bNumber; // Sort numerically in ascending order
+            return $aNumber - $bNumber;
         }
 
         // For non-test titles, or if one is a test and the other is not, sort alphabetically
@@ -93,11 +92,11 @@ function fetchExam($fe_clu_id, $fe_exmne_id) {
     });
 
     // DEBUG: Print details of unattempted exams
-    foreach ($unattemptedExams as $row) {
+    /*foreach ($unattemptedExams as $row) {
         echo "Exam Title: " . htmlspecialchars($row['ex_title']) . "<br>";
         echo "Exam ID: " . htmlspecialchars($row['ex_id']) . "<br>";
         echo "Exam Practice: " . htmlspecialchars($row['ex_practice']) . "<br>";
-    }
+    }*/
 
     // Store unattempted exam IDs and practices
     $unattemptedExamsData = [];
