@@ -33,6 +33,18 @@
 10. For ADMIN, go to web browser and input "localhost/adminpanel"
 11. For EXAMINEE, go to web browser and input "localhost/online-exam"
 
+## Reminders
+
+1. Follow Test Format  
+   ```
+   Test 1: ...  
+   Test 2: ... (Part 1)  
+   Test 2: ... (Part 2)  
+   Test 3: ...  
+   Applicant Risk Profiler  
+   ```
+   *The System sorts the exam for the examinee based on the title with tests being the first and the applicant risk profiler being the last.
+
 ## Dependencies Information
 #### CSS
 <b>Bootstrap:</b> 4.1.3  
