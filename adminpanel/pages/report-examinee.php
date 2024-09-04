@@ -92,6 +92,7 @@
                                                 <th>Score</th>
                                                 <th>Percentage</th>
                                                 <th>Date</th>
+                                                <th>Cheated</th>
                                                 <th data-dt-order="disable">Action</th>
                                             </tr>
                                             </thead>
@@ -112,6 +113,7 @@
                                                 $ex_id = $row['ex_id'];
                                                 $ex_score = $row['ex_score'];
                                                 $ex_total = $row['ex_total'];
+                                                $ex_cheat = ($row['cheat_cnt'] > 0) ? 'Yes' : 'No';
                                                 $exatmpt_no = $row['exatmpt_no'];
                                                 $exatmpt_date = $row['exatmpt_date'];
                                                 //$exatmpt_time = $row['exatmpt_time'];
@@ -146,6 +148,7 @@
                                                 <td><?php echo htmlspecialchars($ex_score) . "/" . htmlspecialchars($ex_total); ?></td>
                                                 <td><?php echo htmlspecialchars($percentage) . "%"; ?></td>
                                                 <td><?php echo htmlspecialchars($exatmpt_date); ?></td>
+                                                <td><?php echo htmlspecialchars($ex_cheat); ?></td>
                                                 <td>
                                                     <a href="?page=report-examinee-result&exmne=<?php echo htmlspecialchars($exmne_id); ?>&exam=<?php echo htmlspecialchars($ex_id); ?>" class="btn btn-primary m-1" id="view-btn" data-toggle="tooltip" data-placement="bottom" title="View">
                                                         <i class="fas fa-eye"></i>
