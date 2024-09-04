@@ -1,6 +1,7 @@
 <?php
 $exmne_clu_id = isset($_SESSION['ex_user']['exmne_clu_id']) ? $_SESSION['ex_user']['exmne_clu_id'] : '';
 $exmne_id = isset($_SESSION['ex_user']['exmne_id']) ? $_SESSION['ex_user']['exmne_id'] : '';
+$exmne_status = isset($_SESSION['ex_user']['exmne_status']) ? $_SESSION['ex_user']['exmne_status'] : '';
 $exmne_disablecam = isset($_SESSION['ex_user']['exmne_disablecam']) ? $_SESSION['ex_user']['exmne_disablecam'] : '';
 
 //echo $_SESSION['sess']['sessionid'];
@@ -85,10 +86,19 @@ foreach ($unattemptedExams as $exam) {
 }
 
 $ex_count = count($unattemptedExams);
-if (count($unattemptedExams) > 0) {
+if ($ex_count > 0) {
     $selEx_id = $unattemptedExams[0]['ex_id'];
 } else {
     $selEx_id = '';
+
+    if ($exmne_status == 1 && $ex_count == 0) {
+    //update examinee acc
+    $stmt3 = $conn->prepare("UPDATE examinee_tbl SET exmne_status = 2 WHERE exmne_id = :exmne_id");
+    $stmt3->bindParam(':exmne_id', $exmne_id);
+    if ($stmt3->execute()) {
+        $_SESSION['ex_user']['exmne_status'] = 2;
+    }
+    }
 }
 ?>
 
