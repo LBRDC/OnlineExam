@@ -252,7 +252,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
 
     // Prevent page refresh from close or reload
     window.addEventListener('beforeunload', function (event) {
-        console.log("Allow Exit: " + examSubmitted); //DEBUG
+        //console.log("Allow Exit: " + examSubmitted); //DEBUG
         if (window.location.href.includes("exam.php") && !examSubmitted == true) {
             event.preventDefault();
             event.returnValue = '';
@@ -684,7 +684,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                     stopRecording();
                     examSubmitted = true;
                     var currentTime = { minutes: 0, seconds: 0 };
-                    localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+                    localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
                     $.ajax({
                         type: "POST",
                         url: "query/page_Message.php",
@@ -737,7 +737,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
             var currentTime = { minutes: 0, seconds: 0 };
-            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+            localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
@@ -769,7 +769,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                             timerProgressBar: true,
                         }).then(function() {
                             //window.location.href = 'exam.php?id=' + response.examId;
-                            console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                            //console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
                             // Create a form element
                             var form = document.createElement('form');
                             form.method = 'POST';
