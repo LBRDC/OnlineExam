@@ -2,6 +2,7 @@
     session_start();
     include("../conn.php");
     
+    // Session Examinee
     if (isset($_SESSION['ex_user']['exmne_fname']) && isset($_SESSION['ex_user']['exmne_lname'])) {
         $exmne_fname = $_SESSION['ex_user']['exmne_fname'];
         $exmne_lname = $_SESSION['ex_user']['exmne_lname'];
@@ -13,27 +14,28 @@
         exit(); // Ensure no further code is executed after the redirect
     }
 
+    // Examinee Display
     if ($_SESSION['ex_user']['exmne_mname'] != "") {
         $exmne_mname = $_SESSION['ex_user']['exmne_mname'];
         $exmne_minitial = substr($exmne_mname, 0, 1) . ". ";
     } else {
         $exmne_minitial = '_ ';
     }
-
     if ($_SESSION['ex_user']['exmne_sfname'] != "") {
         $exmne_sfname = $_SESSION['ex_user']['exmne_sfname'];
     } else {
         $exmne_sfname = '';
     }  
 
+    // Fetch Exam
     $ex_id = isset($_POST['fetchid']) && !empty($_POST['fetchid']) ? $_POST['fetchid'] : 0;
     $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
     $exmne_id = $_SESSION['ex_user']['exmne_id'];
-    //Select ex_title, ex_description, ex_time_limit, ex_qstn_limit, ex_disable_prv, ex_random_qstn
     $stmt1 = $conn->prepare("SELECT * FROM exam_tbl WHERE ex_id = :ex_id");
     $stmt1->bindparam(':ex_id', $ex_id);
     $stmt1->execute();
 
+    // Fetch Details
     $ex_details = $stmt1->fetch(PDO::FETCH_ASSOC);
     if ($ex_details) {
     $ex_title = $ex_details['ex_title'];
@@ -509,8 +511,8 @@
                                     </i>
                                 </div>
                                 <div><?php echo htmlspecialchars($ex_title); ?>
-                                    <div class="page-title-subheading" id="exDesc">
-                                        <?php echo htmlspecialchars($ex_description); ?>
+                                    <div class="page-title-subheading instructions ml-4 mr-4 text-justify">
+                                        <b>Instructions:</b> <span id="exDesc"><?php echo nl2br(htmlspecialchars($ex_description)); ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -759,6 +761,7 @@
                                         <input type="text" name="timeLimit" id="timeLimit" value="<?php echo htmlspecialchars($ex_time_limit); ?>" hidden readonly>
                                         <input type="text" name="examLimit" id="examLimit" value="<?php echo htmlspecialchars($ex_qstn_limit); ?>" hidden readonly>
                                         <input type="text" name="examUser" id="examUser" value="<?php echo htmlspecialchars($exmne_id); ?>" hidden readonly>
+                                        <input type="text" name="examAC" id="examAC" value="" hidden readonly>
                                         <input type="text" name="examAction" id="examAction" hidden readonly>
                                         <input type="text" name="disablePrevBtn" id="disablePrevBtn" value="<?php echo htmlspecialchars($ex_disable_prv); ?>" hidden readonly>
                                         <!-- ANSWERS HIDDEN INPUTS -->

@@ -1,22 +1,9 @@
 <?php
-/*
-    Fetch Attempts
-    If > 1 = Output Already Taken
-    Else = 
-
-    Fetch Answers
-    Check Correct Answers
-    Compute Correct / Total
-    Input Database
-
-    Fetch Exams
-    Check for Not Completed
-
-    If All Complete = Output Finished
-    If Not Complete = Output exam_Id
-*/
 session_start(); 
 include("../../conn.php");
+
+// Set the time zone to Manila, Philippines (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
 
 extract($_POST);
 //var_dump($_POST); //DEBUG
@@ -29,31 +16,85 @@ $exmne_clu_id = $_SESSION['ex_user']['exmne_clu_id'];
 function fetchExam($fe_clu_id, $fe_exmne_id) {
     global $conn;
     // Fetch Exam IDs based on cluster
-    $stmtFE1 = $conn->prepare("SELECT et.ex_id FROM exam_cluster_tbl ect JOIN exam_tbl et ON ect.ex_id = et.ex_id WHERE ect.clu_id = :clu_id AND et.ex_status = 1");
-    $stmtFE1->bindParam(':clu_id', $fe_clu_id);
-    $stmtFE1->execute();
+    $stmt1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = ?");
+    $stmt1->execute([$fe_clu_id]);
 
-    $unattemptedExamIds = [];
+    $examIds = $stmt1->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    // Loop through each exam ID fetched from exam_cluster_tbl and check if it has been attempted
-    while ($row = $stmtFE1->fetch(PDO::FETCH_ASSOC)) {
-        $ex_id = $row['ex_id'];
-
-        // Check if the exam has been attempted
-        $stmtFE2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
-        $stmtFE2->bindParam(':ex_id', $ex_id);
-        $stmtFE2->bindParam(':exmne_id', $fe_exmne_id);
-        $stmtFE2->execute();
-        $attempts = $stmtFE2->rowCount();
-
-        // If the exam has not been attempted, add it to the list
-        if ($attempts == 0) {
-            $unattemptedExamIds[] = $ex_id;
-        }
+    // If no exams are found, handle this case
+    if (empty($examIds)) {
+        $unattemptedExamsData = [];
+        return;
     }
 
-    if (count($unattemptedExamIds) > 0) {
-        return $unattemptedExamIds[0];
+    // Fetch all exams for the given cluster
+    $placeholders = implode(',', array_fill(0, count($examIds), '?'));
+    $stmt2 = $conn->prepare("
+        SELECT e.*, 
+            CASE 
+                WHEN ea.ex_id IS NOT NULL THEN 1 
+                ELSE 0 
+            END AS attempted
+        FROM exam_tbl e
+        LEFT JOIN examinee_attempt ea ON e.ex_id = ea.ex_id AND ea.exmne_id = ?
+        WHERE e.ex_id IN ($placeholders) AND e.ex_status = 1
+    ");
+    $params = array_merge([$fe_exmne_id], $examIds);
+    $stmt2->execute($params);
+
+    $results = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+    // Filter out exams that have been attempted
+    $unattemptedExams = array_filter($results, function ($exam) {
+        return $exam['attempted'] == 0;
+    });
+
+    // Custom sorting function
+    usort($unattemptedExams, function ($a, $b) {
+        $aTitle = $a['ex_title'];
+        $bTitle = $b['ex_title'];
+
+        // Check if the title is "APPLICANT RISK PROFILER (ARP)"
+        if ($aTitle === 'APPLICANT RISK PROFILER (ARP)' && $bTitle !== 'APPLICANT RISK PROFILER (ARP)') {
+            return 1;
+        }
+        if ($bTitle === 'APPLICANT RISK PROFILER (ARP)' && $aTitle !== 'APPLICANT RISK PROFILER (ARP)') {
+            return -1;
+        }
+
+        // Extract the numeric part of the title for sorting
+        preg_match('/TEST (\d+)/', $aTitle, $aMatch);
+        preg_match('/TEST (\d+)/', $bTitle, $bMatch);
+        $aNumber = isset($aMatch[1]) ? (int)$aMatch[1] : 0;
+        $bNumber = isset($bMatch[1]) ? (int)$bMatch[1] : 0;
+
+        // If both titles are tests, sort by the number
+        if ($aNumber > 0 && $bNumber > 0) {
+            return $aNumber - $bNumber;
+        }
+
+        // For non-test titles, or if one is a test and the other is not, sort alphabetically
+        return strcmp($aTitle, $bTitle);
+    });
+
+    // DEBUG: Print details of unattempted exams
+    /*foreach ($unattemptedExams as $row) {
+        echo "Exam Title: " . htmlspecialchars($row['ex_title']) . "<br>";
+        echo "Exam ID: " . htmlspecialchars($row['ex_id']) . "<br>";
+        echo "Exam Practice: " . htmlspecialchars($row['ex_practice']) . "<br>";
+    }*/
+
+    // Store unattempted exam IDs and practices
+    $unattemptedExamsData = [];
+    foreach ($unattemptedExams as $exam) {
+        $unattemptedExamsData[] = [
+            'ex_id' => $exam['ex_id'],
+            'ex_practice' => $exam['ex_practice']
+        ];
+    }
+
+    if (count($unattemptedExamsData) > 0) {
+        return $unattemptedExamsData[0];
     } else {
         return "noexam";
     }
@@ -140,9 +181,10 @@ if ($stmt1->rowCount() > 0) {
         }
 
         //Add Exam Attempt
-        $stmt4 = $conn->prepare("INSERT INTO examinee_attempt(exmne_id, ex_id, exatmpt_no, exatmpt_date, exatmpt_time) VALUES (:exmne_id, :exam_id, :exatmpt_no, :exatmpt_date, :exatmpt_time)");
+        $stmt4 = $conn->prepare("INSERT INTO examinee_attempt(exmne_id, ex_id, cheat_cnt, exatmpt_no, exatmpt_date, exatmpt_time) VALUES (:exmne_id, :exam_id, :exam_cheat, :exatmpt_no, :exatmpt_date, :exatmpt_time)");
         $stmt4->bindParam(':exmne_id', $exmne_id);
         $stmt4->bindParam(':exam_id', $exam_id);
+        $stmt4->bindParam(':exam_cheat', $examAC);
         $stmt4->bindParam(':exatmpt_no', $no_Attempt);
         $stmt4->bindParam(':exatmpt_date', $date);
         $stmt4->bindParam(':exatmpt_time', $time);
@@ -153,7 +195,7 @@ if ($stmt1->rowCount() > 0) {
             //Fetch Next Exam
             $nxtExam = fetchExam($exmne_clu_id, $exmne_id);
             if ($nxtExam !== "noexam") {
-                $res = array("res" => "notFinished", "examId" => $nxtExam);
+                $res = array("res" => "notFinished", "examId" => $nxtExam['ex_id'], "practice_st" => $nxtExam['ex_practice']);
                 echo json_encode($res);
                 exit();
             } else {
