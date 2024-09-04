@@ -1,6 +1,7 @@
 <?php
 $exmne_clu_id = isset($_SESSION['ex_user']['exmne_clu_id']) ? $_SESSION['ex_user']['exmne_clu_id'] : '';
 $exmne_id = isset($_SESSION['ex_user']['exmne_id']) ? $_SESSION['ex_user']['exmne_id'] : '';
+$exmne_religion = isset($_SESSION['ex_user']['exmne_religion']) ? $_SESSION['ex_user']['exmne_religion'] : '';
 $exmne_status = isset($_SESSION['ex_user']['exmne_status']) ? $_SESSION['ex_user']['exmne_status'] : '';
 $exmne_disablecam = isset($_SESSION['ex_user']['exmne_disablecam']) ? $_SESSION['ex_user']['exmne_disablecam'] : '';
 
@@ -235,19 +236,32 @@ if ($ex_count > 0) {
                                 <div class="card-body">
                                     <div class="row mb-4">
                                         <div class="col-md-12 text-center">
-                                            <?php 
-                                                //Select one Random
-                                                $stmt4 = $conn->prepare("SELECT * FROM page_messages ORDER BY RAND() LIMIT 1");
-                                                $stmt4->execute();
-                                                if ($stmt4->rowcount() > 0) {
-                                                    $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
-                                                    $msg_txt = $msg['msg_text'];
-                                                    $msg_src = $msg['src_text'];
-                                                } else {
-                                                    $msg_txt = "The LORD makes firm the steps of the one who delights in him; though he may stumble, he will not fall, for the LORD upholds him with his hand.";
-                                                    $msg_src = "Psalm 37:23-24";
-                                                }
-                                            ?>
+                                        <?php
+                                            // Assume $exmne_religion is already defined somewhere in your code
+                                            $query = "SELECT * FROM page_messages ";
+                                            
+                                            if ($exmne_religion == 1 || $exmne_religion == 2) {
+                                                $query .= "";
+                                            } else {
+                                                $query .= " WHERE religion != 1 ";
+                                            }
+                                            
+                                            $query .= " ORDER BY RAND() LIMIT 1";
+                                            
+                                            // Prepare and execute the query
+                                            $stmt4 = $conn->prepare($query);
+                                            $stmt4->execute();
+                                            
+                                            if ($stmt4->rowCount() > 0) {
+                                                $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
+                                                $msg_txt = $msg['msg_text'];
+                                                $msg_src = $msg['src_text'];
+                                            } else {
+                                                $msg_txt = "There are no secrets to success. It is the result of preparation, hard work, and learning from failure.";
+                                                $msg_src = "General Colin Powell, former US Secretary of State";
+                                            }
+                                        ?>
+
 
                                             <span class='font-italic font-weight-bold'><?php echo htmlspecialchars($msg_txt) ?><br> -<?php echo htmlspecialchars($msg_src) ?></span>
                                         </div>

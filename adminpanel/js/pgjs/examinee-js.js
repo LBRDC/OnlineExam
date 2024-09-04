@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
         theme: 'bootstrap4',
         minimumResultsForSearch: Infinity
     });
+    $('#add_ExmneReligion').select2({
+        dropdownParent: $('#mdlAddExaminee'),
+        //placeholder: 'Select...',
+        theme: 'bootstrap4',
+        minimumResultsForSearch: Infinity
+    });
 
     $('#edit_ExmneCluster').select2({
         dropdownParent: $('#mdlEditExaminee'),
@@ -41,6 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
         minimumResultsForSearch: Infinity
     });
     $('#edit_ExmneSex').select2({
+        dropdownParent: $('#mdlEditExaminee'),
+        //placeholder: 'Select...',
+        theme: 'bootstrap4',
+        minimumResultsForSearch: Infinity
+    });
+    $('#edit_ExmneReligion').select2({
         dropdownParent: $('#mdlEditExaminee'),
         //placeholder: 'Select...',
         theme: 'bootstrap4',
@@ -65,6 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
         minimumResultsForSearch: Infinity
     });
     $('#view_ExmneSex').select2({
+        dropdownParent: $('#mdlViewExaminee'),
+        //placeholder: 'Select...',
+        theme: 'bootstrap4',
+        minimumResultsForSearch: Infinity
+    });
+    $('#view_ExmneReligion').select2({
         dropdownParent: $('#mdlViewExaminee'),
         //placeholder: 'Select...',
         theme: 'bootstrap4',
@@ -117,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var view_cluster = this.getAttribute('data-view-cluster');
             var view_sex = this.getAttribute('data-view-sex');
             var view_birth = this.getAttribute('data-view-birth');
+            var view_religion = this.getAttribute('data-view-religion');
             var view_cam = this.getAttribute('data-view-cam');
             var view_status = this.getAttribute('data-view-status');
             var view_email = this.getAttribute('data-view-email');
@@ -126,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('view_ExmneMname').value = view_mName;
             document.getElementById('view_ExmneLname').value = view_lName;
             document.getElementById('view_ExmneBirth').value = view_birth;
+            document.getElementById('view_ExmneReligion').value = view_religion;
             document.getElementById('view_DisableCam').checked = view_cam === 'yes';
             document.getElementById('view_ExmneEmail').value = view_email;
             document.getElementById('view_ExmnePass').value = view_pass;
@@ -133,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#view_ExmneSfname').val(view_sfName).trigger('change');
             $('#view_ExmneCluster').val(view_cluster).trigger('change');
             $('#view_ExmneSex').val(view_sex).trigger('change');
+            $('#view_ExmneReligion').val(view_religion).trigger('change');
             $('#view_ExmneStatus').val(view_status).trigger('change');
 
             var modalTitle = document.querySelector('#mdlViewExaminee .modal-title span');
@@ -150,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var edit_cluster = this.getAttribute('data-edit-cluster');
             var edit_sex = this.getAttribute('data-edit-sex');
             var edit_birth = this.getAttribute('data-edit-birth');
+            var edit_religion = this.getAttribute('data-edit-religion');
             var edit_cam = this.getAttribute('data-edit-cam');
             var edit_status = this.getAttribute('data-edit-status');
             var edit_email = this.getAttribute('data-edit-email');
@@ -163,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('edit_ExmneCluster').value = edit_cluster;
             document.getElementById('edit_ExmneSex').value = edit_sex;
             document.getElementById('edit_ExmneBirth').value = edit_birth;
+            document.getElementById('edit_ExmneReligion').value = edit_religion;
             document.getElementById('edit_DisableCam').checked = edit_cam === 'yes';
             document.getElementById('edit_ExmneEmail').value = edit_email;
             document.getElementById('edit_ExmnePass').value = edit_pass;
@@ -170,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#edit_ExmneSfname').val(edit_sfName).trigger('change');
             $('#edit_ExmneCluster').val(edit_cluster).trigger('change');
             $('#edit_ExmneSex').val(edit_sex).trigger('change');
+            $('#edit_ExmneReligion').val(edit_religion).trigger('change');
             $('#edit_ExmneStatus').val(edit_status).trigger('change');
 
             var modalTitle = document.querySelector('#mdlEditExaminee .modal-title span');

@@ -119,6 +119,22 @@ foreach ($resultmdl1 as $row) {
                         </div>
                     </div>
                     <div class="row mb-2">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-row">
+                                <label for="add_ExmneReligion">Religion</label>
+                                <select class="form-control-lg" name="add_ExmneReligion" id="add_ExmneReligion" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <option value="1">Roman Catholic</option>
+                                    <option value="2">Christian</option>
+                                    <option value="3">Islam</option>
+                                    <option value="4">Iglesia ni Cristo</option>
+                                    <option value="5">Other</option>
+                                    <option value="999">None</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
                         <div class="col-md-12">
                             <label>Options</label>
                             <div class="custom-control custom-checkbox">
@@ -260,12 +276,19 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-2">
                         <div class="col-lg-6 col-md-12">
-                            <label>Options</label>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="view_DisableCam" value="yes" disabled>
-                                <label class="custom-control-label" for="view_DisableCam">Disable Camera</label>
+                            <div class="form-row">
+                                <label for="view_ExmneReligion">Religion</label>
+                                <select class="form-control-lg" name="view_ExmneReligion" id="view_ExmneReligion" style="width: 100%" disabled>
+                                    <option value="">Select...</option>
+                                    <option value="1">Roman Catholic</option>
+                                    <option value="2">Christian</option>
+                                    <option value="3">Islam</option>
+                                    <option value="4">Iglesia ni Cristo</option>
+                                    <option value="5">Other</option>
+                                    <option value="999">None</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
@@ -278,6 +301,15 @@ foreach ($resultmdl1 as $row) {
                                     <option value="2">Finished</option>
                                     <option value="3">Disabled</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-lg-6 col-md-12">
+                            <label>Options</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="view_DisableCam" value="yes" disabled>
+                                <label class="custom-control-label" for="view_DisableCam">Disable Camera</label>
                             </div>
                         </div>
                     </div>
@@ -413,12 +445,19 @@ foreach ($resultmdl1 as $row) {
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row mb-2">
                         <div class="col-lg-6 col-md-12">
-                            <label>Options</label>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="edit_DisableCam" value="yes">
-                                <label class="custom-control-label" for="edit_DisableCam">Disable Camera</label>
+                            <div class="form-row">
+                                <label for="edit_ExmneReligion">Religion</label>
+                                <select class="form-control-lg" name="edit_ExmneReligion" id="edit_ExmneReligion" style="width: 100%">
+                                    <option value="">Select...</option>
+                                    <option value="1">Roman Catholic</option>
+                                    <option value="2">Christian</option>
+                                    <option value="3">Islam</option>
+                                    <option value="4">Iglesia ni Cristo</option>
+                                    <option value="5">Other</option>
+                                    <option value="999">None</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
@@ -431,6 +470,15 @@ foreach ($resultmdl1 as $row) {
                                     <option value="2">Finished</option>
                                     <option value="3">Disabled</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-lg-6 col-md-12">
+                            <label>Options</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="edit_DisableCam" value="yes">
+                                <label class="custom-control-label" for="edit_DisableCam">Disable Camera</label>
                             </div>
                         </div>
                     </div>

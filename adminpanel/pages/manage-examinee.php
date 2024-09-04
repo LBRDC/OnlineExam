@@ -141,6 +141,7 @@
                                                     $exmne_sfname = $row['exmne_sfname'];
                                                     $exmne_sex = $row['exmne_sex'];
                                                     $exmne_birthdate = $row['exmne_birthdate'];
+                                                    $exmne_religion = $row['exmne_religion'];
                                                     $exmne_disablecam = $row['exmne_disablecam'];
                                                     $exmne_email = $row['exmne_email'];
                                                     $exmne_pass = $row['exmne_pass'];
@@ -189,6 +190,7 @@
                                                     data-view-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                     data-view-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                     data-view-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                    data-view-religion = "<?php echo htmlspecialchars($exmne_religion); ?>"
                                                     data-view-cam = "<?php echo htmlspecialchars($exmne_disablecam); ?>"
                                                     data-view-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                     data-view-email = "<?php echo htmlspecialchars($exmne_email); ?>"
@@ -204,6 +206,7 @@
                                                     data-edit-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                     data-edit-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                     data-edit-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                    data-edit-religion = "<?php echo htmlspecialchars($exmne_religion); ?>"
                                                     data-edit-cam = "<?php echo htmlspecialchars($exmne_disablecam); ?>"
                                                     data-edit-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                     data-edit-email = "<?php echo htmlspecialchars($exmne_email); ?>"
