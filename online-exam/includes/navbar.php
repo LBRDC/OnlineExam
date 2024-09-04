@@ -30,6 +30,21 @@
   }  
 
   $exmne_Id = $_SESSION['ex_user']['exmne_id'];
+
+  // fetch feedback
+  $stmt1 = $conn->prepare("SELECT * FROM feedback_tbl WHERE exmne_id = :fb_ExmneId LIMIT 1");
+  $stmt1->bindParam(':fb_ExmneId', $exmne_Id);
+  $stmt1->execute();
+
+  if ($stmt1->rowCount() > 0) {
+    $fb = $stmt1->fetch(PDO::FETCH_ASSOC);
+    $fb_txt = $fb['fb_feedback'];
+    $fb_anon = $fb['fb_exmne_as'];
+  } else {
+    $fb_txt = '';
+    $fb_anon = '';  
+  }
+
 ?>
 
 <!-- #START# navbar.php -->
@@ -161,7 +176,10 @@
                             </li>
                             <li class="app-sidebar__heading">Feedback</li>
                             <li>
-                                <a href="javascript:void(0);" id="feedback-btn" class="" data-toggle="modal" data-target="#mdlFeedback" data-feedback-id="<?php echo htmlspecialchars($exmne_Id); ?>">
+                                <a href="javascript:void(0);" id="feedback-btn" class="" data-toggle="modal" data-target="#mdlFeedback" 
+                                data-feedback-id="<?php echo htmlspecialchars($exmne_Id); ?>"
+                                data-feedback-txt="<?php echo htmlspecialchars($fb_txt); ?>"
+                                data-feedback-anon="<?php echo htmlspecialchars($fb_anon); ?>">
                                     <i class="metismenu-icon pe-7s-comment"></i>
                                     Feedback
                                 </a>
