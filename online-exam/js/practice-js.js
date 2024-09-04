@@ -156,8 +156,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     }
 
     function init() {
-        //var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
-        var savedTimeKey = 'Debug_TIMER'; //DEBUG
+        var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
+        //var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
         if (savedTime) {
@@ -241,13 +241,13 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             event.preventDefault();
         }
         // DEBUG
-        if ((event.ctrlKey || event.metaKey) && event.key === 'r' && !event.shiftKey) {
+        /*if ((event.ctrlKey || event.metaKey) && event.key === 'r' && !event.shiftKey) {
+            event.preventDefault();
+        }*/
+        // Prevent Keyboard Shortcuts
+        if ((event.ctrlKey || event.metaKey) && (event.key === 'r' || (event.key === 'R' && event.shiftKey))) {
             event.preventDefault();
         }
-        // Prevent Keyboard Shortcuts
-        //if ((event.ctrlKey || event.metaKey) && (event.key === 'r' || (event.key === 'R' && event.shiftKey))) {
-        //    event.preventDefault();
-        //}
     });
 
     // Prevent page refresh from close or reload
@@ -263,7 +263,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     // Check Internet
     window.addEventListener('online', function () {
         if (isInternetDownNotifShown) {
-        startTimer();
+        //startTimer();
         }
     });
 
@@ -408,7 +408,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             }
             
             if (document.visibilityState != "visible" && pgActive == 1 && anticheatsts == 'enabled') {
-                console.log("tab inactive"); //DEBUG
+                //console.log("tab inactive"); //DEBUG
                 pgActive = 0;
                 $.ajax({
                     type: "POST",

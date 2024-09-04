@@ -3,7 +3,7 @@ function fetchExamId() {
     //const id = urlParams.get('id');
     var id = document.getElementById("exam_id").value;
     id = id ? id : "0"; // If id is null or "0", set it to "0"
-    console.log("[SYS] ID = " + id); //DEBUG
+    //console.log("[SYS] ID = " + id); //DEBUG
     return id;
 }
 
@@ -167,7 +167,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         seconds = objLocalStorageTimer.seconds;
         } else {
         var timeLimit = $('#timeLimit').val();
-        console.log("[SYS] Time Limit: " + timeLimit);
+        //console.log("[SYS] Time Limit: " + timeLimit); //DEBUG
         minutes = parseInt(timeLimit);
         seconds = 0;
         }
@@ -376,7 +376,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         Swal.fire({
             icon: 'warning',
             title: 'Ready',
-            text: 'Starting...',
+            text: 'Starting Exam...',
             allowOutsideClick: false,
             showConfirmButton: false,
             timer: 3000,
@@ -455,7 +455,9 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                         Avoid using other tabs, windows, or leaving the window while the exam is in progress.
                                         <br>
                                         <br>
-                                        <i>${response['msg_txt']} -${response['msg_src']}</i>
+                                        <i>${response['msg_txt']}</i>
+                                        <br>
+                                        <i>-${response['msg_src']}</i>
                                     `,
                                 icon: 'warning',
                                 allowOutsideClick: false,
