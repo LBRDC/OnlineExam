@@ -128,6 +128,7 @@
                                                 <th>Total</th>
                                                 <th>Percentage</th>
                                                 <th>Date</th>
+                                                <th>Cheated</th>
                                             </tr>
                                             </thead>
                                             <!--<tfoot>
@@ -182,11 +183,13 @@
                                                                 $total = '';
                                                                 $percentage = 'noans';
                                                                 $date = ''; 
+                                                                $ex_cheat = '';
                                                             } else {
                                                                 $score = isset($result['ex_score']) ? $result['ex_score'] : 0;
                                                                 $total = isset($result['ex_total']) ? $result['ex_total'] : 0;
                                                                 $date = isset($result['exatmpt_date']) ? $result['exatmpt_date'] : '';
                                                                 $percentage = number_format(($total > 0? ($score / $total) * 100 : 0), 2);
+                                                                $ex_cheat = ($result['cheat_cnt'] > 0) ? 'Yes' : 'No';
                                                             }
 
                                                             // Determine the ranking based on percentage
@@ -217,6 +220,7 @@
                                                     <td><?php echo htmlspecialchars($total); ?></td>
                                                     <td><?php echo htmlspecialchars($percentageDisplay); ?></td>
                                                     <td><?php echo htmlspecialchars($date); ?></td>
+                                                    <td><?php echo htmlspecialchars($ex_cheat); ?></td>
                                                 </tr>
                                                 <?php
                                                         }

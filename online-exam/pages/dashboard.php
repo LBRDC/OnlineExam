@@ -1,44 +1,105 @@
 <?php
 $exmne_clu_id = isset($_SESSION['ex_user']['exmne_clu_id']) ? $_SESSION['ex_user']['exmne_clu_id'] : '';
 $exmne_id = isset($_SESSION['ex_user']['exmne_id']) ? $_SESSION['ex_user']['exmne_id'] : '';
+$exmne_religion = isset($_SESSION['ex_user']['exmne_religion']) ? $_SESSION['ex_user']['exmne_religion'] : '';
+$exmne_status = isset($_SESSION['ex_user']['exmne_status']) ? $_SESSION['ex_user']['exmne_status'] : '';
 $exmne_disablecam = isset($_SESSION['ex_user']['exmne_disablecam']) ? $_SESSION['ex_user']['exmne_disablecam'] : '';
 
+//echo $_SESSION['sess']['sessionid'];
+//echo $_SESSION['sess']['time'];
+
 // Fetch Exam IDs based on cluster
-$stmt1 = $conn->prepare("SELECT * FROM exam_cluster_tbl WHERE clu_id = :clu_id ORDER BY ex_id ASC");
-$stmt1->bindParam(':clu_id', $exmne_clu_id);
-$stmt1->execute();
+$stmt1 = $conn->prepare("SELECT ex_id FROM exam_cluster_tbl WHERE clu_id = ?");
+$stmt1->execute([$exmne_clu_id]);
 
-$unattemptedExamIds = [];
+$examIds = $stmt1->fetchAll(PDO::FETCH_COLUMN, 0);
 
-while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-    $ex_id = $row['ex_id'];
-
-    // Fetch the status of the exam
-    $stmt3 = $conn->prepare("SELECT ex_status FROM exam_tbl WHERE ex_id = :ex_id");
-    $stmt3->bindParam(':ex_id', $ex_id);
-    $stmt3->execute();
-    $examStatus = $stmt3->fetch(PDO::FETCH_ASSOC);
-
-    // Check if the exam is active
-    if ($examStatus['ex_status'] == 1) {
-        // Check if the exam has been attempted
-        $stmt2 = $conn->prepare("SELECT * FROM examinee_attempt WHERE ex_id = :ex_id AND exmne_id = :exmne_id");
-        $stmt2->bindParam(':ex_id', $ex_id);
-        $stmt2->bindParam(':exmne_id', $exmne_id);
-        $stmt2->execute();
-        $attempts = $stmt2->rowCount();
-
-        if ($attempts == 0) {
-            $unattemptedExamIds[] = $ex_id;
-        }
-    }
+// If no exams are found, handle this case
+if (empty($examIds)) {
+    $unattemptedExamsData = [];
+    return; 
 }
 
-$ex_count = count($unattemptedExamIds);
-if (count($unattemptedExamIds) > 0) {
-    $selEx_id = $unattemptedExamIds[0];
+// Fetch all exams for the given cluster
+$placeholders = implode(',', array_fill(0, count($examIds), '?'));
+$stmt2 = $conn->prepare("
+    SELECT e.*, 
+        CASE 
+            WHEN ea.ex_id IS NOT NULL THEN 1 
+            ELSE 0 
+        END AS attempted
+    FROM exam_tbl e
+    LEFT JOIN examinee_attempt ea ON e.ex_id = ea.ex_id AND ea.exmne_id = ?
+    WHERE e.ex_id IN ($placeholders) AND e.ex_status = 1
+");
+$params = array_merge([$exmne_id], $examIds);
+$stmt2->execute($params);
+
+$results = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+// Filter out exams that have been attempted
+$unattemptedExams = array_filter($results, function ($exam) {
+    return $exam['attempted'] == 0;
+});
+
+// Custom sorting function
+usort($unattemptedExams, function ($a, $b) {
+    $aTitle = $a['ex_title'];
+    $bTitle = $b['ex_title'];
+
+    // Check if the title is "APPLICANT RISK PROFILER (ARP)"
+    if ($aTitle === 'APPLICANT RISK PROFILER (ARP)' && $bTitle !== 'APPLICANT RISK PROFILER (ARP)') {
+        return 1;
+    }
+    if ($bTitle === 'APPLICANT RISK PROFILER (ARP)' && $aTitle !== 'APPLICANT RISK PROFILER (ARP)') {
+        return -1;
+    }
+
+    // Extract the numeric part of the title for sorting
+    preg_match('/TEST (\d+)/', $aTitle, $aMatch);
+    preg_match('/TEST (\d+)/', $bTitle, $bMatch);
+    $aNumber = isset($aMatch[1]) ? (int)$aMatch[1] : 0;
+    $bNumber = isset($bMatch[1]) ? (int)$bMatch[1] : 0;
+
+    // If both titles are tests, sort by the number
+    if ($aNumber > 0 && $bNumber > 0) {
+        return $aNumber - $bNumber;
+    }
+
+    // For non-test titles, or if one is a test and the other is not, sort alphabetically
+    return strcmp($aTitle, $bTitle);
+});
+
+// DEBUG: Print details of unattempted exams
+/*foreach ($unattemptedExams as $row) {
+    echo "Exam Title: " . htmlspecialchars($row['ex_title']) . "<br>";
+    echo "Exam ID: " . htmlspecialchars($row['ex_id']) . "<br>";
+    echo "Exam Practice: " . htmlspecialchars($row['ex_practice']) . "<br>";
+}*/
+
+// Store unattempted exam IDs and practices
+$unattemptedExamsData = [];
+foreach ($unattemptedExams as $exam) {
+    $unattemptedExamsData[] = [
+        'ex_id' => $exam['ex_id'],
+        'ex_practice' => $exam['ex_practice']
+    ];
+}
+
+$ex_count = count($unattemptedExams);
+if ($ex_count > 0) {
+    $selEx_id = $unattemptedExams[0]['ex_id'];
 } else {
     $selEx_id = '';
+
+    if ($exmne_status == 1 && $ex_count == 0) {
+    //update examinee acc
+    $stmt3 = $conn->prepare("UPDATE examinee_tbl SET exmne_status = 2 WHERE exmne_id = :exmne_id");
+    $stmt3->bindParam(':exmne_id', $exmne_id);
+    if ($stmt3->execute()) {
+        $_SESSION['ex_user']['exmne_status'] = 2;
+    }
+    }
 }
 ?>
 
@@ -175,19 +236,32 @@ if (count($unattemptedExamIds) > 0) {
                                 <div class="card-body">
                                     <div class="row mb-4">
                                         <div class="col-md-12 text-center">
-                                            <?php 
-                                                //Select one Random
-                                                $stmt4 = $conn->prepare("SELECT * FROM page_messages ORDER BY RAND() LIMIT 1");
-                                                $stmt4->execute();
-                                                if ($stmt4->rowcount() > 0) {
-                                                    $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
-                                                    $msg_txt = $msg['msg_text'];
-                                                    $msg_src = $msg['src_text'];
-                                                } else {
-                                                    $msg_txt = "The LORD makes firm the steps of the one who delights in him; though he may stumble, he will not fall, for the LORD upholds him with his hand.";
-                                                    $msg_src = "Psalm 37:23-24";
-                                                }
-                                            ?>
+                                        <?php
+                                            // Assume $exmne_religion is already defined somewhere in your code
+                                            $query = "SELECT * FROM page_messages ";
+                                            
+                                            if ($exmne_religion == 1 || $exmne_religion == 2) {
+                                                $query .= "";
+                                            } else {
+                                                $query .= " WHERE religion != 1 ";
+                                            }
+                                            
+                                            $query .= " ORDER BY RAND() LIMIT 1";
+                                            
+                                            // Prepare and execute the query
+                                            $stmt4 = $conn->prepare($query);
+                                            $stmt4->execute();
+                                            
+                                            if ($stmt4->rowCount() > 0) {
+                                                $msg = $stmt4->fetch(PDO::FETCH_ASSOC);
+                                                $msg_txt = $msg['msg_text'];
+                                                $msg_src = $msg['src_text'];
+                                            } else {
+                                                $msg_txt = "There are no secrets to success. It is the result of preparation, hard work, and learning from failure.";
+                                                $msg_src = "General Colin Powell, former US Secretary of State";
+                                            }
+                                        ?>
+
 
                                             <span class='font-italic font-weight-bold'><?php echo htmlspecialchars($msg_txt) ?><br> -<?php echo htmlspecialchars($msg_src) ?></span>
                                         </div>

@@ -1,6 +1,9 @@
 <?php 
 include("../../conn.php");
 
+// Set the time zone to Manila, Philippines (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
 // Use $_POST directly instead of extract($_POST) for better security and clarity
 $add_ExmneId = isset($_POST['add_ExmneId']) ? $_POST['add_ExmneId'] : '';
 $add_Feedback = isset($_POST['add_Feedback']) ? $_POST['add_Feedback'] : '';
@@ -34,16 +37,28 @@ if ($add_Anonymous != "yes") {
 //Current date
 $add_Date = date("Y-m-d");
 
-
-// Prepare and execute the second statement to insert the new cluster
-$stmt2 = $conn->prepare("INSERT INTO feedback_tbl (exmne_id, fb_exmne_as, fb_feedback, fb_date) VALUES (:add_ExmneId, :add_ExmneName, :add_Feedback, :add_Date)");
+// check if user already submitted feedback
+$stmt2 = $conn->prepare("SELECT * FROM feedback_tbl WHERE exmne_id = :add_ExmneId");
 $stmt2->bindParam(':add_ExmneId', $add_ExmneId);
-$stmt2->bindParam(':add_ExmneName', $exmne_name);
-$stmt2->bindParam(':add_Feedback', $add_Feedback);
-$stmt2->bindParam(':add_Date', $add_Date);
+$stmt2->execute();
+if ($stmt2->rowCount() > 0) {
+    // Update
+    $stmt3 = $conn->prepare("UPDATE feedback_tbl SET fb_exmne_as = :add_ExmneName, fb_feedback = :add_Feedback, fb_date = :add_Date WHERE exmne_id = :add_ExmneId");
+    $stmt3->bindParam(':add_ExmneId', $add_ExmneId);
+    $stmt3->bindParam(':add_ExmneName', $exmne_name);
+    $stmt3->bindParam(':add_Feedback', $add_Feedback);
+    $stmt3->bindParam(':add_Date', $add_Date);
+} else {
+    // Add
+    $stmt4 = $conn->prepare("INSERT INTO feedback_tbl (exmne_id, fb_exmne_as, fb_feedback, fb_date) VALUES (:add_ExmneId, :add_ExmneName, :add_Feedback, :add_Date)");
+    $stmt4->bindParam(':add_ExmneId', $add_ExmneId);
+    $stmt4->bindParam(':add_ExmneName', $exmne_name);
+    $stmt4->bindParam(':add_Feedback', $add_Feedback);
+    $stmt4->bindParam(':add_Date', $add_Date);
+}
 
 // Execute the statement and check if it was successful
-if($stmt2->execute()) {
+if($stmt3->execute() || $stmt4->execute()) {
     $res = array("res" => "success", "msg" => $exmne_name . "|" . $add_Anonymous);
 } else {
     $res = array("res" => "failed");

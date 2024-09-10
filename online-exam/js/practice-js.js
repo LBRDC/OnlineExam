@@ -24,6 +24,7 @@ $.ajax({
     success: function(response) {
         //console.log(response); //DEBUG
         //console.log(checkData); //DEBUG
+        checkedExam = response;
         if (response.res == "complete") {
             Swal.fire({
                 icon: "error",
@@ -46,8 +47,6 @@ $.ajax({
                 timer: 3000,
                 timerProgressBar: true,
             }).then(function() {
-                //window.location.href = 'home.php';
-                // Create a form element
                 if (response.res == "incomplete" && response.practice_st == 'yes') {
                     // Create a form element
                     var form = document.createElement('form');
@@ -119,13 +118,13 @@ $.ajax({
 
 // Check if camera is working
 if (sessionStorage.getItem('camWorking') === 'true') {
-    console.log("Camera Working");
+    //console.log("Camera Working"); //DEBUG
     camWorking = 'true';
 } else if (sessionStorage.getItem('camWorking') === 'disabled') {
-    console.log("Camera Disabled");
+    //console.log("Camera Disabled"); //DEBUG
     camWorking = 'disabled';
 } else {
-    console.log("Camera Not Working");
+    //console.log("Camera Not Working"); //DEBUG
     camWorking = 'false';
     Swal.fire({
         icon: "error",
@@ -157,7 +156,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     }
 
     function init() {
-        var savedTimeKey = 'countTimer_user' + user + '_exam' + exId;
+        var savedTimeKey = 'countTimer_user' + user + '_practice' + exId;
         //var savedTimeKey = 'Debug_TIMER'; //DEBUG
         var savedTime = localStorage.getItem(savedTimeKey);
         //console.log(savedTimeKey); //Debug
@@ -167,12 +166,12 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         seconds = objLocalStorageTimer.seconds;
         } else {
         var timeLimit = $('#timeLimit').val();
-        //console.log("[SYS] Time Limit: " + timeLimit); //DEBUG
+        //var timeLimit = 500;
         minutes = parseInt(timeLimit);
         seconds = 0;
         }
     
-        startTimer();
+        //startTimer();
         updateDisplay();
     }
 
@@ -221,8 +220,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
 
         updateDisplay();
 
-        var currentTime = { minutes: minutes, seconds: seconds };
-        localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+        //var currentTime = { minutes: minutes, seconds: seconds };
+        //localStorage.setItem('countTimer_user' + user + '_practice' + exId, JSON.stringify(currentTime));
     }
 
     function updateDisplay() {
@@ -264,7 +263,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
     // Check Internet
     window.addEventListener('online', function () {
         if (isInternetDownNotifShown) {
-        startTimer();
+        //startTimer();
         }
     });
 
@@ -372,38 +371,44 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         var anticheatCnt = 0;
         //Display Instructions
         stopTimer();
-
+        //console.log("[SYS] Show Instructions"); //DEBUG
+        var exDesc = document.getElementById('exDesc').innerText;
+        var exTime = document.getElementById('timeLimit').value;
         Swal.fire({
-            icon: 'warning',
-            title: 'Ready',
-            text: 'Starting Exam...',
+            title: 'Instructions',
+            //text: exDesc,
+            width: 800,
+            html: `
+            <div class="m-3 text-justify"><b>Time Limit:</b> ${exTime} minutes</div>
+            <div class="m-3 text-justify">${exDesc.replace(/\n/g, '<br>')}
+            </div>`,
+            icon: 'info',
             allowOutsideClick: false,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-        }).then(function() {
-            table.page.len(display_Limit).draw();
-            startTimer();
-            updateDisplay();
-            showCard();
-            pgActive = 1;
-            anticheatsts = 'enabled';
-            if (camWorking != 'disabled') {
-                startRecording();
+        }).then((result) => {
+            if (result.value) {
+                table.page.len(display_Limit).draw();
+                //startTimer();
+                stopTimer();
+                updateDisplay();
+                //showCard();
+                pgActive = 1;
+                anticheatsts = 'enabled';
+                if (camWorking != 'disabled') {
+                    startRecording();
+                }
             }
         });
 
         //Anticheat OLD
-        /*document.addEventListener("visibilitychange", (event) => {
+        document.addEventListener("visibilitychange", (event) => {
             if (document.visibilityState != "visible" && anticheatsts == 'enabled') {
                 //anticheatCnt++;
                 anticheatCnt = 0; // DEBUG
                 localStorage.setItem("anticheatCnt", anticheatCnt);
-                document.getElementById('examAC').value = anticheatCnt;
             }
             
             if (document.visibilityState != "visible" && pgActive == 1 && anticheatsts == 'enabled') {
-                console.log("tab inactive");
+                //console.log("tab inactive"); //DEBUG
                 pgActive = 0;
                 $.ajax({
                     type: "POST",
@@ -431,18 +436,17 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                     }
                 });
             }
-        });*/
+        });
 
         // Anticheat NEW
-        function handleInactivity() {
+        /*function handleInactivity() {
             if (anticheatsts == 'enabled') {
-                anticheatCnt++;
-                //anticheatCnt = 0; // DEBUG
+                //anticheatCnt++;
+                anticheatCnt = 0; // DEBUG
                 localStorage.setItem("anticheatCnt", anticheatCnt);
-                document.getElementById('examAC').value = anticheatCnt;
                 
                 if (pgActive == 1) {
-                    console.log("tab inactive or window out of focus");
+                    console.log("tab inactive or window out of focus"); //DEBUG
                     pgActive = 0;
                     $.ajax({
                         type: "POST",
@@ -455,9 +459,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                                         Avoid using other tabs, windows, or leaving the window while the exam is in progress.
                                         <br>
                                         <br>
-                                        <i>${response['msg_txt']}</i>
-                                        <br>
-                                        <i>-${response['msg_src']}</i>
+                                        <i>${response['msg_txt']} -${response['msg_src']}</i>
                                     `,
                                 icon: 'warning',
                                 allowOutsideClick: false,
@@ -490,7 +492,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         // Reset the state when the window or tab becomes active again
         window.addEventListener("focus", (event) => {
             pgActive = 1;
-        });
+        });*/
         
         //Variable
         const disableBtn = document.getElementById('disablePrevBtn').value;
@@ -596,6 +598,7 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
         event.preventDefault();
 
         var examAction = $('#examAction').val();
+        var examId = fetchExamId();
         //console.log("Exam Submitted: " + examSubmitted); //DEBUG
 
         if (examAction == 'timeout') {
@@ -603,8 +606,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
-            currentTime = { minutes: 0, seconds: 0 };
-            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Over',
@@ -615,123 +618,58 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 timerProgressBar: true,
             }).then(function() {
                 examSubmitted = true;
-                $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
-                    var response = JSON.parse(data);
-                    if (response.res == "finished") {
-                        $.ajax({
-                            type: "POST",
-                            url: "query/page_Message.php",
-                            dataType: "json",
-                            success: function(msg) {
-                                Swal.fire({
-                                    title: 'Finished',
-                                    html: `
-                                            Congratulations! You have finished all the exams.
-                                            <br>
-                                            <br>
-                                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                                        `,
-                                    icon: 'success',
-                                    allowOutsideClick: false,
-                                    showConfirmButton: false,
-                                    timer: 10000,
-                                    timerProgressBar: true,
-                                }).then(function() {
-                                    window.location.href = 'home.php';
-                                });
-                            }
-                        });
-                    } else if (response.res == "notFinished") {
-                        $.ajax({
-                            type: "POST",
-                            url: "query/page_Message.php",
-                            dataType: "json",
-                            success: function(msg) {
-                                Swal.fire({
-                                    title: 'Loading...',
-                                    html: `
-                                            Proceeding to next exam...
-                                            <br>
-                                            <br>
-                                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                                        `,
-                                    icon: 'info',
-                                    allowOutsideClick: false,
-                                    showConfirmButton: false,
-                                    timer: 5000,
-                                    timerProgressBar: true,
-                                }).then(function() {
-                                    //window.location.href = 'exam.php?id=' + response.examId;
-                                    if (response.practice_st == 'yes') {
-                                        // Create a form element
-                                        var form = document.createElement('form');
-                                        form.method = 'POST';
-                                        form.action = 'practice.php';
-                          
-                                        // Create an input field for the exam ID
-                                        var hiddenInput = document.createElement('input');
-                                        hiddenInput.type = 'hidden';
-                                        hiddenInput.name = 'fetchid';
-                                        hiddenInput.id = 'fetchid';
-                                        hiddenInput.value = response.examId;
-                          
-                                        // Append the hidden input to the form
-                                        form.appendChild(hiddenInput);
-                          
-                                        // Append the form to the body (or any other container element)
-                                        document.body.appendChild(form);
-                          
-                                        // Submit the form
-                                        form.submit();
-                                      } else {
-                                        // Create a form element
-                                        var form = document.createElement('form');
-                                        form.method = 'POST';
-                                        form.action = 'exam.php';
-                          
-                                        // Create an input field for the exam ID
-                                        var hiddenInput = document.createElement('input');
-                                        hiddenInput.type = 'hidden';
-                                        hiddenInput.name = 'fetchid';
-                                        hiddenInput.id = 'fetchid';
-                                        hiddenInput.value = response.examId;
-                          
-                                        // Append the hidden input to the form
-                                        form.appendChild(hiddenInput);
-                          
-                                        // Append the form to the body (or any other container element)
-                                        document.body.appendChild(form);
-                          
-                                        // Submit the form
-                                        form.submit();
-                                      }
-                                });
-                            }
-                        });
-                    } else if (response.res == "failed") {
+
+                $.ajax({
+                    type: "POST",
+                    url: "query/page_Message.php",
+                    dataType: "json",
+                    success: function(msg) {
+                        //Proceed to Exam
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: 'An error occured while submitting your answers. Please try again.',
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: 'System error occurred.',
+                            title: 'Loading...',
+                            html: `
+                                    Proceeding to exam...
+                                    <br>
+                                    <br>
+                                    <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                `,
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            //window.location.href = 'exam.php?id=' + response.examId;
+                            //console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                            // Create a form element
+                            var form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = 'exam.php';
+
+                            // Create an input field for the exam ID
+                            var hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'fetchid';
+                            hiddenInput.id = 'fetchid';
+                            hiddenInput.value = examId;
+
+                            // Append the hidden input to the form
+                            form.appendChild(hiddenInput);
+
+                            // Append the form to the body (or any other container element)
+                            document.body.appendChild(form);
+
+                            // Submit the form
+                            form.submit();
                         });
                     }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert('A script error occured. Please try again.');
-                    console.error(textStatus, errorThrown);
-                    console.log(jqXHR.responseText);
                 });
             });
         } else if (examAction == 'ontime') {
             Swal.fire({
                 icon: 'warning',
-                title: 'Submit Exam',
-                text: 'Are you sure you want to submit?',
+                title: 'Conclude Practice',
+                text: 'Proceed to exam?',
                 showCancelButton: true,
                 allowOutsideClick: false,
                 confirmButtonColor: '#3085d6',
@@ -739,123 +677,57 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 confirmButtonText: 'Yes'
             }).then(function(result) {
                 if (result.value) {      
+                    //Proceed to Exam
                     localStorage.setItem("anticheatCnt", 0);
                     stopTimer();
                     anticheatsts = 'disabled';
                     stopRecording();
                     examSubmitted = true;
-                    currentTime = { minutes: 0, seconds: 0 };
-                    localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
-                    $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
-                        var response = JSON.parse(data);
-                        if (response.res == "finished") {
-                            $.ajax({
-                                type: "POST",
-                                url: "query/page_Message.php",
-                                dataType: "json",
-                                success: function(msg) {
-                                    Swal.fire({
-                                        title: 'Finished',
-                                        html: `
-                                                Congratulations! You have finished all the exams.
-                                                <br>
-                                                <br>
-                                                <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                                            `,
-                                        icon: 'success',
-                                        allowOutsideClick: false,
-                                        showConfirmButton: false,
-                                        timer: 10000,
-                                        timerProgressBar: true,
-                                    }).then(function() {
-                                        window.location.href = 'home.php';
-                                    });
-                                }
-                            });
-                        } else if (response.res == "notFinished") {
-                            $.ajax({
-                                type: "POST",
-                                url: "query/page_Message.php",
-                                dataType: "json",
-                                success: function(msg) {
-                                    Swal.fire({
-                                        title: 'Loading...',
-                                        html: `
-                                                Proceeding to next exam...
-                                                <br>
-                                                <br>
-                                                <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                                            `,
-                                        icon: 'info',
-                                        allowOutsideClick: false,
-                                        showConfirmButton: false,
-                                        timer: 5000,
-                                        timerProgressBar: true,
-                                    }).then(function() {
-                                        //window.location.href = 'exam.php?id=' + response.examId;
-                                        if (response.practice_st == 'yes') {
-                                            // Create a form element
-                                            var form = document.createElement('form');
-                                            form.method = 'POST';
-                                            form.action = 'practice.php';
-                                
-                                            // Create an input field for the exam ID
-                                            var hiddenInput = document.createElement('input');
-                                            hiddenInput.type = 'hidden';
-                                            hiddenInput.name = 'fetchid';
-                                            hiddenInput.id = 'fetchid';
-                                            hiddenInput.value = response.examId;
-                                
-                                            // Append the hidden input to the form
-                                            form.appendChild(hiddenInput);
-                                
-                                            // Append the form to the body (or any other container element)
-                                            document.body.appendChild(form);
-                                
-                                            // Submit the form
-                                            form.submit();
-                                        } else {
-                                            // Create a form element
-                                            var form = document.createElement('form');
-                                            form.method = 'POST';
-                                            form.action = 'exam.php';
-                                
-                                            // Create an input field for the exam ID
-                                            var hiddenInput = document.createElement('input');
-                                            hiddenInput.type = 'hidden';
-                                            hiddenInput.name = 'fetchid';
-                                            hiddenInput.id = 'fetchid';
-                                            hiddenInput.value = response.examId;
-                                
-                                            // Append the hidden input to the form
-                                            form.appendChild(hiddenInput);
-                                
-                                            // Append the form to the body (or any other container element)
-                                            document.body.appendChild(form);
-                                
-                                            // Submit the form
-                                            form.submit();
-                                        }
-                                    });
-                                }
-                            });
-                        } else if (response.res == "failed") {
+                    var currentTime = { minutes: 0, seconds: 0 };
+                    localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
+                    $.ajax({
+                        type: "POST",
+                        url: "query/page_Message.php",
+                        dataType: "json",
+                        success: function(msg) {
                             Swal.fire({
-                                icon: 'error',
-                                title: 'Failed',
-                                text: 'An error occured while submitting your answers. Please try again.',
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Failed',
-                                text: 'System error occurred.',
+                                title: 'Loading...',
+                                html: `
+                                        Proceeding to exam...
+                                        <br>
+                                        <br>
+                                        <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                    `,
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                            }).then(function() {
+                                //window.location.href = 'exam.php?id=' + response.examId;
+                                console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                                // Create a form element
+                                var form = document.createElement('form');
+                                form.method = 'POST';
+                                form.action = 'exam.php';
+        
+                                // Create an input field for the exam ID
+                                var hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = 'fetchid';
+                                hiddenInput.id = 'fetchid';
+                                hiddenInput.value = examId;
+        
+                                // Append the hidden input to the form
+                                form.appendChild(hiddenInput);
+        
+                                // Append the form to the body (or any other container element)
+                                document.body.appendChild(form);
+        
+                                // Submit the form
+                                form.submit();
                             });
                         }
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
-                        alert('A script error occured. Please try again.');
-                        console.error(textStatus, errorThrown);
-                        console.log(jqXHR.responseText);
                     });
                 }
             });
@@ -864,8 +736,8 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
             anticheatsts = 'disabled';
             stopRecording();
             localStorage.setItem("anticheatCnt", 0);
-            currentTime = { minutes: 0, seconds: 0 };
-            localStorage.setItem('countTimer_user' + user + '_exam' + exId, JSON.stringify(currentTime));
+            var currentTime = { minutes: 0, seconds: 0 };
+            localStorage.setItem('countTimer_user' + user + '_prac' + exId, JSON.stringify(currentTime));
             Swal.fire({
                 icon: 'warning',
                 title: 'Exam Terminated',
@@ -876,116 +748,50 @@ if (!examCompleted && (camWorking == 'true' || camWorking == 'disabled')) {
                 timerProgressBar: true,
             }).then(function() {
                 examSubmitted = true;
-                $.post("query/submit_AnswerExe.php", $('#submitAnswerFrm').serialize(), function (data) {
-                    var response = JSON.parse(data);
-                    if (response.res == "finished") {
-                        $.ajax({
-                            type: "POST",
-                            url: "query/page_Message.php",
-                            dataType: "json",
-                            success: function(msg) {
-                                Swal.fire({
-                                    title: 'Finished',
-                                    html: `
-                                            Congratulations! You have finished all the exams.
-                                            <br>
-                                            <br>
-                                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                                        `,
-                                    icon: 'success',
-                                    allowOutsideClick: false,
-                                    showConfirmButton: false,
-                                    timer: 10000,
-                                    timerProgressBar: true,
-                                }).then(function() {
-                                    window.location.href = 'home.php';
-                                });
-                            }
-                        });
-                    } else if (response.res == "notFinished") {
-                        $.ajax({
-                            type: "POST",
-                            url: "query/page_Message.php",
-                            dataType: "json",
-                            success: function(msg) {
-                                Swal.fire({
-                                    title: 'Loading...',
-                                    html: `
-                                            Proceeding to next exam...
-                                            <br>
-                                            <br>
-                                            <i>${msg['msg_txt']} -${msg['msg_src']}</i>
-                                        `,
-                                    icon: 'info',
-                                    allowOutsideClick: false,
-                                    showConfirmButton: false,
-                                    timer: 5000,
-                                    timerProgressBar: true,
-                                }).then(function() {
-                                    //window.location.href = 'exam.php?id=' + response.examId;
-                                    if (response.practice_st == 'yes') {
-                                        // Create a form element
-                                        var form = document.createElement('form');
-                                        form.method = 'POST';
-                                        form.action = 'practice.php';
-                            
-                                        // Create an input field for the exam ID
-                                        var hiddenInput = document.createElement('input');
-                                        hiddenInput.type = 'hidden';
-                                        hiddenInput.name = 'fetchid';
-                                        hiddenInput.id = 'fetchid';
-                                        hiddenInput.value = response.examId;
-                            
-                                        // Append the hidden input to the form
-                                        form.appendChild(hiddenInput);
-                            
-                                        // Append the form to the body (or any other container element)
-                                        document.body.appendChild(form);
-                            
-                                        // Submit the form
-                                        form.submit();
-                                    } else {
-                                        // Create a form element
-                                        var form = document.createElement('form');
-                                        form.method = 'POST';
-                                        form.action = 'exam.php';
-                            
-                                        // Create an input field for the exam ID
-                                        var hiddenInput = document.createElement('input');
-                                        hiddenInput.type = 'hidden';
-                                        hiddenInput.name = 'fetchid';
-                                        hiddenInput.id = 'fetchid';
-                                        hiddenInput.value = response.examId;
-                            
-                                        // Append the hidden input to the form
-                                        form.appendChild(hiddenInput);
-                            
-                                        // Append the form to the body (or any other container element)
-                                        document.body.appendChild(form);
-                            
-                                        // Submit the form
-                                        form.submit();
-                                    }
-                                });
-                            }
-                        });
-                    } else if (response.res == "failed") {
+                //Proceed to Exam
+                $.ajax({
+                    type: "POST",
+                    url: "query/page_Message.php",
+                    dataType: "json",
+                    success: function(msg) {
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: 'An error occured while submitting your answers. Please try again.',
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: 'System error occurred.',
+                            title: 'Loading...',
+                            html: `
+                                    Proceeding to exam...
+                                    <br>
+                                    <br>
+                                    <i>${msg['msg_txt']} -${msg['msg_src']}</i>
+                                `,
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        }).then(function() {
+                            //window.location.href = 'exam.php?id=' + response.examId;
+                            //console.log("[SYS] NEXT EXAM ID = " + examId); //DEBUG
+                            // Create a form element
+                            var form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = 'exam.php';
+        
+                            // Create an input field for the exam ID
+                            var hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'fetchid';
+                            hiddenInput.id = 'fetchid';
+                            hiddenInput.value = examId;
+        
+                            // Append the hidden input to the form
+                            form.appendChild(hiddenInput);
+        
+                            // Append the form to the body (or any other container element)
+                            document.body.appendChild(form);
+        
+                            // Submit the form
+                            form.submit();
                         });
                     }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert('A script error occured. Please try again.');
-                    console.error(textStatus, errorThrown);
-                    console.log(jqXHR.responseText);
                 });
             });
         } else {

@@ -66,6 +66,7 @@
                                             <select class="form-control" name="filter_status" id="filter_status">
                                                 <option value="">Select...</option>
                                                 <option value="1">Active</option>
+                                                <option value="2">Finished</option>
                                                 <option value="0">Inactive</option>
                                             </select>
                                         </div> 
@@ -140,11 +141,12 @@
                                                     $exmne_sfname = $row['exmne_sfname'];
                                                     $exmne_sex = $row['exmne_sex'];
                                                     $exmne_birthdate = $row['exmne_birthdate'];
+                                                    $exmne_religion = $row['exmne_religion'];
                                                     $exmne_disablecam = $row['exmne_disablecam'];
                                                     $exmne_email = $row['exmne_email'];
                                                     $exmne_pass = $row['exmne_pass'];
                                                     $exmne_status = $row['exmne_status'];
-                                                    $statusText = ($exmne_status == 1) ? 'Active' : (($exmne_status == 3) ? 'Disabled' : 'Inactive');
+                                                    $statusText = ($exmne_status == 1) ? 'Active' : (($exmne_status == 2) ? 'Finished' : (($exmne_status == 3) ? 'Disabled' : 'Inactive'));
                                                     $disableCamText = ($exmne_disablecam == 'yes') ? 'Disabled Cam' : '';
 
                                                     $disp_fname = $row['exmne_fname'] != '' ? $row['exmne_fname'] : 'null';
@@ -188,6 +190,7 @@
                                                     data-view-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                     data-view-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                     data-view-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                    data-view-religion = "<?php echo htmlspecialchars($exmne_religion); ?>"
                                                     data-view-cam = "<?php echo htmlspecialchars($exmne_disablecam); ?>"
                                                     data-view-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                     data-view-email = "<?php echo htmlspecialchars($exmne_email); ?>"
@@ -203,6 +206,7 @@
                                                     data-edit-cluster = "<?php echo htmlspecialchars($exmne_clu_id); ?>"
                                                     data-edit-sex = "<?php echo htmlspecialchars($exmne_sex); ?>"
                                                     data-edit-birth = "<?php echo htmlspecialchars($exmne_birthdate); ?>"
+                                                    data-edit-religion = "<?php echo htmlspecialchars($exmne_religion); ?>"
                                                     data-edit-cam = "<?php echo htmlspecialchars($exmne_disablecam); ?>"
                                                     data-edit-status = "<?php echo htmlspecialchars($exmne_status); ?>"
                                                     data-edit-email = "<?php echo htmlspecialchars($exmne_email); ?>"
@@ -217,7 +221,7 @@
                                                     data-disable-status="<?php echo htmlspecialchars($exmne_status); ?>">
                                                         <i class="fas fa-times-circle"></i>
                                                     </a>
-                                                    <?php } else if ($exmne_status == 0) { ?>
+                                                    <?php } else if ($exmne_status == 0 || $exmne_status == 3) { ?>
                                                     <a href="javascript:void(0);" class="btn btn-success m-1" id="enable-btn" data-toggle="modal" data-target="#mdlEnableExaminee" data-toggle="tooltip" data-placement="bottom" title="Enable" 
                                                     data-enable-id="<?php echo htmlspecialchars($exmne_id); ?>" 
                                                     data-enable-fname="<?php echo htmlspecialchars($exmne_fname); ?>" 
