@@ -41,24 +41,30 @@ $add_Date = date("Y-m-d");
 $stmt2 = $conn->prepare("SELECT * FROM feedback_tbl WHERE exmne_id = :add_ExmneId");
 $stmt2->bindParam(':add_ExmneId', $add_ExmneId);
 $stmt2->execute();
+
+$stmt3 = $conn->prepare("UPDATE feedback_tbl SET fb_exmne_as = :add_ExmneName, fb_feedback = :add_Feedback, fb_date = :add_Date WHERE exmne_id = :add_ExmneId");
+$stmt4 = $conn->prepare("INSERT INTO feedback_tbl (exmne_id, fb_exmne_as, fb_feedback, fb_date) VALUES (:add_ExmneId, :add_ExmneName, :add_Feedback, :add_Date)");
+
 if ($stmt2->rowCount() > 0) {
     // Update
-    $stmt3 = $conn->prepare("UPDATE feedback_tbl SET fb_exmne_as = :add_ExmneName, fb_feedback = :add_Feedback, fb_date = :add_Date WHERE exmne_id = :add_ExmneId");
     $stmt3->bindParam(':add_ExmneId', $add_ExmneId);
     $stmt3->bindParam(':add_ExmneName', $exmne_name);
     $stmt3->bindParam(':add_Feedback', $add_Feedback);
     $stmt3->bindParam(':add_Date', $add_Date);
+    $stmt3->execute();
+    $fb_result = "success";
 } else {
     // Add
-    $stmt4 = $conn->prepare("INSERT INTO feedback_tbl (exmne_id, fb_exmne_as, fb_feedback, fb_date) VALUES (:add_ExmneId, :add_ExmneName, :add_Feedback, :add_Date)");
     $stmt4->bindParam(':add_ExmneId', $add_ExmneId);
     $stmt4->bindParam(':add_ExmneName', $exmne_name);
     $stmt4->bindParam(':add_Feedback', $add_Feedback);
     $stmt4->bindParam(':add_Date', $add_Date);
+    $stmt4->execute();
+    $fb_result = "success";
 }
 
 // Execute the statement and check if it was successful
-if($stmt3->execute() || $stmt4->execute()) {
+if($fb_result == "success") {
     $res = array("res" => "success", "msg" => $exmne_name . "|" . $add_Anonymous);
 } else {
     $res = array("res" => "failed");
